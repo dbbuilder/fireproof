@@ -1,0 +1,101 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# .NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+.pnp/
+.pnp.js
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Azure
+.azure/
+local.settings.json
+*.PublishSettings
+
+# Rider
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+logs/
+*.log
+
+# Test coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Build artifacts
+publish/
+*.zip
+*.tar.gz
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Database
+*.bak
+*.mdf
+*.ldf
+
+# Certificates
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Sensitive data
+appsettings.Development.json
+appsettings.Production.json
+secrets.json
