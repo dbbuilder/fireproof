@@ -1,0 +1,61 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ./backend/FireExtinguisherInspection.API
+      
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+      working-directory: ./backend/FireExtinguisherInspection.API
+      
+    - name: Run tests
+      run: dotnet test --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
+      working-directory: ./backend/FireExtinguisherInspection.API
+      
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./backend/**/coverage.cobertura.xml
+        flags: backend
+        name: backend-coverage
+        
+    - name: Publish artifacts
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: dotnet publish --configuration Release --output ./publish
+      working-directory: ./backend/FireExtinguisherInspection.API
+      
+    - name: Upload artifacts
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-build
+        path: ./backend/FireExtinguisherInspection.API/publish
+        retention-days: 30
