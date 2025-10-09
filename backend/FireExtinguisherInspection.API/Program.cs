@@ -1,6 +1,7 @@
 using FireExtinguisherInspection.API.Data;
 using FireExtinguisherInspection.API.Middleware;
 using FireExtinguisherInspection.API.Models;
+using FireExtinguisherInspection.API.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,6 +65,9 @@ builder.Services.AddMemoryCache();
 // Register core services
 builder.Services.AddScoped<TenantContext>();
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
+
+// Register application services
+builder.Services.AddScoped<ILocationService, LocationService>();
 
 // Add CORS
 builder.Services.AddCors(options =>
