@@ -212,6 +212,107 @@ export interface BarcodeResponse {
 }
 
 // ============================================================================
+// Inspection Types
+// ============================================================================
+
+export interface InspectionDto {
+  inspectionId: string
+  tenantId: string
+  extinguisherId: string
+  inspectorUserId: string
+  inspectionDate: string
+  inspectionType: string // Monthly, Annual, 5-Year, 12-Year
+  gpsLatitude?: number | null
+  gpsLongitude?: number | null
+  gpsAccuracyMeters?: number | null
+  locationVerified: boolean
+  isAccessible: boolean
+  hasObstructions: boolean
+  signageVisible: boolean
+  sealIntact: boolean
+  pinInPlace: boolean
+  nozzleClear: boolean
+  hoseConditionGood: boolean
+  gaugeInGreenZone: boolean
+  gaugePressurePsi?: number | null
+  physicalDamagePresent: boolean
+  damageDescription?: string | null
+  weightPounds?: number | null
+  weightWithinSpec: boolean
+  inspectionTagAttached: boolean
+  previousInspectionDate?: string | null
+  notes?: string | null
+  passed: boolean
+  requiresService: boolean
+  requiresReplacement: boolean
+  failureReason?: string | null
+  correctiveAction?: string | null
+  photoUrls?: string[] | null
+  dataHash: string
+  inspectorSignature: string
+  signedDate: string
+  isVerified: boolean
+  createdDate: string
+  modifiedDate: string
+  // Navigation properties
+  extinguisherCode?: string | null
+  inspectorName?: string | null
+  locationName?: string | null
+}
+
+export interface CreateInspectionRequest {
+  extinguisherId: string
+  inspectorUserId: string
+  inspectionDate: string
+  inspectionType: string
+  gpsLatitude?: number | null
+  gpsLongitude?: number | null
+  gpsAccuracyMeters?: number | null
+  isAccessible: boolean
+  hasObstructions: boolean
+  signageVisible: boolean
+  sealIntact: boolean
+  pinInPlace: boolean
+  nozzleClear: boolean
+  hoseConditionGood: boolean
+  gaugeInGreenZone: boolean
+  gaugePressurePsi?: number | null
+  physicalDamagePresent: boolean
+  damageDescription?: string | null
+  weightPounds?: number | null
+  inspectionTagAttached: boolean
+  previousInspectionDate?: string | null
+  notes?: string | null
+  requiresService: boolean
+  requiresReplacement: boolean
+  failureReason?: string | null
+  correctiveAction?: string | null
+  photoUrls?: string[] | null
+}
+
+export interface InspectionVerificationResponse {
+  inspectionId: string
+  isValid: boolean
+  validationMessage?: string | null
+  originalHash: string
+  computedHash: string
+  hashMatch: boolean
+  verifiedDate: string
+}
+
+export interface InspectionStatsDto {
+  totalInspections: number
+  passedInspections: number
+  failedInspections: number
+  requireingService: number
+  requiringReplacement: number
+  passRate: number
+  lastInspectionDate?: string | null
+  inspectionsThisMonth: number
+  inspectionsThisYear: number
+}
+
+// ============================================================================
 // Type Guards
 // ============================================================================
 

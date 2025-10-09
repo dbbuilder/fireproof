@@ -70,7 +70,9 @@ builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IExtinguisherTypeService, ExtinguisherTypeService>();
 builder.Services.AddScoped<IExtinguisherService, ExtinguisherService>();
+builder.Services.AddScoped<IInspectionService, InspectionService>();
 builder.Services.AddSingleton<IBarcodeGeneratorService, BarcodeGeneratorService>();
+builder.Services.AddSingleton<ITamperProofingService, TamperProofingService>();
 
 // Add CORS
 builder.Services.AddCors(options =>
