@@ -137,6 +137,81 @@ export interface PaginatedResponse<T> {
 }
 
 // ============================================================================
+// Extinguisher Types
+// ============================================================================
+
+export interface ExtinguisherDto {
+  extinguisherId: string
+  tenantId: string
+  locationId: string
+  extinguisherTypeId: string
+  extinguisherCode: string
+  serialNumber: string
+  assetTag?: string | null
+  manufacturer?: string | null
+  manufactureDate?: string | null
+  installDate?: string | null
+  lastServiceDate?: string | null
+  nextServiceDueDate?: string | null
+  lastHydroTestDate?: string | null
+  nextHydroTestDueDate?: string | null
+  locationDescription?: string | null
+  floorLevel?: string | null
+  notes?: string | null
+  barcodeData?: string | null
+  qrCodeData?: string | null
+  isActive: boolean
+  isOutOfService: boolean
+  outOfServiceReason?: string | null
+  createdDate: string
+  modifiedDate: string
+  // Navigation properties
+  locationName?: string | null
+  typeName?: string | null
+  typeCode?: string | null
+}
+
+export interface CreateExtinguisherRequest {
+  locationId: string
+  extinguisherTypeId: string
+  extinguisherCode: string
+  serialNumber: string
+  assetTag?: string | null
+  manufacturer?: string | null
+  manufactureDate?: string | null
+  installDate?: string | null
+  locationDescription?: string | null
+  floorLevel?: string | null
+  notes?: string | null
+}
+
+export interface UpdateExtinguisherRequest {
+  locationId: string
+  extinguisherTypeId: string
+  serialNumber: string
+  assetTag?: string | null
+  manufacturer?: string | null
+  manufactureDate?: string | null
+  installDate?: string | null
+  lastServiceDate?: string | null
+  nextServiceDueDate?: string | null
+  lastHydroTestDate?: string | null
+  nextHydroTestDueDate?: string | null
+  locationDescription?: string | null
+  floorLevel?: string | null
+  notes?: string | null
+  isActive: boolean
+  isOutOfService: boolean
+  outOfServiceReason?: string | null
+}
+
+export interface BarcodeResponse {
+  barcodeData: string
+  qrCodeData: string
+  format: string
+}
+
+// ============================================================================
 // Type Guards
 // ============================================================================
 
@@ -157,5 +232,16 @@ export function isExtinguisherTypeDto(obj: any): obj is ExtinguisherTypeDto {
     typeof obj.typeCode === 'string' &&
     typeof obj.typeName === 'string' &&
     typeof obj.isActive === 'boolean'
+  )
+}
+
+export function isExtinguisherDto(obj: any): obj is ExtinguisherDto {
+  return (
+    obj &&
+    typeof obj.extinguisherId === 'string' &&
+    typeof obj.extinguisherCode === 'string' &&
+    typeof obj.serialNumber === 'string' &&
+    typeof obj.isActive === 'boolean' &&
+    typeof obj.isOutOfService === 'boolean'
   )
 }

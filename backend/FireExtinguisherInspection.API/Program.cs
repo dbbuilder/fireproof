@@ -69,6 +69,8 @@ builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 // Register application services
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IExtinguisherTypeService, ExtinguisherTypeService>();
+builder.Services.AddScoped<IExtinguisherService, ExtinguisherService>();
+builder.Services.AddSingleton<IBarcodeGeneratorService, BarcodeGeneratorService>();
 
 // Add CORS
 builder.Services.AddCors(options =>
