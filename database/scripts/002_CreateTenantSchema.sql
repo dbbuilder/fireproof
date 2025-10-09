@@ -720,3 +720,439 @@ PRINT 'Next step: Run 003_CreateStoredProcedures.sql to create data access proce
 PRINT '============================================================================'
 
 GO
+EXEC sp_executesql @CreateLocationsSql
+
+DECLARE @CreateLocationsIndexesSql NVARCHAR(MAX) = '
+PRINT ''  - Creating indexes on ' + @SchemaName + '.Locations''
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Locations_Code ON [' + @SchemaName + '].Locations(LocationCode)
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Locations_BarcodeData ON [' + @SchemaName + '].Locations(LocationBarcodeData) WHERE LocationBarcodeData IS NOT NULL
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Locations_IsActive ON [' + @SchemaName + '].Locations(IsActive) INCLUDE (LocationName, City)
+'
+EXEC sp_executesql @CreateLocationsIndexesSql
+PRINT '  - Table ' + @SchemaName + '.Locations created successfully'
+PRINT ''
+
+/*============================================================================
+  TABLE: ExtinguisherTypes
+  Description: Types of fire extinguishers (ABC, BC, K, CO2, etc.)
+============================================================================*/
+PRINT 'Creating table: ' + @SchemaName + '.ExtinguisherTypes'
+
+DECLARE @CreateExtTypeSql NVARCHAR(MAX) = '
+IF OBJECT_ID(''' + @SchemaName + '.ExtinguisherTypes'', ''U'') IS NOT NULL
+BEGIN
+    PRINT ''  - Table already exists, dropping...''
+    DROP TABLE [' + @SchemaName + '].ExtinguisherTypes
+END
+
+CREATE TABLE [' + @SchemaName + '].ExtinguisherTypes (
+    ExtinguisherTypeId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    TenantId UNIQUEIDENTIFIER NOT NULL,
+    TypeCode NVARCHAR(50) NOT NULL,
+    TypeName NVARCHAR(200) NOT NULL,
+    Description NVARCHAR(1000) NULL,
+    MonthlyInspectionRequired BIT NOT NULL DEFAULT 1,
+    AnnualInspectionRequired BIT NOT NULL DEFAULT 1,
+    HydrostaticTestYears INT NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CONSTRAINT PK_' + @SchemaName + '_ExtinguisherTypes PRIMARY KEY CLUSTERED (ExtinguisherTypeId),
+    CONSTRAINT UQ_' + @SchemaName + '_ExtinguisherTypes_TypeCode UNIQUE (TypeCode)
+)
+
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_ExtinguisherTypes_TypeCode ON [' + @SchemaName + '].ExtinguisherTypes(TypeCode) INCLUDE (TypeName)
+'
+EXEC sp_executesql @CreateExtTypeSql
+PRINT '  - Table ' + @SchemaName + '.ExtinguisherTypes created successfully'
+PRINT ''
+
+/*============================================================================
+  TABLE: Extinguishers
+  Description: Individual fire extinguisher assets
+============================================================================*/
+PRINT 'Creating table: ' + @SchemaName + '.Extinguishers'
+
+DECLARE @CreateExtSql NVARCHAR(MAX) = '
+IF OBJECT_ID(''' + @SchemaName + '.Extinguishers'', ''U'') IS NOT NULL
+BEGIN
+    PRINT ''  - Table already exists, dropping...''
+    DROP TABLE [' + @SchemaName + '].Extinguishers
+END
+
+CREATE TABLE [' + @SchemaName + '].Extinguishers (
+    ExtinguisherId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    TenantId UNIQUEIDENTIFIER NOT NULL,
+    LocationId UNIQUEIDENTIFIER NOT NULL,
+    ExtinguisherTypeId UNIQUEIDENTIFIER NOT NULL,
+    AssetTag NVARCHAR(100) NOT NULL,
+    BarcodeData NVARCHAR(200) NOT NULL,
+    Manufacturer NVARCHAR(200) NULL,
+    Model NVARCHAR(200) NULL,
+    SerialNumber NVARCHAR(200) NULL,
+    ManufactureDate DATE NULL,
+    InstallDate DATE NULL,
+    LastHydrostaticTestDate DATE NULL,
+    Capacity NVARCHAR(50) NULL,
+    LocationDescription NVARCHAR(500) NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    ModifiedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CONSTRAINT PK_' + @SchemaName + '_Extinguishers PRIMARY KEY CLUSTERED (ExtinguisherId),
+    CONSTRAINT FK_' + @SchemaName + '_Ext_Location FOREIGN KEY (LocationId) REFERENCES [' + @SchemaName + '].Locations(LocationId),
+    CONSTRAINT FK_' + @SchemaName + '_Ext_Type FOREIGN KEY (ExtinguisherTypeId) REFERENCES [' + @SchemaName + '].ExtinguisherTypes(ExtinguisherTypeId),
+    CONSTRAINT UQ_' + @SchemaName + '_Ext_AssetTag UNIQUE (AssetTag),
+    CONSTRAINT UQ_' + @SchemaName + '_Ext_BarcodeData UNIQUE (BarcodeData)
+)
+'
+EXEC sp_executesql @CreateExtSql
+
+DECLARE @CreateExtIndexesSql NVARCHAR(MAX) = '
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Ext_AssetTag ON [' + @SchemaName + '].Extinguishers(AssetTag)
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Ext_BarcodeData ON [' + @SchemaName + '].Extinguishers(BarcodeData)
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Ext_LocationId ON [' + @SchemaName + '].Extinguishers(LocationId) WHERE IsActive = 1
+'
+EXEC sp_executesql @CreateExtIndexesSql
+PRINT '  - Table ' + @SchemaName + '.Extinguishers created successfully'
+PRINT ''
+/*============================================================================
+  TABLE: InspectionTypes
+  Description: Types of inspections (Monthly, Annual, Hydrostatic)
+============================================================================*/
+PRINT 'Creating table: ' + @SchemaName + '.InspectionTypes'
+
+DECLARE @CreateInspTypeSql NVARCHAR(MAX) = '
+IF OBJECT_ID(''' + @SchemaName + '.InspectionTypes'', ''U'') IS NOT NULL
+BEGIN
+    PRINT ''  - Table already exists, dropping...''
+    DROP TABLE [' + @SchemaName + '].InspectionTypes
+END
+
+CREATE TABLE [' + @SchemaName + '].InspectionTypes (
+    InspectionTypeId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    TenantId UNIQUEIDENTIFIER NOT NULL,
+    TypeName NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(1000) NULL,
+    RequiresServiceTechnician BIT NOT NULL DEFAULT 0,
+    FrequencyDays INT NOT NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CONSTRAINT PK_' + @SchemaName + '_InspectionTypes PRIMARY KEY CLUSTERED (InspectionTypeId)
+)
+'
+EXEC sp_executesql @CreateInspTypeSql
+PRINT '  - Table ' + @SchemaName + '.InspectionTypes created successfully'
+PRINT ''
+
+/*============================================================================
+  TABLE: InspectionChecklistTemplates
+  Description: Templates for inspection checklists
+============================================================================*/
+PRINT 'Creating table: ' + @SchemaName + '.InspectionChecklistTemplates'
+
+DECLARE @CreateCheckTempSql NVARCHAR(MAX) = '
+IF OBJECT_ID(''' + @SchemaName + '.InspectionChecklistTemplates'', ''U'') IS NOT NULL
+BEGIN
+    PRINT ''  - Table already exists, dropping...''
+    DROP TABLE [' + @SchemaName + '].InspectionChecklistTemplates
+END
+
+CREATE TABLE [' + @SchemaName + '].InspectionChecklistTemplates (
+    ChecklistTemplateId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    TenantId UNIQUEIDENTIFIER NOT NULL,
+    InspectionTypeId UNIQUEIDENTIFIER NOT NULL,
+    TemplateName NVARCHAR(200) NOT NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CONSTRAINT PK_' + @SchemaName + '_ChecklistTemplates PRIMARY KEY CLUSTERED (ChecklistTemplateId),
+    CONSTRAINT FK_' + @SchemaName + '_CheckTemp_InspType FOREIGN KEY (InspectionTypeId) REFERENCES [' + @SchemaName + '].InspectionTypes(InspectionTypeId)
+)
+'
+EXEC sp_executesql @CreateCheckTempSql
+PRINT '  - Table ' + @SchemaName + '.InspectionChecklistTemplates created successfully'
+PRINT ''
+
+/*============================================================================
+  TABLE: ChecklistItems
+  Description: Individual items in checklist templates
+============================================================================*/
+PRINT 'Creating table: ' + @SchemaName + '.ChecklistItems'
+
+DECLARE @CreateCheckItemsSql NVARCHAR(MAX) = '
+IF OBJECT_ID(''' + @SchemaName + '.ChecklistItems'', ''U'') IS NOT NULL
+BEGIN
+    PRINT ''  - Table already exists, dropping...''
+    DROP TABLE [' + @SchemaName + '].ChecklistItems
+END
+
+CREATE TABLE [' + @SchemaName + '].ChecklistItems (
+    ChecklistItemId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    ChecklistTemplateId UNIQUEIDENTIFIER NOT NULL,
+    ItemText NVARCHAR(500) NOT NULL,
+    ItemOrder INT NOT NULL,
+    IsRequired BIT NOT NULL DEFAULT 1,
+    RequiresPhoto BIT NOT NULL DEFAULT 0,
+    RequiresNote BIT NOT NULL DEFAULT 0,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CONSTRAINT PK_' + @SchemaName + '_ChecklistItems PRIMARY KEY CLUSTERED (ChecklistItemId),
+    CONSTRAINT FK_' + @SchemaName + '_CheckItem_Template FOREIGN KEY (ChecklistTemplateId) REFERENCES [' + @SchemaName + '].InspectionChecklistTemplates(ChecklistTemplateId)
+)
+
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_CheckItems_Template ON [' + @SchemaName + '].ChecklistItems(ChecklistTemplateId, ItemOrder)
+'
+EXEC sp_executesql @CreateCheckItemsSql
+PRINT '  - Table ' + @SchemaName + '.ChecklistItems created successfully'
+PRINT ''
+/*============================================================================
+  TABLE: Inspections
+  Description: Inspection records with tamper-proof hashing
+============================================================================*/
+PRINT 'Creating table: ' + @SchemaName + '.Inspections'
+
+DECLARE @CreateInspSql NVARCHAR(MAX) = '
+IF OBJECT_ID(''' + @SchemaName + '.Inspections'', ''U'') IS NOT NULL
+BEGIN
+    PRINT ''  - Table already exists, dropping...''
+    DROP TABLE [' + @SchemaName + '].Inspections
+END
+
+CREATE TABLE [' + @SchemaName + '].Inspections (
+    InspectionId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    TenantId UNIQUEIDENTIFIER NOT NULL,
+    ExtinguisherId UNIQUEIDENTIFIER NOT NULL,
+    InspectionTypeId UNIQUEIDENTIFIER NOT NULL,
+    InspectorUserId UNIQUEIDENTIFIER NOT NULL,
+    InspectionStartTime DATETIME2 NOT NULL,
+    InspectionEndTime DATETIME2 NULL,
+    InspectionStatus NVARCHAR(50) NOT NULL,
+    Latitude DECIMAL(9,6) NULL,
+    Longitude DECIMAL(9,6) NULL,
+    GpsAccuracy DECIMAL(10,2) NULL,
+    DeviceFingerprint NVARCHAR(500) NULL,
+    OverallResult NVARCHAR(50) NULL,
+    InspectorNotes NVARCHAR(MAX) NULL,
+    TamperHash NVARCHAR(128) NOT NULL,
+    PreviousInspectionHash NVARCHAR(128) NULL,
+    IsOfflineInspection BIT NOT NULL DEFAULT 0,
+    SyncedDate DATETIME2 NULL,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    ModifiedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CONSTRAINT PK_' + @SchemaName + '_Inspections PRIMARY KEY CLUSTERED (InspectionId),
+    CONSTRAINT FK_' + @SchemaName + '_Insp_Extinguisher FOREIGN KEY (ExtinguisherId) REFERENCES [' + @SchemaName + '].Extinguishers(ExtinguisherId),
+    CONSTRAINT FK_' + @SchemaName + '_Insp_Type FOREIGN KEY (InspectionTypeId) REFERENCES [' + @SchemaName + '].InspectionTypes(InspectionTypeId),
+    CONSTRAINT CK_' + @SchemaName + '_Insp_Status CHECK (InspectionStatus IN (''InProgress'', ''Completed'', ''Failed'')),
+    CONSTRAINT CK_' + @SchemaName + '_Insp_Result CHECK (OverallResult IN (''Pass'', ''Fail'', ''NeedsService'') OR OverallResult IS NULL)
+)
+'
+EXEC sp_executesql @CreateInspSql
+
+DECLARE @CreateInspIndexesSql NVARCHAR(MAX) = '
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Insp_Ext_Start ON [' + @SchemaName + '].Inspections(ExtinguisherId, InspectionStartTime DESC)
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Insp_StartTime ON [' + @SchemaName + '].Inspections(InspectionStartTime DESC)
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Insp_Inspector ON [' + @SchemaName + '].Inspections(InspectorUserId) INCLUDE (InspectionStatus, InspectionStartTime)
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Insp_Status ON [' + @SchemaName + '].Inspections(InspectionStatus) WHERE InspectionStatus = ''InProgress''
+'
+EXEC sp_executesql @CreateInspIndexesSql
+PRINT '  - Table ' + @SchemaName + '.Inspections created successfully'
+PRINT ''
+
+/*============================================================================
+  TABLE: InspectionChecklistResponses
+  Description: Responses to checklist items during inspection
+============================================================================*/
+PRINT 'Creating table: ' + @SchemaName + '.InspectionChecklistResponses'
+
+DECLARE @CreateRespSql NVARCHAR(MAX) = '
+IF OBJECT_ID(''' + @SchemaName + '.InspectionChecklistResponses'', ''U'') IS NOT NULL
+BEGIN
+    PRINT ''  - Table already exists, dropping...''
+    DROP TABLE [' + @SchemaName + '].InspectionChecklistResponses
+END
+
+CREATE TABLE [' + @SchemaName + '].InspectionChecklistResponses (
+    ResponseId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    InspectionId UNIQUEIDENTIFIER NOT NULL,
+    ChecklistItemId UNIQUEIDENTIFIER NOT NULL,
+    ResponseValue NVARCHAR(50) NOT NULL,
+    Notes NVARCHAR(MAX) NULL,
+    PhotoBlobPath NVARCHAR(500) NULL,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CONSTRAINT PK_' + @SchemaName + '_Responses PRIMARY KEY CLUSTERED (ResponseId),
+    CONSTRAINT FK_' + @SchemaName + '_Resp_Inspection FOREIGN KEY (InspectionId) REFERENCES [' + @SchemaName + '].Inspections(InspectionId),
+    CONSTRAINT FK_' + @SchemaName + '_Resp_CheckItem FOREIGN KEY (ChecklistItemId) REFERENCES [' + @SchemaName + '].ChecklistItems(ChecklistItemId),
+    CONSTRAINT CK_' + @SchemaName + '_Resp_Value CHECK (ResponseValue IN (''Pass'', ''Fail'', ''NA''))
+)
+
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Resp_Inspection ON [' + @SchemaName + '].InspectionChecklistResponses(InspectionId)
+'
+EXEC sp_executesql @CreateRespSql
+PRINT '  - Table ' + @SchemaName + '.InspectionChecklistResponses created successfully'
+PRINT ''
+/*============================================================================
+  TABLE: InspectionPhotos
+  Description: Photos captured during inspections
+============================================================================*/
+PRINT 'Creating table: ' + @SchemaName + '.InspectionPhotos'
+
+DECLARE @CreatePhotosSql NVARCHAR(MAX) = '
+IF OBJECT_ID(''' + @SchemaName + '.InspectionPhotos'', ''U'') IS NOT NULL
+BEGIN
+    PRINT ''  - Table already exists, dropping...''
+    DROP TABLE [' + @SchemaName + '].InspectionPhotos
+END
+
+CREATE TABLE [' + @SchemaName + '].InspectionPhotos (
+    PhotoId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    InspectionId UNIQUEIDENTIFIER NOT NULL,
+    BlobPath NVARCHAR(500) NOT NULL,
+    FileName NVARCHAR(255) NOT NULL,
+    FileSize BIGINT NOT NULL,
+    ContentType NVARCHAR(100) NOT NULL,
+    CaptureDate DATETIME2 NOT NULL,
+    ExifData NVARCHAR(MAX) NULL,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CONSTRAINT PK_' + @SchemaName + '_Photos PRIMARY KEY CLUSTERED (PhotoId),
+    CONSTRAINT FK_' + @SchemaName + '_Photos_Inspection FOREIGN KEY (InspectionId) REFERENCES [' + @SchemaName + '].Inspections(InspectionId)
+)
+
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Photos_Inspection ON [' + @SchemaName + '].InspectionPhotos(InspectionId)
+'
+EXEC sp_executesql @CreatePhotosSql
+PRINT '  - Table ' + @SchemaName + '.InspectionPhotos created successfully'
+PRINT ''
+
+/*============================================================================
+  TABLE: MaintenanceRecords
+  Description: Maintenance and service history for extinguishers
+============================================================================*/
+PRINT 'Creating table: ' + @SchemaName + '.MaintenanceRecords'
+
+DECLARE @CreateMaintSql NVARCHAR(MAX) = '
+IF OBJECT_ID(''' + @SchemaName + '.MaintenanceRecords'', ''U'') IS NOT NULL
+BEGIN
+    PRINT ''  - Table already exists, dropping...''
+    DROP TABLE [' + @SchemaName + '].MaintenanceRecords
+END
+
+CREATE TABLE [' + @SchemaName + '].MaintenanceRecords (
+    MaintenanceRecordId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    ExtinguisherId UNIQUEIDENTIFIER NOT NULL,
+    MaintenanceType NVARCHAR(100) NOT NULL,
+    MaintenanceDate DATE NOT NULL,
+    TechnicianName NVARCHAR(200) NULL,
+    ServiceCompany NVARCHAR(200) NULL,
+    Cost DECIMAL(10,2) NULL,
+    Notes NVARCHAR(MAX) NULL,
+    ReceiptBlobPath NVARCHAR(500) NULL,
+    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    CONSTRAINT PK_' + @SchemaName + '_Maintenance PRIMARY KEY CLUSTERED (MaintenanceRecordId),
+    CONSTRAINT FK_' + @SchemaName + '_Maint_Extinguisher FOREIGN KEY (ExtinguisherId) REFERENCES [' + @SchemaName + '].Extinguishers(ExtinguisherId)
+)
+
+CREATE NONCLUSTERED INDEX IX_' + @SchemaName + '_Maint_Ext_Date ON [' + @SchemaName + '].MaintenanceRecords(ExtinguisherId, MaintenanceDate DESC)
+'
+EXEC sp_executesql @CreateMaintSql
+PRINT '  - Table ' + @SchemaName + '.MaintenanceRecords created successfully'
+PRINT ''
+
+/*============================================================================
+  SEED DATA: Insert sample data for the tenant
+============================================================================*/
+PRINT 'Inserting seed data for tenant...'
+
+-- Insert extinguisher types
+DECLARE @InsertExtTypesSql NVARCHAR(MAX) = '
+INSERT INTO [' + @SchemaName + '].ExtinguisherTypes (TenantId, TypeCode, TypeName, Description, MonthlyInspectionRequired, AnnualInspectionRequired, HydrostaticTestYears)
+VALUES
+    (''' + CAST(@TenantId AS NVARCHAR(36)) + ''', ''ABC'', ''ABC Dry Chemical'', ''Multi-purpose dry chemical for Class A, B, and C fires'', 1, 1, 12),
+    (''' + CAST(@TenantId AS NVARCHAR(36)) + ''', ''BC'', ''BC Dry Chemical'', ''Dry chemical for Class B and C fires'', 1, 1, 12),
+    (''' + CAST(@TenantId AS NVARCHAR(36)) + ''', ''K'', ''Class K Wet Chemical'', ''Wet chemical for kitchen/cooking fires'', 1, 1, 5),
+    (''' + CAST(@TenantId AS NVARCHAR(36)) + ''', ''CO2'', ''Carbon Dioxide'', ''CO2 for Class B and C fires'', 1, 1, 5),
+    (''' + CAST(@TenantId AS NVARCHAR(36)) + ''', ''H2O'', ''Water'', ''Water-based for Class A fires only'', 1, 1, 5)
+
+PRINT ''  - Inserted extinguisher types''
+'
+EXEC sp_executesql @InsertExtTypesSql
+
+-- Insert sample location
+DECLARE @SampleLocationId UNIQUEIDENTIFIER = NEWID()
+DECLARE @InsertLocationSql NVARCHAR(MAX) = '
+INSERT INTO [' + @SchemaName + '].Locations (LocationId, TenantId, LocationCode, LocationName, AddressLine1, City, StateProvince, PostalCode, Country, Latitude, Longitude)
+VALUES
+    (''' + CAST(@SampleLocationId AS NVARCHAR(36)) + ''', ''' + CAST(@TenantId AS NVARCHAR(36)) + ''', ''LOC001'', ''Main Office Building'', ''123 Main Street'', ''Seattle'', ''WA'', ''98101'', ''USA'', 47.606209, -122.332069)
+
+PRINT ''  - Inserted sample location''
+'
+EXEC sp_executesql @InsertLocationSql
+
+-- Insert inspection types
+DECLARE @MonthlyInspTypeId UNIQUEIDENTIFIER = NEWID()
+DECLARE @AnnualInspTypeId UNIQUEIDENTIFIER = NEWID()
+
+DECLARE @InsertInspTypesSql NVARCHAR(MAX) = '
+INSERT INTO [' + @SchemaName + '].InspectionTypes (InspectionTypeId, TenantId, TypeName, Description, RequiresServiceTechnician, FrequencyDays)
+VALUES
+    (''' + CAST(@MonthlyInspTypeId AS NVARCHAR(36)) + ''', ''' + CAST(@TenantId AS NVARCHAR(36)) + ''', ''Monthly Visual'', ''Monthly visual inspection per NFPA 10'', 0, 30),
+    (''' + CAST(@AnnualInspTypeId AS NVARCHAR(36)) + ''', ''' + CAST(@TenantId AS NVARCHAR(36)) + ''', ''Annual Service'', ''Annual inspection by certified technician'', 1, 365)
+
+PRINT ''  - Inserted inspection types''
+'
+EXEC sp_executesql @InsertInspTypesSql
+
+-- Insert checklist template for monthly inspection
+DECLARE @MonthlyTemplateId UNIQUEIDENTIFIER = NEWID()
+
+DECLARE @InsertTemplateSql NVARCHAR(MAX) = '
+INSERT INTO [' + @SchemaName + '].InspectionChecklistTemplates (ChecklistTemplateId, TenantId, InspectionTypeId, TemplateName)
+VALUES
+    (''' + CAST(@MonthlyTemplateId AS NVARCHAR(36)) + ''', ''' + CAST(@TenantId AS NVARCHAR(36)) + ''', ''' + CAST(@MonthlyInspTypeId AS NVARCHAR(36)) + ''', ''Standard Monthly Checklist'')
+
+PRINT ''  - Inserted checklist template''
+'
+EXEC sp_executesql @InsertTemplateSql
+
+-- Insert checklist items
+DECLARE @InsertCheckItemsSql NVARCHAR(MAX) = '
+INSERT INTO [' + @SchemaName + '].ChecklistItems (ChecklistTemplateId, ItemText, ItemOrder, IsRequired, RequiresPhoto)
+VALUES
+    (''' + CAST(@MonthlyTemplateId AS NVARCHAR(36)) + ''', ''Extinguisher is accessible and unobstructed'', 1, 1, 0),
+    (''' + CAST(@MonthlyTemplateId AS NVARCHAR(36)) + ''', ''Pressure gauge shows proper pressure (green zone)'', 2, 1, 1),
+    (''' + CAST(@MonthlyTemplateId AS NVARCHAR(36)) + ''', ''Safety pin and tamper seal are intact'', 3, 1, 1),
+    (''' + CAST(@MonthlyTemplateId AS NVARCHAR(36)) + ''', ''Hose and nozzle are in good condition'', 4, 1, 0),
+    (''' + CAST(@MonthlyTemplateId AS NVARCHAR(36)) + ''', ''Operating instructions are legible'', 5, 1, 0),
+    (''' + CAST(@MonthlyTemplateId AS NVARCHAR(36)) + ''', ''No visible damage, corrosion, or leakage'', 6, 1, 0),
+    (''' + CAST(@MonthlyTemplateId AS NVARCHAR(36)) + ''', ''Inspection tag is current and legible'', 7, 1, 1)
+
+PRINT ''  - Inserted checklist items''
+'
+EXEC sp_executesql @InsertCheckItemsSql
+
+PRINT ''  - Seed data insertion completed''
+PRINT ''
+
+/*============================================================================
+  VERIFICATION
+============================================================================*/
+PRINT 'Verifying tenant schema creation...'
+
+-- Verify all tables exist
+DECLARE @TableCount INT
+SELECT @TableCount = COUNT(*) 
+FROM sys.tables t
+INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
+WHERE s.name = @SchemaName
+
+PRINT '  - Tables created: ' + CAST(@TableCount AS NVARCHAR(10))
+
+IF @TableCount >= 11
+    PRINT '  ✓ All expected tables created successfully'
+ELSE
+    PRINT '  ⚠ Warning: Expected 11 tables, found ' + CAST(@TableCount AS NVARCHAR(10))
+
+PRINT ''
+PRINT '============================================================================'
+PRINT 'Tenant schema creation completed successfully!'
+PRINT 'Schema: ' + @SchemaName
+PRINT 'Next step: Run 003_CreateStoredProcedures.sql'
+PRINT '============================================================================'
+
+GO
