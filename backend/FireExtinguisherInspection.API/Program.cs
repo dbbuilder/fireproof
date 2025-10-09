@@ -1,7 +1,10 @@
+using System.Text;
 using FireExtinguisherInspection.API.Data;
 using FireExtinguisherInspection.API.Middleware;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,6 +77,11 @@ builder.Services.AddScoped<IInspectionService, InspectionService>();
 builder.Services.AddSingleton<IBarcodeGeneratorService, BarcodeGeneratorService>();
 builder.Services.AddSingleton<ITamperProofingService, TamperProofingService>();
 
+// Register authentication services
+builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
+builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
 // Add CORS
 builder.Services.AddCors(options =>
 {
@@ -91,6 +99,34 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+
+// Configure JWT Authentication
+var jwtSecretKey = builder.Configuration["Jwt:SecretKey"]
+    ?? throw new InvalidOperationException("JWT SecretKey not configured");
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "FireProofAPI";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "FireProofApp";
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
+        ClockSkew = TimeSpan.Zero // No tolerance for expiry
+    };
+});
+
+builder.Services.AddAuthorization();
 
 // Add health checks
 builder.Services.AddHealthChecks()
@@ -116,9 +152,9 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontend");
 
-// Authentication and Authorization will be added here
-// app.UseAuthentication();
-// app.UseAuthorization();
+// Authentication and Authorization
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Tenant resolution middleware
 app.UseTenantResolution();

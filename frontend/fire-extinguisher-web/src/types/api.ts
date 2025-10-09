@@ -313,6 +313,80 @@ export interface InspectionStatsDto {
 }
 
 // ============================================================================
+// Authentication Types
+// ============================================================================
+
+export interface RegisterRequest {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  tenantId?: string | null
+  tenantRole?: string | null
+}
+
+export interface LoginRequest {
+  email: string
+  password: string
+}
+
+export interface DevLoginRequest {
+  email: string
+}
+
+export interface RefreshTokenRequest {
+  refreshToken: string
+}
+
+export interface AuthenticationResponse {
+  accessToken: string
+  refreshToken: string
+  expiresAt: string
+  user: UserDto
+  roles: RoleDto[]
+}
+
+export interface UserDto {
+  userId: string
+  email: string
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  emailConfirmed: boolean
+  mfaEnabled: boolean
+  lastLoginDate?: string | null
+  isActive: boolean
+  createdDate: string
+  modifiedDate: string
+}
+
+export interface RoleDto {
+  roleType: string // "System" or "Tenant"
+  tenantId?: string | null
+  roleName: string
+  description?: string | null
+  isActive: boolean
+}
+
+export interface ResetPasswordRequest {
+  userId: string
+  currentPassword: string
+  newPassword: string
+}
+
+export interface ConfirmEmailRequest {
+  userId: string
+  confirmationToken: string
+}
+
+export interface AssignUserToTenantRequest {
+  userId: string
+  tenantId: string
+  roleName: string
+}
+
+// ============================================================================
 // Type Guards
 // ============================================================================
 
