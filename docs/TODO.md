@@ -1495,3 +1495,207 @@ This TODO document serves as the master checklist for implementation. Update tas
 **Last Updated:** October 8, 2025  
 **Status:** Ready for Implementation  
 **Next Review:** Weekly during active development
+
+
+---
+
+## Phase 1.6: Scheduling and Route Optimization (Week 11)
+
+### Inspection Scheduling System
+
+#### Backend Implementation
+- ⬜ **Create Models/Entities/InspectionSchedule.cs** (30 minutes)
+- ⬜ **Create Models/Entities/InspectorRoute.cs** (30 minutes)
+- ⬜ **Create Models/Entities/LocationGeofence.cs** (30 minutes)
+
+- ⬜ **Create Services/Interfaces/ISchedulingService.cs** (1 hour)
+- ⬜ **Create Services/Implementations/SchedulingService.cs** (8 hours)
+  - `GetUpcomingInspectionsAsync` - Inspections due in date range
+  - `GenerateSchedulesAsync` - Auto-generate schedules for all extinguishers
+  - `RecalculateNextDueDateAsync` - Update based on completion
+  - `AssignInspectorAsync` - Assign inspector to schedule
+  - `GetInspectorWorkloadAsync` - Current workload per inspector
+  - `SuggestAssignmentAsync` - Auto-assign based on location proximity
+  - Error handling and logging
+  - Unit tests
+
+- ⬜ **Create Services/Interfaces/IRouteOptimizationService.cs** (1 hour)
+- ⬜ **Create Services/Implementations/RouteOptimizationService.cs** (10 hours)
+  - `OptimizeRouteAsync` - Traveling salesman problem solver
+  - `CalculateDistanceAsync` - Distance between two locations
+  - `EstimateInspectionTimeAsync` - Time per inspection type
+  - `GenerateDailyRouteAsync` - Create optimized route for inspector
+  - `ExportToNavigationAsync` - Format for Google Maps/Apple Maps
+  - Integration with mapping API (Google Maps Distance Matrix or Azure Maps)
+  - Greedy nearest-neighbor algorithm (simple but effective)
+  - Unit tests
+
+- ⬜ **Create Services/Interfaces/IGeofencingService.cs** (30 minutes)
+- ⬜ **Create Services/Implementations/GeofencingService.cs** (4 hours)
+  - `CreateGeofenceAsync` - Define geofence for location
+  - `CheckGeofenceAsync` - Is GPS coordinate within geofence?
+  - `GetNearbyLocationsAsync` - Locations within distance
+  - `CalculateDistanceAsync` - Haversine formula for GPS distance
+  - Unit tests
+
+- ⬜ **Create Controllers/SchedulingController.cs** (3 hours)
+  - `GET /api/scheduling/upcoming` - Inspections due soon
+  - `GET /api/scheduling/overdue` - Overdue inspections
+  - `POST /api/scheduling/generate` - Generate schedules
+  - `PUT /api/scheduling/{scheduleId}/assign` - Assign inspector
+  - `GET /api/scheduling/inspector/{userId}/workload` - Inspector workload
+  - Integration tests
+
+- ⬜ **Create Controllers/RoutesController.cs** (3 hours)
+  - `GET /api/routes/daily/{userId}/{date}` - Daily route for inspector
+  - `POST /api/routes/optimize` - Generate optimized route
+  - `GET /api/routes/export/{routeId}` - Export route to navigation
+  - `GET /api/routes/nearby` - Nearby locations for opportunistic inspection
+  - Integration tests
+
+- ⬜ **Update Database with Scheduling Tables** (2 hours)
+  - Execute 005_CreateSchedulingTables.sql
+  - Add InspectionSchedules table
+  - Add InspectorRoutes table
+  - Add LocationGeofences table
+  - Create stored procedures for scheduling queries
+  - Test with sample data
+
+#### Frontend Implementation
+- ⬜ **Create services/scheduling.service.js** (1 hour)
+- ⬜ **Create services/routing.service.js** (1 hour)
+
+- ⬜ **Create stores/scheduling.js** (2 hours)
+  - State: schedules, upcoming inspections, overdue count
+  - Actions: fetch schedules, generate, assign inspector
+  - Getters: filtered schedules, compliance metrics
+
+- ⬜ **Create components/scheduling/ScheduleCalendar.vue** (4 hours)
+  - Calendar view of scheduled inspections
+  - Color-coded by status (due, overdue, completed)
+  - Drag-and-drop to reschedule
+  - Click date to see details
+  - Month/week/day views
+
+- ⬜ **Create components/scheduling/InspectorAssignment.vue** (3 hours)
+  - Assign inspector to inspection
+  - View inspector workload
+  - Balance workload across inspectors
+  - Filter by location proximity
+  - Drag-and-drop assignment
+
+- ⬜ **Create components/scheduling/RouteMap.vue** (4 hours)
+  - Map with daily route
+  - Numbered sequence markers
+  - Distance and time estimates
+  - Export to navigation app
+  - Current location indicator
+  - Traffic overlay (optional)
+
+- ⬜ **Create components/scheduling/ComplianceDashboard.vue** (4 hours)
+  - Overall compliance percentage gauge
+  - Breakdown by location (list or map)
+  - Trend chart (line chart)
+  - Overdue list with days overdue
+  - Quick actions (schedule, assign)
+
+- ⬜ **Create views/Scheduling.vue** (2 hours)
+  - Page layout
+  - Calendar component
+  - Upcoming inspections widget
+  - Overdue alerts
+  - Quick schedule generator
+
+#### Acceptance Criteria
+- Schedules auto-generate when extinguisher added
+- Next due date recalculated after inspection
+- Route optimization reduces travel time 30%+
+- Inspectors see optimized daily route
+- Geofence detection within 50 meters
+- All tests passing
+
+---
+
+## Phase 1.7: Push Notifications and Mobile Features (Week 12)
+
+### Push Notification System
+
+#### Backend Implementation
+- ⬜ **Install Push Notification Libraries** (30 minutes)
+  ```bash
+  # For Firebase Cloud Messaging (iOS and Android)
+  dotnet add package FirebaseAdmin --version 2.4.0
+  ```
+
+- ⬜ **Create Models/Entities/PushNotificationSubscription.cs** (30 minutes)
+- ⬜ **Create Models/Entities/UserNotificationPreference.cs** (30 minutes)
+
+- ⬜ **Create Services/Interfaces/IPushNotificationService.cs** (1 hour)
+- ⬜ **Create Services/Implementations/PushNotificationService.cs** (8 hours)
+  - `RegisterDeviceAsync` - Register device token
+  - `UnregisterDeviceAsync` - Remove device token
+  - `SendNotificationAsync` - Send to specific user
+  - `SendBulkNotificationAsync` - Send to multiple users
+  - `ScheduleNotificationAsync` - Schedule for future delivery
+  - Integration with Firebase Cloud Messaging
+  - Handle iOS and Android differences
+  - Retry logic for failed sends
+  - Unit tests
+
+- ⬜ **Create Services/Interfaces/INotificationPreferenceService.cs** (30 minutes)
+- ⬜ **Create Services/Implementations/NotificationPreferenceService.cs** (3 hours)
+  - `GetPreferencesAsync` - Get user notification preferences
+  - `UpdatePreferencesAsync` - Save preferences
+  - `CheckQuietHoursAsync` - Is it quiet hours for user?
+  - `CanSendNotificationAsync` - Check if user accepts this type
+  - Unit tests
+
+- ⬜ **Create Infrastructure/BackgroundJobs/NotificationJob.cs** (6 hours)
+  - Send inspection reminders (7 days, 1 day, day-of)
+  - Send overdue alerts
+  - Send daily digest
+  - Send geofence entry notifications (queued from mobile)
+  - Send sync completion notifications
+  - Respect user preferences and quiet hours
+  - Unit tests
+
+- ⬜ **Create Controllers/NotificationsController.cs** (2 hours)
+  - `POST /api/notifications/register` - Register device
+  - `DELETE /api/notifications/unregister` - Unregister device
+  - `GET /api/notifications/preferences` - Get preferences
+  - `PUT /api/notifications/preferences` - Update preferences
+  - `GET /api/notifications/history` - Notification history
+  - Integration tests
+
+- ⬜ **Configure Firebase Cloud Messaging** (2 hours)
+  - Create Firebase project
+  - Add iOS app to Firebase
+  - Add Android app to Firebase
+  - Download service account key
+  - Store in Azure Key Vault
+  - Test notification sending
+
+#### Acceptance Criteria
+- Push notifications delivered within 60 seconds
+- 95% delivery success rate
+- Deep links work correctly
+- Users can customize preferences
+- Quiet hours respected
+- All tests passing
+
+---
+
+**Total Estimated Effort (Updated):**
+- Phase 1.1-1.5 (Foundation through Testing): ~240 hours (10 weeks)
+- **Phase 1.6 (Scheduling & Route Optimization): ~60 hours (1 week)**
+- **Phase 1.7 (Push Notifications): ~25 hours (1 week)**
+- Phase 2.0 (Native Mobile Apps): ~200 hours (3 months)
+
+**Total Phase 1: ~325 hours (~14 weeks)**
+**Total Project: ~525 hours**
+
+---
+
+**Last Updated:** October 8, 2025 (Enhanced with Scheduling and Mobile Features)
+**Status:** Ready for Implementation  
+**Next Review:** Weekly during active development
