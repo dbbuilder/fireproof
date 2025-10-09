@@ -89,10 +89,7 @@ builder.Services.AddCors(options =>
 
 // Add health checks
 builder.Services.AddHealthChecks()
-    .AddSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")!,
-        name: "database",
-        tags: new[] { "db", "sql" });
+    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
 var app = builder.Build();
 
