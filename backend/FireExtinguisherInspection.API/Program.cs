@@ -105,8 +105,6 @@ builder.Services.AddCors(options =>
             .WithOrigins(
                 "http://localhost:5173",  // Vite dev server
                 "http://localhost:3000",   // Alternative frontend port
-                "https://fireproof.app",   // Production domain (future)
-                "https://www.fireproof.app",
                 "https://fireproofapp.net",  // Production domain
                 "https://www.fireproofapp.net",
                 "https://nice-smoke-08dbc500f.2.azurestaticapps.net"  // Azure Static Web App
