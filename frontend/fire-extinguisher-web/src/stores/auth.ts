@@ -307,12 +307,23 @@ export const useAuthStore = defineStore('auth', {
           // Fetch user and roles
           await Promise.all([this.fetchCurrentUser(), this.fetchCurrentUserRoles()])
           this.isAuthenticated = true
-        } catch (error) {
+        } catch (error: any) {
           // Token might be expired, try to refresh
-          try {
-            await this.refreshAccessToken()
-          } catch (refreshError) {
-            // Refresh failed, logout
+          // Only try refresh if we got a 401 (Unauthorized)
+          if (error.response?.status === 401) {
+            try {
+              await this.refreshAccessToken()
+              // After refresh, try to fetch user data again
+              await Promise.all([this.fetchCurrentUser(), this.fetchCurrentUserRoles()])
+              this.isAuthenticated = true
+            } catch (refreshError) {
+              // Refresh failed, logout and clear everything
+              console.warn('Session expired, logging out')
+              this.logout()
+            }
+          } else {
+            // Non-401 error, logout for safety
+            console.error('Failed to initialize auth:', error)
             this.logout()
           }
         }
