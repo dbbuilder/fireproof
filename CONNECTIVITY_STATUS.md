@@ -97,25 +97,53 @@ Set in Azure as: `ConnectionStrings__DefaultConnection`
 
 ---
 
+## ✅ SQL Server Browser Service Configured
+
+### Firewall Rules Added:
+- **Azure NSG**: UDP port 1434 (Priority 240) ✓
+- **Windows Firewall**: UDP port 1434 rule created ✓
+- **Service Status**: SQL Browser running (Automatic) ✓
+
+### Local Connection Working:
+- Connection string: `Server=sqltest.schoolvision.net,14333;...;Encrypt=Optional`
+- Microsoft.Data.SqlClient 5.2.2
+- Tested successfully with login endpoint ✓
+
 ## 🚧 Remaining Issues
+
+### Azure App Service Still Failing
+
+**Status**: App responds but returns "Unhealthy" on health check
+
+**Tests Performed**:
+1. ✓ Set connection string as SQLAzure type
+2. ✓ Set connection string as app setting (ConnectionStrings__DefaultConnection)
+3. ✓ Tried `Encrypt=Optional` (works locally)
+4. ✓ Tried `Encrypt=False` (traditional setting)
+5. ✗ All attempts result in "Unhealthy" status
 
 ### Possible Causes:
 
-1. **Azure App Service Outbound IP Mismatch**
-   - App Service may use different IPs than the documented outbound IPs
-   - VNet integration might change the source IP
+1. **Azure App Service Outbound UDP Restrictions**
+   - App Service may block outbound UDP traffic to port 1434
+   - SQL Server Browser service cannot respond to instance queries
+   - Even though we specify port 14333, SqlClient may still try UDP 1434
 
-2. **SQL Server Mixed Mode Authentication**
-   - SQL Server may not be configured for SQL Authentication
-   - Only Windows Authentication might be enabled
+2. **Network Path Differences**
+   - Local (WSL): Direct connection works perfectly
+   - Azure (East US 2): Cannot establish connection
+   - MobileID-demo (West US 3): Successfully connects to same server
+   - Suggests regional or network path issue
 
-3. **Password Escaping in Azure Environment Variables**
-   - The `!` character in password may need special handling
-   - Azure may interpret escape sequences differently
+3. **Azure SQL Connection Proxy**
+   - Azure may intercept or modify SQL connections
+   - Connection string type "SQLAzure" may trigger special handling
+   - App setting override may not be taking effect
 
-4. **Network Routing**
-   - Azure App Service may not be able to route to the public IP
-   - May require VNet integration or Private Endpoint
+4. **SqlClient Version Compatibility**
+   - Microsoft.Data.SqlClient 5.2.2 has strict SSL/TLS requirements
+   - May behave differently when running in Azure vs local
+   - MobileID-demo may use older SqlClient version
 
 ---
 

@@ -283,5 +283,52 @@ namespace FireExtinguisherInspection.API.Controllers
                 return StatusCode(500, new { message = "An error occurred during tenant assignment" });
             }
         }
+
+        /// <summary>
+        /// Test database connection (diagnostic endpoint)
+        /// </summary>
+        /// <returns>Connection test result</returns>
+        [HttpGet("test-db")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(object), 200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> TestDatabase()
+        {
+            try
+            {
+                var connString = _configuration.GetConnectionString("DefaultConnection");
+                using var connection = new Microsoft.Data.SqlClient.SqlConnection(connString);
+                await connection.OpenAsync();
+
+                using var command = connection.CreateCommand();
+                command.CommandText = "SELECT DB_NAME() AS [Database], SUSER_NAME() AS [User], @@VERSION AS [Version]";
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (await reader.ReadAsync())
+                {
+                    return Ok(new
+                    {
+                        success = true,
+                        database = reader["Database"].ToString(),
+                        user = reader["User"].ToString(),
+                        version = reader["Version"].ToString(),
+                        connectionString = connString?.Replace(_configuration["ConnectionStrings:DefaultConnection"]?.Split("Password=")[1]?.Split(";")[0] ?? "", "***")
+                    });
+                }
+
+                return Ok(new { success = true, message = "Connected but no data returned" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Database connection test failed");
+                return StatusCode(500, new
+                {
+                    success = false,
+                    error = ex.Message,
+                    innerError = ex.InnerException?.Message,
+                    stackTrace = ex.StackTrace
+                });
+            }
+        }
     }
 }
