@@ -1,13 +1,27 @@
 using System.Text;
+using Azure.Identity;
+using FireExtinguisherInspection.API.Authorization;
 using FireExtinguisherInspection.API.Data;
 using FireExtinguisherInspection.API.Middleware;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Azure Key Vault if VaultUri is provided
+var keyVaultUri = builder.Configuration["KeyVault:VaultUri"];
+if (!string.IsNullOrEmpty(keyVaultUri))
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri(keyVaultUri),
+        new DefaultAzureCredential());
+
+    Log.Information("Azure Key Vault configured: {VaultUri}", keyVaultUri);
+}
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()
@@ -92,7 +106,8 @@ builder.Services.AddCors(options =>
                 "http://localhost:5173",  // Vite dev server
                 "http://localhost:3000",   // Alternative frontend port
                 "https://fireproof.app",   // Production domain
-                "https://www.fireproof.app"
+                "https://www.fireproof.app",
+                "https://nice-smoke-08dbc500f.2.azurestaticapps.net"  // Azure Static Web App
             )
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -101,7 +116,9 @@ builder.Services.AddCors(options =>
 });
 
 // Configure JWT Authentication
-var jwtSecretKey = builder.Configuration["Jwt:SecretKey"]
+// Try Key Vault first, fallback to appsettings
+var jwtSecretKey = builder.Configuration["JwtSecretKey"]
+    ?? builder.Configuration["Jwt:SecretKey"]
     ?? throw new InvalidOperationException("JWT SecretKey not configured");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "FireProofAPI";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "FireProofApp";
@@ -126,7 +143,48 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+// Configure Authorization with policies
+builder.Services.AddAuthorization(options =>
+{
+    // System-level policies
+    options.AddPolicy(AuthorizationPolicies.SystemAdmin, policy =>
+        policy.Requirements.Add(new RoleRequirement(RoleNames.SystemAdmin)));
+
+    options.AddPolicy(AuthorizationPolicies.SuperUser, policy =>
+        policy.Requirements.Add(new RoleRequirement(RoleNames.SuperUser)));
+
+    // Tenant-level policies
+    options.AddPolicy(AuthorizationPolicies.TenantAdmin, policy =>
+        policy.Requirements.Add(new RoleRequirement(true, RoleNames.TenantAdmin)));
+
+    options.AddPolicy(AuthorizationPolicies.TenantManager, policy =>
+        policy.Requirements.Add(new RoleRequirement(true, RoleNames.TenantManager)));
+
+    options.AddPolicy(AuthorizationPolicies.Inspector, policy =>
+        policy.Requirements.Add(new RoleRequirement(true, RoleNames.Inspector)));
+
+    options.AddPolicy(AuthorizationPolicies.Viewer, policy =>
+        policy.Requirements.Add(new RoleRequirement(true, RoleNames.Viewer)));
+
+    // Combined policies (system OR tenant roles)
+    options.AddPolicy(AuthorizationPolicies.AdminOrTenantAdmin, policy =>
+        policy.Requirements.Add(new RoleRequirement(
+            new[] { RoleNames.SystemAdmin, RoleNames.SuperUser },
+            new[] { RoleNames.TenantAdmin })));
+
+    options.AddPolicy(AuthorizationPolicies.ManagerOrAbove, policy =>
+        policy.Requirements.Add(new RoleRequirement(
+            new[] { RoleNames.SystemAdmin, RoleNames.SuperUser },
+            new[] { RoleNames.TenantAdmin, RoleNames.TenantManager })));
+
+    options.AddPolicy(AuthorizationPolicies.InspectorOrAbove, policy =>
+        policy.Requirements.Add(new RoleRequirement(
+            new[] { RoleNames.SystemAdmin, RoleNames.SuperUser },
+            new[] { RoleNames.TenantAdmin, RoleNames.TenantManager, RoleNames.Inspector })));
+});
+
+// Register authorization handlers
+builder.Services.AddSingleton<IAuthorizationHandler, RoleAuthorizationHandler>();
 
 // Add health checks
 builder.Services.AddHealthChecks()
