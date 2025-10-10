@@ -1,15 +1,19 @@
+using FireExtinguisherInspection.API.Authorization;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using FireExtinguisherInspection.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FireExtinguisherInspection.API.Controllers;
 
 /// <summary>
 /// API controller for location management
+/// Requires tenant-level authorization (Manager or above)
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize] // Require authentication for all endpoints
 public class LocationsController : ControllerBase
 {
     private readonly ILocationService _locationService;
@@ -32,9 +36,11 @@ public class LocationsController : ControllerBase
     /// <param name="request">Location creation request</param>
     /// <returns>Created location</returns>
     [HttpPost]
+    [Authorize(Policy = AuthorizationPolicies.ManagerOrAbove)]
     [ProducesResponseType(typeof(LocationDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<LocationDto>> CreateLocation([FromBody] CreateLocationRequest request)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -58,8 +64,10 @@ public class LocationsController : ControllerBase
     /// <param name="isActive">Filter by active status (optional)</param>
     /// <returns>List of locations</returns>
     [HttpGet]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
     [ProducesResponseType(typeof(IEnumerable<LocationDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<LocationDto>>> GetAllLocations([FromQuery] bool? isActive = null)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -80,9 +88,11 @@ public class LocationsController : ControllerBase
     /// <param name="id">Location ID</param>
     /// <returns>Location details</returns>
     [HttpGet("{id}")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
     [ProducesResponseType(typeof(LocationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<LocationDto>> GetLocationById(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -109,10 +119,12 @@ public class LocationsController : ControllerBase
     /// <param name="request">Location update request</param>
     /// <returns>Updated location</returns>
     [HttpPut("{id}")]
+    [Authorize(Policy = AuthorizationPolicies.ManagerOrAbove)]
     [ProducesResponseType(typeof(LocationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<LocationDto>> UpdateLocation(Guid id, [FromBody] UpdateLocationRequest request)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -139,9 +151,11 @@ public class LocationsController : ControllerBase
     /// <param name="id">Location ID</param>
     /// <returns>No content on success</returns>
     [HttpDelete("{id}")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOrTenantAdmin)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteLocation(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)

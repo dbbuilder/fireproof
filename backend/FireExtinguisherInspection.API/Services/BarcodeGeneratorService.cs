@@ -1,7 +1,6 @@
-using System.Drawing;
-using System.Drawing.Imaging;
 using QRCoder;
-using BarcodeLib;
+using BarcodeStandard;
+using SkiaSharp;
 
 namespace FireExtinguisherInspection.API.Services;
 
@@ -33,15 +32,15 @@ public class BarcodeGeneratorService : IBarcodeGeneratorService
 
             // Generate barcode image (Code 128 format)
             using var image = barcode.Encode(
-                BarcodeLib.TYPE.CODE128,
+                BarcodeStandard.Type.Code128,
                 data,
-                Color.Black,
-                Color.White,
+                SKColors.Black,
+                SKColors.White,
                 400,
                 150
             );
 
-            return ConvertImageToBase64(image);
+            return ConvertSkImageToBase64(image);
         }
         catch (Exception ex)
         {
@@ -103,13 +102,13 @@ public class BarcodeGeneratorService : IBarcodeGeneratorService
     }
 
     /// <summary>
-    /// Convert System.Drawing.Image to base64 data URI
+    /// Convert SKImage to base64 data URI
     /// </summary>
-    private string ConvertImageToBase64(Image image)
+    private string ConvertSkImageToBase64(SKImage image)
     {
-        using var ms = new MemoryStream();
-        image.Save(ms, ImageFormat.Png);
-        var base64 = Convert.ToBase64String(ms.ToArray());
+        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+        var bytes = data.ToArray();
+        var base64 = Convert.ToBase64String(bytes);
         return $"data:image/png;base64,{base64}";
     }
 }

@@ -781,6 +781,652 @@ This document tracks the phased implementation of the Fire Extinguisher Inspecti
 
 ---
 
+## Phase 2.5: Service Provider Multi-Tenancy (Months 7-8)
+
+### 🎯 Phase Objectives
+- Implement hierarchical multi-tenancy for service providers
+- Allow 3rd party inspection companies to manage multiple sub-tenants
+- Enable outside sales/implementation partners to operate software for clients
+- Build consolidated management and reporting for providers
+- Implement billing and revenue tracking systems
+
+---
+
+### **Feature Overview**
+
+Implement a hierarchical multi-tenancy model that supports **Service Providers** who can manage multiple sub-tenants (institutions/customers). This allows 3rd party inspection companies, outside sales organizations, or managed service providers to operate and manage the software on behalf of multiple institutions.
+
+### **Use Cases**
+1. **3rd Party Inspection Companies**: Companies that provide inspection services to multiple institutions
+2. **Outside Sales/Implementation Partners**: Organizations that sell, implement, and operate the software for multiple customers
+3. **Managed Service Providers**: Companies that manage fire safety compliance for multiple client institutions
+4. **White Label Providers**: Service providers offering branded solutions to their clients
+
+---
+
+### Database Schema - Service Provider Tables
+
+#### Core Service Provider Schema
+- ⬜ 🔴 Create `dbo.ServiceProviders` table
+  - ServiceProviderId (PK)
+  - ParentProviderId (FK, nullable - for provider hierarchies)
+  - CompanyName, LegalBusinessName
+  - TaxId, BusinessLicense
+  - BrandingLogoUrl, BrandingColorPrimary, BrandingColorSecondary
+  - CustomDomain (for white-label)
+  - PrimaryContactEmail, PrimaryContactPhone
+  - BillingEmail, BillingAddress
+  - DefaultCommissionRate (decimal)
+  - IsActive, IsApproved, ApprovedDate, ApprovedByUserId
+  - ContractStartDate, ContractEndDate
+  - CreatedDate, ModifiedDate, CreatedBy, ModifiedBy
+
+- ⬜ 🔴 Create `dbo.ServiceProviderUsers` table
+  - ServiceProviderUserId (PK)
+  - ServiceProviderId (FK)
+  - UserId (FK to dbo.Users)
+  - ServiceProviderRole (enum: 'Admin', 'Manager', 'Inspector', 'Billing')
+  - CanManageAllTenants (bit)
+  - IsActive, HireDate, TerminationDate
+  - CreatedDate, ModifiedDate
+
+- ⬜ 🔴 Create `dbo.ServiceProviderTenants` table
+  - ServiceProviderTenantId (PK)
+  - ServiceProviderId (FK)
+  - TenantId (FK)
+  - RelationshipStartDate, RelationshipEndDate
+  - BillingModel (enum: 'PerInspection', 'Monthly', 'Annual', 'PerExtinguisher', 'Tiered')
+  - MonthlyRate, AnnualRate, PerInspectionRate
+  - CommissionRate (decimal, overrides default)
+  - ServiceLevelAgreement (JSON or separate table)
+  - AutoRenewal (bit)
+  - IsActive, IsPaused, PausedReason
+  - CreatedDate, ModifiedDate
+
+- ⬜ 🔴 Create `dbo.ServiceProviderContracts` table
+  - ContractId (PK)
+  - ServiceProviderId (FK)
+  - TenantId (FK, nullable - master vs per-tenant contracts)
+  - ContractType (enum: 'Master', 'TenantSpecific', 'Amendment')
+  - ContractNumber, EffectiveDate, ExpirationDate
+  - DocumentUrl (Azure Blob Storage)
+  - SignedDate, SignedByName, SignedByEmail
+  - TermsAndConditions (text)
+  - IsActive, CreatedDate, ModifiedDate
+
+- ⬜ 🟠 Create `dbo.ServiceProviderInvoices` table
+  - InvoiceId (PK)
+  - ServiceProviderId (FK)
+  - TenantId (FK, nullable - could be aggregated)
+  - InvoiceNumber, InvoiceDate, DueDate
+  - BillingPeriodStart, BillingPeriodEnd
+  - Subtotal, Tax, Total
+  - Currency (default USD)
+  - Status (enum: 'Draft', 'Sent', 'Paid', 'Overdue', 'Cancelled')
+  - PaidDate, PaymentMethod
+  - InvoiceDocumentUrl
+  - CreatedDate, ModifiedDate
+
+- ⬜ 🟠 Create `dbo.ServiceProviderInvoiceLineItems` table
+  - LineItemId (PK)
+  - InvoiceId (FK)
+  - Description (e.g., "Inspection Services - October 2025")
+  - Quantity, UnitPrice, Amount
+  - TenantId (FK, nullable - for multi-tenant invoices)
+  - InspectionId (FK, nullable - for inspection-based billing)
+  - CreatedDate
+
+- ⬜ 🟠 Create `dbo.ServiceProviderCommissions` table
+  - CommissionId (PK)
+  - ServiceProviderId (FK)
+  - ServiceProviderUserId (FK, nullable - for inspector commissions)
+  - InvoiceId (FK)
+  - CommissionAmount
+  - CommissionRate
+  - Status (enum: 'Pending', 'Approved', 'Paid')
+  - ApprovedDate, PaidDate
+  - CreatedDate, ModifiedDate
+
+- ⬜ 🟠 Create `dbo.ServiceProviderSLAMetrics` table
+  - MetricId (PK)
+  - ServiceProviderTenantId (FK)
+  - MetricDate
+  - InspectionsDue, InspectionsCompleted, InspectionsOverdue
+  - SLACompliancePercentage
+  - ResponseTime (hours to first inspection)
+  - ResolutionTime (hours to complete inspection)
+  - CustomerSatisfactionScore
+  - CreatedDate
+
+- ⬜ 🟡 Create `dbo.ServiceProviderPermissions` table
+  - PermissionId (PK)
+  - ServiceProviderId (FK)
+  - TenantId (FK)
+  - PermissionType (enum: 'Read', 'Write', 'Delete', 'ManageUsers', 'ViewReports', 'ManageBilling')
+  - IsGranted (bit)
+  - GrantedDate, GrantedBy
+  - ExpiryDate (nullable)
+  - CreatedDate, ModifiedDate
+
+- ⬜ 🟡 Create `dbo.ServiceProviderBranding` table
+  - BrandingId (PK)
+  - ServiceProviderId (FK)
+  - LogoUrl, FaviconUrl
+  - PrimaryColor, SecondaryColor, AccentColor
+  - FontFamily
+  - CustomCSS (text, for advanced customization)
+  - EmailTemplate (HTML)
+  - ReportHeader (HTML)
+  - ReportFooter (HTML)
+  - CreatedDate, ModifiedDate
+
+#### Indexes and Constraints
+- ⬜ 🟠 Add indexes on ServiceProviderTenants (ServiceProviderId, TenantId, IsActive)
+- ⬜ 🟠 Add indexes on ServiceProviderUsers (ServiceProviderId, UserId)
+- ⬜ 🟠 Add indexes on ServiceProviderInvoices (ServiceProviderId, Status, InvoiceDate)
+- ⬜ 🟠 Add foreign key constraints with appropriate cascading rules
+- ⬜ 🟡 Add check constraints for date validations (EndDate > StartDate)
+
+---
+
+### Database - Stored Procedures
+
+#### Service Provider Management
+- ⬜ 🔴 `usp_ServiceProvider_Create` - Create new service provider with approval workflow
+- ⬜ 🔴 `usp_ServiceProvider_GetById` - Get provider details with branding
+- ⬜ 🔴 `usp_ServiceProvider_GetAll` - List all providers with filtering
+- ⬜ 🔴 `usp_ServiceProvider_Update` - Update provider details
+- ⬜ 🔴 `usp_ServiceProvider_Approve` - Approve/activate provider
+- ⬜ 🔴 `usp_ServiceProvider_Deactivate` - Deactivate provider
+- ⬜ 🟠 `usp_ServiceProvider_GetHierarchy` - Get provider hierarchy tree
+
+#### Tenant Assignment
+- ⬜ 🔴 `usp_ServiceProviderTenant_Create` - Assign tenant to provider
+- ⬜ 🔴 `usp_ServiceProviderTenant_GetByProvider` - List provider's tenants
+- ⬜ 🔴 `usp_ServiceProviderTenant_GetByTenant` - Get tenant's provider
+- ⬜ 🔴 `usp_ServiceProviderTenant_Update` - Update relationship
+- ⬜ 🔴 `usp_ServiceProviderTenant_Terminate` - End provider-tenant relationship
+- ⬜ 🟠 `usp_ServiceProviderTenant_Transfer` - Transfer tenant between providers
+
+#### User Management
+- ⬜ 🔴 `usp_ServiceProviderUser_Create` - Add user to provider
+- ⬜ 🔴 `usp_ServiceProviderUser_GetByProvider` - List provider users
+- ⬜ 🔴 `usp_ServiceProviderUser_GetByUser` - Get user's provider affiliations
+- ⬜ 🔴 `usp_ServiceProviderUser_AssignTenants` - Assign user to specific tenants
+- ⬜ 🟠 `usp_ServiceProviderUser_GetWorkload` - Get inspector's workload across tenants
+
+#### Billing & Invoicing
+- ⬜ 🔴 `usp_ServiceProviderInvoice_Create` - Create invoice
+- ⬜ 🔴 `usp_ServiceProviderInvoice_GetByProvider` - List provider invoices
+- ⬜ 🔴 `usp_ServiceProviderInvoice_GetByTenant` - List tenant invoices
+- ⬜ 🔴 `usp_ServiceProviderInvoice_CalculateBilling` - Calculate billing for period
+- ⬜ 🔴 `usp_ServiceProviderInvoice_MarkPaid` - Mark invoice as paid
+- ⬜ 🟠 `usp_ServiceProviderInvoice_GenerateLineItems` - Auto-generate from inspections
+- ⬜ 🟠 `usp_ServiceProviderCommission_Calculate` - Calculate commissions
+- ⬜ 🟡 `usp_ServiceProviderInvoice_SendReminder` - Get overdue invoices
+
+#### Reporting & Analytics
+- ⬜ 🔴 `usp_ServiceProvider_GetDashboard` - Provider dashboard metrics
+- ⬜ 🔴 `usp_ServiceProvider_GetConsolidatedReport` - Cross-tenant report data
+- ⬜ 🟠 `usp_ServiceProvider_GetRevenueReport` - Revenue by tenant/period
+- ⬜ 🟠 `usp_ServiceProvider_GetSLACompliance` - SLA metrics per tenant
+- ⬜ 🟠 `usp_ServiceProvider_GetInspectorPerformance` - Inspector metrics across tenants
+- ⬜ 🟡 `usp_ServiceProvider_GetUsageAnalytics` - Usage patterns and trends
+
+---
+
+### Backend - .NET API Services
+
+#### Service Provider Service
+- ⬜ 🔴 Create `IServiceProviderService` interface
+- ⬜ 🔴 Implement `ServiceProviderService`
+  - CRUD operations for providers
+  - Approval workflow
+  - Branding management
+  - Hierarchy management
+- ⬜ 🟠 Add validation logic for provider data
+- ⬜ 🟠 Implement provider status transitions
+- ⬜ 🟡 Add bulk operations support
+
+#### Service Provider Tenant Service
+- ⬜ 🔴 Create `IServiceProviderTenantService` interface
+- ⬜ 🔴 Implement `ServiceProviderTenantService`
+  - Assign/unassign tenants
+  - Manage relationships
+  - Calculate billing
+  - SLA tracking
+- ⬜ 🟠 Add tenant transfer logic
+- ⬜ 🟡 Implement relationship history tracking
+
+#### Billing Service
+- ⬜ 🔴 Create `IBillingService` interface
+- ⬜ 🔴 Implement `BillingService`
+  - Invoice generation
+  - Line item calculation
+  - Payment tracking
+  - Commission calculation
+- ⬜ 🟠 Integrate with Stripe or payment gateway
+- ⬜ 🟠 Add PDF invoice generation
+- ⬜ 🟡 Implement subscription management
+- ⬜ 🟡 Add dunning management (overdue payment handling)
+
+#### Contract Management Service
+- ⬜ 🟠 Create `IContractService` interface
+- ⬜ 🟠 Implement `ContractService`
+  - Contract CRUD operations
+  - Document storage integration
+  - E-signature integration (DocuSign/HelloSign)
+  - Contract renewal notifications
+- ⬜ 🟡 Add contract template system
+- ⬜ 🟡 Implement contract versioning
+
+#### Service Provider Analytics Service
+- ⬜ 🔴 Create `IServiceProviderAnalyticsService` interface
+- ⬜ 🔴 Implement `ServiceProviderAnalyticsService`
+  - Cross-tenant dashboards
+  - Revenue analytics
+  - Performance metrics
+  - SLA compliance tracking
+- ⬜ 🟠 Add predictive analytics (forecasting)
+- ⬜ 🟡 Implement custom report builder
+
+---
+
+### Backend - API Endpoints
+
+#### Service Provider Endpoints
+- ⬜ 🔴 `GET /api/service-providers` - List all providers (admin)
+- ⬜ 🔴 `POST /api/service-providers` - Create provider (registration)
+- ⬜ 🔴 `GET /api/service-providers/{id}` - Get provider details
+- ⬜ 🔴 `PUT /api/service-providers/{id}` - Update provider
+- ⬜ 🔴 `POST /api/service-providers/{id}/approve` - Approve provider (admin)
+- ⬜ 🔴 `DELETE /api/service-providers/{id}` - Deactivate provider
+- ⬜ 🟠 `GET /api/service-providers/{id}/hierarchy` - Get provider hierarchy
+- ⬜ 🟠 `PUT /api/service-providers/{id}/branding` - Update branding
+
+#### Tenant Management Endpoints
+- ⬜ 🔴 `GET /api/service-providers/{id}/tenants` - List provider's tenants
+- ⬜ 🔴 `POST /api/service-providers/{id}/tenants` - Add tenant to provider
+- ⬜ 🔴 `PUT /api/service-providers/{id}/tenants/{tenantId}` - Update relationship
+- ⬜ 🔴 `DELETE /api/service-providers/{id}/tenants/{tenantId}` - Remove tenant
+- ⬜ 🟠 `POST /api/service-providers/{id}/tenants/{tenantId}/transfer` - Transfer tenant
+
+#### User Management Endpoints
+- ⬜ 🔴 `GET /api/service-providers/{id}/users` - List provider users
+- ⬜ 🔴 `POST /api/service-providers/{id}/users` - Add user to provider
+- ⬜ 🔴 `PUT /api/service-providers/{id}/users/{userId}` - Update user role
+- ⬜ 🔴 `DELETE /api/service-providers/{id}/users/{userId}` - Remove user
+- ⬜ 🟠 `POST /api/service-providers/{id}/users/{userId}/assign-tenants` - Assign tenants
+
+#### Inspection & Operations Endpoints
+- ⬜ 🔴 `GET /api/service-providers/{id}/inspections` - All inspections across tenants
+- ⬜ 🔴 `GET /api/service-providers/{id}/inspections/due` - Due inspections across all tenants
+- ⬜ 🔴 `GET /api/service-providers/{id}/inspections/schedule` - Optimized inspection schedule
+- ⬜ 🟠 `GET /api/service-providers/{id}/inspections/route` - Route optimization for inspectors
+- ⬜ 🟡 `POST /api/service-providers/{id}/inspections/bulk-assign` - Bulk assign inspections
+
+#### Billing & Invoicing Endpoints
+- ⬜ 🔴 `GET /api/service-providers/{id}/invoices` - List invoices
+- ⬜ 🔴 `POST /api/service-providers/{id}/invoices` - Create invoice
+- ⬜ 🔴 `GET /api/service-providers/{id}/invoices/{invoiceId}` - Get invoice
+- ⬜ 🔴 `PUT /api/service-providers/{id}/invoices/{invoiceId}` - Update invoice
+- ⬜ 🔴 `POST /api/service-providers/{id}/invoices/{invoiceId}/send` - Send invoice
+- ⬜ 🔴 `POST /api/service-providers/{id}/invoices/{invoiceId}/pay` - Record payment
+- ⬜ 🟠 `GET /api/service-providers/{id}/billing/calculate` - Calculate billing for period
+- ⬜ 🟠 `GET /api/service-providers/{id}/commissions` - Commission report
+- ⬜ 🟡 `POST /api/service-providers/{id}/invoices/bulk-generate` - Bulk invoice generation
+
+#### Reporting & Dashboard Endpoints
+- ⬜ 🔴 `GET /api/service-providers/{id}/dashboard` - Provider dashboard data
+- ⬜ 🔴 `GET /api/service-providers/{id}/reports/consolidated` - Cross-tenant compliance report
+- ⬜ 🔴 `GET /api/service-providers/{id}/reports/revenue` - Revenue by tenant/period
+- ⬜ 🟠 `GET /api/service-providers/{id}/reports/sla-compliance` - SLA metrics
+- ⬜ 🟠 `GET /api/service-providers/{id}/reports/inspector-performance` - Inspector metrics
+- ⬜ 🟠 `GET /api/service-providers/{id}/reports/tenant-summary` - Per-tenant summary
+- ⬜ 🟡 `GET /api/service-providers/{id}/analytics/trends` - Usage and revenue trends
+- ⬜ 🟡 `GET /api/service-providers/{id}/analytics/forecast` - Revenue forecasting
+
+#### Contract Management Endpoints
+- ⬜ 🟠 `GET /api/service-providers/{id}/contracts` - List contracts
+- ⬜ 🟠 `POST /api/service-providers/{id}/contracts` - Create contract
+- ⬜ 🟠 `GET /api/service-providers/{id}/contracts/{contractId}` - Get contract
+- ⬜ 🟠 `PUT /api/service-providers/{id}/contracts/{contractId}` - Update contract
+- ⬜ 🟡 `POST /api/service-providers/{id}/contracts/{contractId}/sign` - E-signature integration
+
+---
+
+### Frontend - Service Provider Portal
+
+#### Provider Registration & Onboarding
+- ⬜ 🔴 Create ServiceProviderRegistration view
+- ⬜ 🔴 Create ServiceProviderOnboarding wizard component
+- ⬜ 🔴 Create BrandingSetup component
+- ⬜ 🟠 Add document upload for business license/insurance
+- ⬜ 🟡 Add e-signature for master agreement
+
+#### Provider Dashboard
+- ⬜ 🔴 Create ProviderDashboard view
+- ⬜ 🔴 Create TenantOverview component (list all managed tenants)
+- ⬜ 🔴 Create ConsolidatedMetrics component (KPIs across all tenants)
+- ⬜ 🔴 Create RevenueChart component
+- ⬜ 🟠 Create SLAComplianceWidget component
+- ⬜ 🟠 Create InspectorWorkloadWidget component
+- ⬜ 🟡 Create PredictiveAnalytics component
+
+#### Tenant Management UI
+- ⬜ 🔴 Create TenantManagement view
+- ⬜ 🔴 Create TenantList component (provider's tenants)
+- ⬜ 🔴 Create TenantSelector component (switch context)
+- ⬜ 🔴 Create AddTenantModal component
+- ⬜ 🔴 Create TenantRelationshipForm component
+- ⬜ 🟠 Create TenantTransferModal component
+- ⬜ 🟡 Create BulkTenantOperations component
+
+#### User & Inspector Management
+- ⬜ 🔴 Create ProviderUserManagement view
+- ⬜ 🔴 Create InspectorList component
+- ⬜ 🔴 Create InspectorSchedule component (cross-tenant)
+- ⬜ 🔴 Create TenantAssignment component (assign inspectors to tenants)
+- ⬜ 🟠 Create InspectorPerformanceReport component
+- ⬜ 🟡 Create WorkloadBalancer component (optimize assignments)
+
+#### Inspection Operations
+- ⬜ 🔴 Create ConsolidatedInspectionQueue view
+- ⬜ 🔴 Create MultiTenantInspectionList component
+- ⬜ 🔴 Create InspectionScheduleOptimizer component
+- ⬜ 🟠 Create RouteOptimization component (GPS-based routing)
+- ⬜ 🟠 Create BulkInspectionAssignment component
+- ⬜ 🟡 Create InspectionHeatmap component (geographic view)
+
+#### Billing & Invoicing UI
+- ⬜ 🔴 Create BillingDashboard view
+- ⬜ 🔴 Create InvoiceList component
+- ⬜ 🔴 Create InvoiceDetails component
+- ⬜ 🔴 Create GenerateInvoice component
+- ⬜ 🔴 Create PaymentTracking component
+- ⬜ 🟠 Create CommissionReport component
+- ⬜ 🟠 Create RevenueByTenant component
+- ⬜ 🟡 Create PaymentGatewayIntegration component (Stripe Elements)
+- ⬜ 🟡 Create RecurringBillingSetup component
+
+#### Reporting & Analytics
+- ⬜ 🔴 Create ProviderReports view
+- ⬜ 🔴 Create ConsolidatedComplianceReport component
+- ⬜ 🔴 Create RevenueDashboard component
+- ⬜ 🔴 Create SLAComplianceReport component
+- ⬜ 🟠 Create CustomReportBuilder component
+- ⬜ 🟠 Create TrendAnalysis component
+- ⬜ 🟡 Create ForecastingDashboard component
+- ⬜ 🟡 Create ExportToExcel component (consolidated exports)
+
+#### Branding & White Label
+- ⬜ 🟠 Create BrandingManagement view
+- ⬜ 🟠 Create LogoUpload component
+- ⬜ 🟠 Create ColorScheme component
+- ⬜ 🟠 Create EmailTemplateEditor component
+- ⬜ 🟡 Create ReportTemplateEditor component
+- ⬜ 🟡 Create CustomDomainSetup component
+
+#### Contract Management
+- ⬜ 🟠 Create ContractManagement view
+- ⬜ 🟠 Create ContractList component
+- ⬜ 🟠 Create ContractDetails component
+- ⬜ 🟡 Create ContractRenewalReminder component
+- ⬜ 🟡 Create ESignatureIntegration component
+
+---
+
+### Frontend - Mobile App Enhancements
+
+#### Multi-Tenant Inspector Experience
+- ⬜ 🔴 Add TenantSwitcher component to mobile app
+- ⬜ 🔴 Add CurrentTenant indicator in app header
+- ⬜ 🔴 Update InspectionList to show tenant context
+- ⬜ 🟠 Add cross-tenant search
+- ⬜ 🟡 Add tenant-specific branding support
+
+#### Inspector Assignment
+- ⬜ 🔴 Create MyAssignments view (across all tenants)
+- ⬜ 🔴 Add TenantFilter to assignment list
+- ⬜ 🟠 Add RouteOptimization for daily inspections
+- ⬜ 🟡 Add cross-tenant navigation optimization
+
+---
+
+### Authorization & Security
+
+#### New Authorization Policies
+- ⬜ 🔴 Create `ServiceProviderAdmin` policy
+- ⬜ 🔴 Create `ServiceProviderManager` policy
+- ⬜ 🔴 Create `ServiceProviderInspector` policy
+- ⬜ 🔴 Create `ServiceProviderBilling` policy
+- ⬜ 🟠 Implement cross-tenant authorization checks
+- ⬜ 🟠 Add provider-level data isolation
+- ⬜ 🟡 Implement granular permissions system
+
+#### Claims Transformation
+- ⬜ 🔴 Add `service_provider_id` claim
+- ⬜ 🔴 Add `service_provider_role` claim
+- ⬜ 🔴 Add `managed_tenant_ids` claim (array)
+- ⬜ 🟠 Update JWT token generation for provider users
+- ⬜ 🟠 Add tenant context switching claims
+
+#### Middleware Updates
+- ⬜ 🔴 Update `TenantResolutionMiddleware` to handle provider context
+- ⬜ 🔴 Create `ServiceProviderResolutionMiddleware`
+- ⬜ 🟠 Add provider-tenant validation middleware
+- ⬜ 🟡 Implement audit logging for cross-tenant access
+
+---
+
+### Integration & Dependencies
+
+#### Payment Gateway Integration (Stripe)
+- ⬜ 🟠 Setup Stripe account and API keys
+- ⬜ 🟠 Install Stripe .NET SDK
+- ⬜ 🟠 Implement customer creation in Stripe
+- ⬜ 🟠 Implement subscription management
+- ⬜ 🟠 Implement invoice sync with Stripe
+- ⬜ 🟠 Add webhook handlers for payment events
+- ⬜ 🟡 Implement payment method management
+- ⬜ 🟡 Add support for multiple currencies
+
+#### E-Signature Integration (DocuSign/HelloSign)
+- ⬜ 🟡 Setup DocuSign or HelloSign account
+- ⬜ 🟡 Install SDK
+- ⬜ 🟡 Implement contract sending workflow
+- ⬜ 🟡 Add webhook handlers for signature events
+- ⬜ 🟡 Store signed documents in Azure Blob Storage
+- ⬜ 🟡 Add contract status tracking
+
+#### Email & Communication
+- ⬜ 🔴 Create email templates for provider notifications
+  - New tenant assignment
+  - Invoice generated
+  - Payment received
+  - SLA violation alerts
+  - Contract renewal reminders
+- ⬜ 🟠 Implement SendGrid template system
+- ⬜ 🟠 Add email scheduling for reminders
+- ⬜ 🟡 Add SMS notifications (Twilio)
+
+#### Analytics & Reporting Integration
+- ⬜ 🟠 Implement Power BI embedding for advanced analytics
+- ⬜ 🟡 Add Google Analytics for provider portal usage
+- ⬜ 🟡 Implement custom event tracking for billing events
+
+#### Accounting Software Integration (Optional)
+- ⬜ 🟡 QuickBooks Online integration
+- ⬜ 🟡 Xero integration
+- ⬜ 🟡 Automated invoice sync
+- ⬜ 🟡 Payment reconciliation
+
+---
+
+### Background Jobs & Automation
+
+#### Billing Automation Jobs
+- ⬜ 🔴 Create `GenerateMonthlyInvoicesJob` - Auto-generate invoices
+- ⬜ 🔴 Create `SendInvoiceRemindersJob` - Send payment reminders
+- ⬜ 🔴 Create `CalculateCommissionsJob` - Calculate provider/inspector commissions
+- ⬜ 🟠 Create `ProcessPaymentsJob` - Process recurring payments
+- ⬜ 🟠 Create `SyncStripeInvoicesJob` - Sync with Stripe
+- ⬜ 🟡 Create `HandleOverdueInvoicesJob` - Dunning management
+
+#### SLA Monitoring Jobs
+- ⬜ 🔴 Create `CalculateSLAMetricsJob` - Calculate daily SLA metrics
+- ⬜ 🔴 Create `SendSLAViolationAlertsJob` - Alert on SLA violations
+- ⬜ 🟠 Create `GenerateSLAReportsJob` - Weekly/monthly SLA reports
+
+#### Contract Management Jobs
+- ⬜ 🟠 Create `ContractRenewalReminderJob` - Alert on upcoming renewals
+- ⬜ 🟡 Create `ContractExpirationJob` - Handle expired contracts
+- ⬜ 🟡 Create `AutoRenewContractsJob` - Process auto-renewals
+
+---
+
+### Testing
+
+#### Unit Tests
+- ⬜ 🔴 Write unit tests for ServiceProviderService
+- ⬜ 🔴 Write unit tests for ServiceProviderTenantService
+- ⬜ 🔴 Write unit tests for BillingService
+- ⬜ 🟠 Write unit tests for ContractService
+- ⬜ 🟠 Write unit tests for ServiceProviderAnalyticsService
+- ⬜ 🟠 Achieve 70%+ code coverage
+
+#### Integration Tests
+- ⬜ 🔴 Test provider registration and approval workflow
+- ⬜ 🔴 Test tenant assignment and management
+- ⬜ 🔴 Test invoice generation and calculation
+- ⬜ 🔴 Test cross-tenant authorization
+- ⬜ 🟠 Test billing calculations for various models
+- ⬜ 🟠 Test commission calculations
+- ⬜ 🟡 Test contract workflow
+
+#### E2E Tests
+- ⬜ 🔴 Provider registration → approval → tenant assignment → inspection → billing flow
+- ⬜ 🟠 Multi-tenant inspector workflow
+- ⬜ 🟡 White label branding verification
+
+---
+
+### Migration & Data Updates
+
+#### Database Migrations
+- ⬜ 🔴 Create migration script for all service provider tables
+- ⬜ 🔴 Add foreign keys to existing tables
+- ⬜ 🔴 Update existing stored procedures
+- ⬜ 🟠 Create seed data for testing
+- ⬜ 🟠 Add database indexes
+- ⬜ 🟡 Create views for common reporting queries
+
+#### Existing Table Updates
+- ⬜ 🔴 Add `ServiceProviderId` to `dbo.Inspections` (nullable, FK)
+- ⬜ 🔴 Add `PerformedByServiceProviderId` to track which provider performed inspection
+- ⬜ 🟠 Add `ServiceProviderInvoiceId` to `dbo.Inspections` (for billing linkage)
+- ⬜ 🟠 Update `dbo.Users` to support multi-provider affiliations
+- ⬜ 🟡 Add audit fields to all new tables
+
+---
+
+### Documentation
+
+#### Technical Documentation
+- ⬜ 🔴 Service provider data model documentation
+- ⬜ 🔴 Multi-tenancy architecture documentation
+- ⬜ 🔴 API documentation for all provider endpoints
+- ⬜ 🟠 Billing calculation logic documentation
+- ⬜ 🟠 Integration guides (Stripe, DocuSign)
+- ⬜ 🟡 White label setup guide
+
+#### User Documentation
+- ⬜ 🔴 Service provider admin guide
+- ⬜ 🔴 Billing and invoicing guide
+- ⬜ 🔴 Multi-tenant inspector guide
+- ⬜ 🟠 Branding customization guide
+- ⬜ 🟡 Contract management guide
+
+#### Business Documentation
+- ⬜ 🟠 Pricing models and examples
+- ⬜ 🟠 SLA templates
+- ⬜ 🟠 Contract templates
+- ⬜ 🟡 Onboarding checklist for providers
+
+---
+
+### Performance & Optimization
+
+#### Query Optimization
+- ⬜ 🔴 Optimize cross-tenant queries
+- ⬜ 🔴 Add database indexes for reporting queries
+- ⬜ 🟠 Implement query result caching for dashboards
+- ⬜ 🟡 Add read replicas for reporting workloads
+
+#### Scalability
+- ⬜ 🟠 Test with 100+ tenants per provider
+- ⬜ 🟠 Test with 1000+ inspections per month
+- ⬜ 🟡 Implement database partitioning for large datasets
+- ⬜ 🟡 Add Redis caching for frequently accessed data
+
+---
+
+### Compliance & Legal
+
+#### Data Privacy
+- ⬜ 🔴 Implement data isolation between providers
+- ⬜ 🔴 Add data access audit logging
+- ⬜ 🟠 GDPR compliance for provider data
+- ⬜ 🟠 Add data retention policies
+- ⬜ 🟡 Implement right-to-be-forgotten for providers
+
+#### Financial Compliance
+- ⬜ 🟠 Add tax calculation support
+- ⬜ 🟠 Generate tax reports (1099 for contractors)
+- ⬜ 🟡 PCI compliance for payment processing
+- ⬜ 🟡 SOC 2 compliance documentation
+
+---
+
+### Priority & Timeline
+
+**Priority:** 🟡 P2 (Medium) - Implement after core inspection functionality is stable and tested
+
+**Estimated Timeline:** 8-10 weeks
+
+**Prerequisites:**
+- ✅ Complete authentication system
+- ⬜ Complete core inspection workflow
+- ⬜ Complete reporting infrastructure
+- ⬜ Complete role-based authorization
+- ⬜ Complete billing system foundation
+
+**Dependencies:**
+- 🔴 P0 - Stripe integration (for billing)
+- 🟠 P1 - Email notification system (for provider communications)
+- 🟠 P1 - PDF generation (for invoices and contracts)
+- 🟡 P2 - E-signature integration (for contracts)
+- 🟡 P2 - Accounting software integration (optional)
+- 🟡 P2 - Advanced analytics/reporting (Power BI)
+
+---
+
+### Future Enhancements (Phase 3+)
+
+#### Advanced Features
+- ⬜ 🟢 Implement provider marketplace (providers bid on tenant contracts)
+- ⬜ 🟢 Add provider rating and review system
+- ⬜ 🟢 Implement provider-to-provider sub-contracting
+- ⬜ 🟢 Add AI-powered inspection scheduling optimization
+- ⬜ 🟢 Implement predictive maintenance recommendations
+- ⬜ 🟢 Add multi-language support for international providers
+- ⬜ 🟢 Implement provider insurance verification and tracking
+- ⬜ 🟢 Add provider certification and training tracking
+- ⬜ 🟢 Implement automated route optimization with traffic data
+- ⬜ 🟢 Add provider referral program
+
+---
+
 ## Continuous Improvement
 
 ### Monitoring & Maintenance

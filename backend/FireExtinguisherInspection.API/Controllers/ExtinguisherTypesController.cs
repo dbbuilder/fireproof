@@ -1,15 +1,19 @@
+using FireExtinguisherInspection.API.Authorization;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using FireExtinguisherInspection.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FireExtinguisherInspection.API.Controllers;
 
 /// <summary>
 /// API controller for fire extinguisher type management
+/// Requires tenant-level authorization (Manager or above)
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize] // Require authentication for all endpoints
 public class ExtinguisherTypesController : ControllerBase
 {
     private readonly IExtinguisherTypeService _extinguisherTypeService;
@@ -30,9 +34,11 @@ public class ExtinguisherTypesController : ControllerBase
     /// Creates a new extinguisher type
     /// </summary>
     [HttpPost]
+    [Authorize(Policy = AuthorizationPolicies.ManagerOrAbove)]
     [ProducesResponseType(typeof(ExtinguisherTypeDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<ExtinguisherTypeDto>> CreateExtinguisherType([FromBody] CreateExtinguisherTypeRequest request)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -54,8 +60,10 @@ public class ExtinguisherTypesController : ControllerBase
     /// Retrieves all extinguisher types for the current tenant
     /// </summary>
     [HttpGet]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
     [ProducesResponseType(typeof(IEnumerable<ExtinguisherTypeDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<ExtinguisherTypeDto>>> GetAllExtinguisherTypes([FromQuery] bool? isActive = null)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -74,9 +82,11 @@ public class ExtinguisherTypesController : ControllerBase
     /// Retrieves a specific extinguisher type by ID
     /// </summary>
     [HttpGet("{id}")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
     [ProducesResponseType(typeof(ExtinguisherTypeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<ExtinguisherTypeDto>> GetExtinguisherTypeById(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -100,10 +110,12 @@ public class ExtinguisherTypesController : ControllerBase
     /// Updates an existing extinguisher type
     /// </summary>
     [HttpPut("{id}")]
+    [Authorize(Policy = AuthorizationPolicies.ManagerOrAbove)]
     [ProducesResponseType(typeof(ExtinguisherTypeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<ExtinguisherTypeDto>> UpdateExtinguisherType(Guid id, [FromBody] UpdateExtinguisherTypeRequest request)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -128,9 +140,11 @@ public class ExtinguisherTypesController : ControllerBase
     /// Deletes (soft delete) an extinguisher type
     /// </summary>
     [HttpDelete("{id}")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOrTenantAdmin)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteExtinguisherType(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)

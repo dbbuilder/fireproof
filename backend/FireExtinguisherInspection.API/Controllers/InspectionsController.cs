@@ -1,12 +1,19 @@
+using FireExtinguisherInspection.API.Authorization;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using FireExtinguisherInspection.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FireExtinguisherInspection.API.Controllers;
 
+/// <summary>
+/// API controller for fire extinguisher inspection management
+/// Requires tenant-level authorization (Inspector or above)
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize] // Require authentication for all endpoints
 public class InspectionsController : ControllerBase
 {
     private readonly IInspectionService _inspectionService;
@@ -27,6 +34,11 @@ public class InspectionsController : ControllerBase
     /// Create a new tamper-proof inspection
     /// </summary>
     [HttpPost]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(InspectionDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<InspectionDto>> CreateInspection([FromBody] CreateInspectionRequest request)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -48,6 +60,10 @@ public class InspectionsController : ControllerBase
     /// Get all inspections with optional filtering
     /// </summary>
     [HttpGet]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(IEnumerable<InspectionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<InspectionDto>>> GetAllInspections(
         [FromQuery] Guid? extinguisherId = null,
         [FromQuery] Guid? inspectorUserId = null,
@@ -83,6 +99,11 @@ public class InspectionsController : ControllerBase
     /// Get inspection by ID
     /// </summary>
     [HttpGet("{id:guid}")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(InspectionDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<InspectionDto>> GetInspectionById(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -109,6 +130,10 @@ public class InspectionsController : ControllerBase
     /// Get inspection history for a specific extinguisher
     /// </summary>
     [HttpGet("extinguisher/{extinguisherId:guid}")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(IEnumerable<InspectionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<InspectionDto>>> GetExtinguisherInspectionHistory(Guid extinguisherId)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -131,6 +156,10 @@ public class InspectionsController : ControllerBase
     /// Get inspections performed by a specific inspector
     /// </summary>
     [HttpGet("inspector/{inspectorUserId:guid}")]
+    [Authorize(Policy = AuthorizationPolicies.ManagerOrAbove)]
+    [ProducesResponseType(typeof(IEnumerable<InspectionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<InspectionDto>>> GetInspectorInspections(
         Guid inspectorUserId,
         [FromQuery] DateTime? startDate = null,
@@ -161,6 +190,11 @@ public class InspectionsController : ControllerBase
     /// Verify the tamper-proof integrity of an inspection
     /// </summary>
     [HttpPost("{id:guid}/verify")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(InspectionVerificationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<InspectionVerificationResponse>> VerifyInspectionIntegrity(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -187,6 +221,10 @@ public class InspectionsController : ControllerBase
     /// Get inspection statistics
     /// </summary>
     [HttpGet("stats")]
+    [Authorize(Policy = AuthorizationPolicies.ManagerOrAbove)]
+    [ProducesResponseType(typeof(InspectionStatsDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<InspectionStatsDto>> GetInspectionStats(
         [FromQuery] DateTime? startDate = null,
         [FromQuery] DateTime? endDate = null)
@@ -210,6 +248,10 @@ public class InspectionsController : ControllerBase
     /// Get overdue inspections
     /// </summary>
     [HttpGet("overdue")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(IEnumerable<InspectionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<InspectionDto>>> GetOverdueInspections(
         [FromQuery] string inspectionType = "Monthly")
     {
@@ -229,9 +271,14 @@ public class InspectionsController : ControllerBase
     }
 
     /// <summary>
-    /// Delete an inspection
+    /// Delete an inspection (admin only - inspections are tamper-proof)
     /// </summary>
     [HttpDelete("{id:guid}")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOrTenantAdmin)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteInspection(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)

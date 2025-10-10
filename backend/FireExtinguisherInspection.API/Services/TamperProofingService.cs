@@ -19,9 +19,14 @@ public class TamperProofingService : ITamperProofingService
         _configuration = configuration;
         _logger = logger;
 
-        // Get signature key from configuration (should be stored in Key Vault in production)
-        var keyString = _configuration["TamperProofing:SignatureKey"] ?? "DEFAULT_DEV_KEY_CHANGE_IN_PRODUCTION";
+        // Try Key Vault first, fallback to appsettings
+        var keyString = _configuration["TamperProofingSignatureKey"]
+            ?? _configuration["TamperProofing:SignatureKey"]
+            ?? throw new InvalidOperationException("TamperProofing signature key not configured");
         _signatureKey = Encoding.UTF8.GetBytes(keyString);
+
+        _logger.LogInformation("TamperProofing service initialized with signature key from {Source}",
+            _configuration["TamperProofingSignatureKey"] != null ? "Key Vault" : "appsettings");
     }
 
     /// <summary>

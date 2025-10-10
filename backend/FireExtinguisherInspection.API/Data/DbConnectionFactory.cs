@@ -20,7 +20,9 @@ public class DbConnectionFactory : IDbConnectionFactory
         IMemoryCache cache,
         ILogger<DbConnectionFactory> logger)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection")
+        // Try Key Vault first, fallback to appsettings
+        _connectionString = configuration["DatabaseConnectionString"]
+            ?? configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found");
         _cache = cache;
         _logger = logger;

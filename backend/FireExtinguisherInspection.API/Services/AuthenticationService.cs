@@ -40,7 +40,7 @@ namespace FireExtinguisherInspection.API.Services
             var passwordHash = _passwordHasher.HashPassword(request.Password, out var salt);
 
             // Create user in database
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
             var parameters = new DynamicParameters();
             parameters.Add("@Email", request.Email);
             parameters.Add("@FirstName", request.FirstName);
@@ -95,7 +95,7 @@ namespace FireExtinguisherInspection.API.Services
         /// </summary>
         public async Task<AuthenticationResponse> LoginAsync(LoginRequest request)
         {
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             // Get user by email
             var userWithPassword = await connection.QueryFirstOrDefaultAsync<UserWithPasswordDto>(
@@ -144,7 +144,7 @@ namespace FireExtinguisherInspection.API.Services
         {
             _logger.LogWarning("DEV LOGIN USED - This should NEVER happen in production! Email: {Email}", request.Email);
 
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             // Get user WITHOUT password verification
             var user = await connection.QueryFirstOrDefaultAsync<UserDto>(
@@ -179,7 +179,7 @@ namespace FireExtinguisherInspection.API.Services
         /// </summary>
         public async Task<AuthenticationResponse> RefreshTokenAsync(RefreshTokenRequest request)
         {
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             // Get user by refresh token
             var user = await connection.QueryFirstOrDefaultAsync<UserDto>(
@@ -216,7 +216,7 @@ namespace FireExtinguisherInspection.API.Services
         /// </summary>
         public async Task<bool> ResetPasswordAsync(ResetPasswordRequest request)
         {
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             // Get user
             var userWithPassword = await connection.QueryFirstOrDefaultAsync<UserWithPasswordDto>(
@@ -256,7 +256,7 @@ namespace FireExtinguisherInspection.API.Services
         /// </summary>
         public async Task<bool> ConfirmEmailAsync(ConfirmEmailRequest request)
         {
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             await connection.ExecuteAsync(
                 "dbo.usp_User_ConfirmEmail",
@@ -273,7 +273,7 @@ namespace FireExtinguisherInspection.API.Services
         /// </summary>
         public async Task<UserDto?> GetUserByIdAsync(Guid userId)
         {
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             return await connection.QueryFirstOrDefaultAsync<UserDto>(
                 "dbo.usp_User_GetById",
@@ -287,7 +287,7 @@ namespace FireExtinguisherInspection.API.Services
         /// </summary>
         public async Task<List<RoleDto>> GetUserRolesAsync(Guid userId)
         {
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             var roles = await connection.QueryAsync<RoleDto>(
                 "dbo.usp_User_GetRoles",
@@ -303,7 +303,7 @@ namespace FireExtinguisherInspection.API.Services
         /// </summary>
         public async Task<bool> AssignUserToTenantAsync(AssignUserToTenantRequest request)
         {
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             await connection.ExecuteAsync(
                 "dbo.usp_User_AssignToTenant",
@@ -327,7 +327,7 @@ namespace FireExtinguisherInspection.API.Services
         /// </summary>
         private async Task UpdateRefreshTokenAsync(Guid userId, string refreshToken)
         {
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             var expiryDate = DateTime.UtcNow.AddDays(7); // 7 days
 
@@ -348,7 +348,7 @@ namespace FireExtinguisherInspection.API.Services
         /// </summary>
         private async Task UpdateLastLoginAsync(Guid userId)
         {
-            using var connection = _connectionFactory.CreateCommonConnection();
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             await connection.ExecuteAsync(
                 "dbo.usp_User_UpdateLastLogin",

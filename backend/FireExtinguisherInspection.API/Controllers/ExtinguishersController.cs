@@ -1,12 +1,19 @@
+using FireExtinguisherInspection.API.Authorization;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using FireExtinguisherInspection.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FireExtinguisherInspection.API.Controllers;
 
+/// <summary>
+/// API controller for fire extinguisher inventory management
+/// Requires tenant-level authorization
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize] // Require authentication for all endpoints
 public class ExtinguishersController : ControllerBase
 {
     private readonly IExtinguisherService _extinguisherService;
@@ -27,6 +34,11 @@ public class ExtinguishersController : ControllerBase
     /// Create a new fire extinguisher
     /// </summary>
     [HttpPost]
+    [Authorize(Policy = AuthorizationPolicies.ManagerOrAbove)]
+    [ProducesResponseType(typeof(ExtinguisherDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<ExtinguisherDto>> CreateExtinguisher([FromBody] CreateExtinguisherRequest request)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -48,6 +60,10 @@ public class ExtinguishersController : ControllerBase
     /// Get all fire extinguishers with optional filtering
     /// </summary>
     [HttpGet]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(IEnumerable<ExtinguisherDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<ExtinguisherDto>>> GetAllExtinguishers(
         [FromQuery] Guid? locationId = null,
         [FromQuery] Guid? typeId = null,
@@ -79,6 +95,11 @@ public class ExtinguishersController : ControllerBase
     /// Get extinguisher by ID
     /// </summary>
     [HttpGet("{id:guid}")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(ExtinguisherDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<ExtinguisherDto>> GetExtinguisherById(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -105,6 +126,11 @@ public class ExtinguishersController : ControllerBase
     /// Get extinguisher by barcode
     /// </summary>
     [HttpGet("barcode/{barcodeData}")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(ExtinguisherDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<ExtinguisherDto>> GetExtinguisherByBarcode(string barcodeData)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -131,6 +157,12 @@ public class ExtinguishersController : ControllerBase
     /// Update an extinguisher
     /// </summary>
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = AuthorizationPolicies.ManagerOrAbove)]
+    [ProducesResponseType(typeof(ExtinguisherDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<ExtinguisherDto>> UpdateExtinguisher(Guid id, [FromBody] UpdateExtinguisherRequest request)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -157,6 +189,11 @@ public class ExtinguishersController : ControllerBase
     /// Delete an extinguisher
     /// </summary>
     [HttpDelete("{id:guid}")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOrTenantAdmin)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteExtinguisher(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -183,6 +220,11 @@ public class ExtinguishersController : ControllerBase
     /// Generate or regenerate barcode for an extinguisher
     /// </summary>
     [HttpPost("{id:guid}/barcode")]
+    [Authorize(Policy = AuthorizationPolicies.ManagerOrAbove)]
+    [ProducesResponseType(typeof(BarcodeResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<BarcodeResponse>> GenerateBarcode(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -209,6 +251,11 @@ public class ExtinguishersController : ControllerBase
     /// Mark extinguisher as out of service
     /// </summary>
     [HttpPost("{id:guid}/outofservice")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(ExtinguisherDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<ExtinguisherDto>> MarkOutOfService(Guid id, [FromBody] OutOfServiceRequest request)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -235,6 +282,11 @@ public class ExtinguishersController : ControllerBase
     /// Return extinguisher to service
     /// </summary>
     [HttpPost("{id:guid}/returntoservice")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(ExtinguisherDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<ExtinguisherDto>> ReturnToService(Guid id)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -261,6 +313,10 @@ public class ExtinguishersController : ControllerBase
     /// Get extinguishers needing service soon
     /// </summary>
     [HttpGet("needingservice")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(IEnumerable<ExtinguisherDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<ExtinguisherDto>>> GetExtinguishersNeedingService([FromQuery] int daysAhead = 30)
     {
         if (_tenantContext.TenantId == Guid.Empty)
@@ -282,6 +338,10 @@ public class ExtinguishersController : ControllerBase
     /// Get extinguishers needing hydro test soon
     /// </summary>
     [HttpGet("needinghydrotest")]
+    [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
+    [ProducesResponseType(typeof(IEnumerable<ExtinguisherDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<ExtinguisherDto>>> GetExtinguishersNeedingHydroTest([FromQuery] int daysAhead = 30)
     {
         if (_tenantContext.TenantId == Guid.Empty)
