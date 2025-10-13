@@ -25,8 +25,7 @@ public class TenantService : ITenantService
     {
         _logger.LogDebug("Fetching all tenants");
 
-        using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
         command.CommandText = "dbo.usp_Tenant_GetAll";
@@ -49,8 +48,7 @@ public class TenantService : ITenantService
     {
         _logger.LogDebug("Fetching available tenants for user {UserId}", userId);
 
-        using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
         command.CommandText = "dbo.usp_Tenant_GetAvailableForUser";
@@ -84,8 +82,7 @@ public class TenantService : ITenantService
     {
         _logger.LogDebug("Fetching tenant {TenantId}", tenantId);
 
-        using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
         command.CommandText = "dbo.usp_Tenant_GetById";
@@ -107,8 +104,7 @@ public class TenantService : ITenantService
     {
         _logger.LogInformation("Creating tenant: {TenantCode}", request.TenantCode);
 
-        using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
         command.CommandText = "dbo.usp_Tenant_Create";
@@ -144,8 +140,7 @@ public class TenantService : ITenantService
             throw new KeyNotFoundException($"Tenant {tenantId} not found");
         }
 
-        using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
         command.CommandText = "dbo.usp_Tenant_Update";
