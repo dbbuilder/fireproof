@@ -58,11 +58,24 @@ BEGIN
     -- Drop the old tenant schema and all its objects
     IF EXISTS (SELECT * FROM sys.schemas WHERE name = @OldSchemaName)
     BEGIN
-        DECLARE @DropSchemaSql NVARCHAR(MAX) = 'DROP SCHEMA IF EXISTS [' + @OldSchemaName + ']'
+        -- Step 1: Drop all foreign key constraints in the schema
+        DECLARE @DropFKsSql NVARCHAR(MAX) = ''
+        SELECT @DropFKsSql = @DropFKsSql +
+            'ALTER TABLE [' + @OldSchemaName + '].[' + OBJECT_NAME(fk.parent_object_id) + '] DROP CONSTRAINT [' + fk.name + ']; '
+        FROM sys.foreign_keys fk
+        INNER JOIN sys.tables t ON fk.parent_object_id = t.object_id
+        INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
+        WHERE s.name = @OldSchemaName
 
-        -- First drop all tables in the schema
+        IF LEN(@DropFKsSql) > 0
+        BEGIN
+            EXEC sp_executesql @DropFKsSql
+            PRINT '    - Dropped foreign key constraints'
+        END
+
+        -- Step 2: Drop all tables in the schema
         DECLARE @DropTablesSql NVARCHAR(MAX) = ''
-        SELECT @DropTablesSql = @DropTablesSql + 'DROP TABLE IF EXISTS [' + @OldSchemaName + '].[' + t.name + ']; '
+        SELECT @DropTablesSql = @DropTablesSql + 'DROP TABLE [' + @OldSchemaName + '].[' + t.name + ']; '
         FROM sys.tables t
         INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
         WHERE s.name = @OldSchemaName
@@ -73,7 +86,8 @@ BEGIN
             PRINT '    - Dropped tenant tables'
         END
 
-        -- Now drop the schema
+        -- Step 3: Drop the schema
+        DECLARE @DropSchemaSql NVARCHAR(MAX) = 'DROP SCHEMA [' + @OldSchemaName + ']'
         EXEC sp_executesql @DropSchemaSql
         PRINT '    - Dropped tenant schema'
     END
