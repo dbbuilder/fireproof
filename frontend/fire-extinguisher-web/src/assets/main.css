@@ -215,7 +215,7 @@
   }
 
   .modal-content {
-    @apply relative bg-white rounded-lg shadow-xl max-w-lg mx-auto mt-20 animate-scale-in;
+    @apply relative bg-white rounded-lg shadow-xl max-w-2xl mx-auto mt-20 p-8 animate-scale-in;
   }
 }
 
