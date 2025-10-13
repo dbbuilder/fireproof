@@ -25,7 +25,8 @@ namespace FireExtinguisherInspection.API.Services
         public JwtTokenService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _secretKey = configuration["Jwt:SecretKey"]
+            _secretKey = configuration["JwtSecretKey"]
+                ?? configuration["Jwt:SecretKey"]
                 ?? throw new InvalidOperationException("JWT SecretKey not configured");
             _issuer = configuration["Jwt:Issuer"] ?? "FireProofAPI";
             _audience = configuration["Jwt:Audience"] ?? "FireProofApp";
