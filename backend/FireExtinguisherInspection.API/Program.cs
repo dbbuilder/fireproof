@@ -116,7 +116,9 @@ builder.Services.AddCors(options =>
 });
 
 // Configure JWT Authentication
-var jwtSecretKey = builder.Configuration["Jwt:SecretKey"]
+// Try Key Vault first, fallback to appsettings
+var jwtSecretKey = builder.Configuration["JwtSecretKey"]
+    ?? builder.Configuration["Jwt:SecretKey"]
     ?? throw new InvalidOperationException("JWT SecretKey not configured");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "FireProofAPI";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "FireProofApp";
