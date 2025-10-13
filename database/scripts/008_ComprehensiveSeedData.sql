@@ -92,6 +92,10 @@ BEGIN
         PRINT '    - Dropped tenant schema'
     END
 
+    -- Delete user tenant roles for this tenant FIRST (before deleting users)
+    DELETE FROM dbo.UserTenantRoles WHERE TenantId = @OldTenantId
+    PRINT '    - Deleted user tenant roles'
+
     -- Delete test users (they're test-only accounts)
     DELETE FROM dbo.Users
     WHERE Email IN (
@@ -103,10 +107,6 @@ BEGIN
         'viewer@testcompany.local'
     )
     PRINT '    - Deleted test users'
-
-    -- Delete user tenant roles for this tenant
-    DELETE FROM dbo.UserTenantRoles WHERE TenantId = @OldTenantId
-    PRINT '    - Deleted user tenant roles'
 
     -- Delete tenant record
     DELETE FROM dbo.Tenants WHERE TenantId = @OldTenantId
@@ -523,6 +523,14 @@ VALUES
     (''' + CAST(@Ext14Id AS NVARCHAR(36)) + ''', ''' + CAST(@TestTenantId AS NVARCHAR(36)) + ''', ''' + CAST(@Location3Id AS NVARCHAR(36)) + ''', ''' + CAST(@TypeBCId AS NVARCHAR(36)) + ''', ''FAC-004'', ''FAC004BC'', ''Ansul'', ''Sentry'', ''SN-FAC-004-2022'', ''2022-07-20'', ''2022-09-01'', ''10 lbs'', ''Welding area''),
     (''' + CAST(@Ext15Id AS NVARCHAR(36)) + ''', ''' + CAST(@TestTenantId AS NVARCHAR(36)) + ''', ''' + CAST(@Location3Id AS NVARCHAR(36)) + ''', ''' + CAST(@TypeABCId AS NVARCHAR(36)) + ''', ''FAC-005'', ''FAC005ABC'', ''First Alert'', ''FE3A40GR'', ''SN-FAC-005-2023'', ''2023-01-25'', ''2023-03-01'', ''10 lbs'', ''Shipping area'')
 '
+
+-- Debug: Print just the FAC-003 line (line 23 of dynamic SQL)
+DECLARE @DebugLine NVARCHAR(MAX) = SUBSTRING(@InsertExtSql,
+    CHARINDEX('FAC-003', @InsertExtSql) - 50,
+    200)
+PRINT '  DEBUG - FAC-003 line context:'
+PRINT @DebugLine
+
 EXEC sp_executesql @InsertExtSql
 
 PRINT '  ✓ Created 15 extinguishers:'
