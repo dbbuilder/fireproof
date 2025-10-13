@@ -52,14 +52,54 @@ BEGIN
     WHERE TenantCode = @TenantCode
 
     PRINT '  - Found existing test tenant, cleaning up...'
+    PRINT '    Old Tenant ID: ' + CAST(@OldTenantId AS NVARCHAR(36))
+    PRINT '    Old Schema: ' + @OldSchemaName
 
-    -- Delete user tenant roles
+    -- Drop the old tenant schema and all its objects
+    IF EXISTS (SELECT * FROM sys.schemas WHERE name = @OldSchemaName)
+    BEGIN
+        DECLARE @DropSchemaSql NVARCHAR(MAX) = 'DROP SCHEMA IF EXISTS [' + @OldSchemaName + ']'
+
+        -- First drop all tables in the schema
+        DECLARE @DropTablesSql NVARCHAR(MAX) = ''
+        SELECT @DropTablesSql = @DropTablesSql + 'DROP TABLE IF EXISTS [' + @OldSchemaName + '].[' + t.name + ']; '
+        FROM sys.tables t
+        INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
+        WHERE s.name = @OldSchemaName
+
+        IF LEN(@DropTablesSql) > 0
+        BEGIN
+            EXEC sp_executesql @DropTablesSql
+            PRINT '    - Dropped tenant tables'
+        END
+
+        -- Now drop the schema
+        EXEC sp_executesql @DropSchemaSql
+        PRINT '    - Dropped tenant schema'
+    END
+
+    -- Delete test users (they're test-only accounts)
+    DELETE FROM dbo.Users
+    WHERE Email IN (
+        'admin@testcompany.local',
+        'manager@testcompany.local',
+        'inspector1@testcompany.local',
+        'inspector2@testcompany.local',
+        'inspector3@testcompany.local',
+        'viewer@testcompany.local'
+    )
+    PRINT '    - Deleted test users'
+
+    -- Delete user tenant roles for this tenant
     DELETE FROM dbo.UserTenantRoles WHERE TenantId = @OldTenantId
+    PRINT '    - Deleted user tenant roles'
 
-    -- Delete tenant
+    -- Delete tenant record
     DELETE FROM dbo.Tenants WHERE TenantId = @OldTenantId
+    PRINT '    - Deleted tenant record'
 
-    PRINT '  - Existing test tenant cleaned up'
+    PRINT '  ✓ Cleanup completed successfully'
+    PRINT ''
 END
 
 -- Insert new test tenant
