@@ -387,6 +387,67 @@ export interface AssignUserToTenantRequest {
 }
 
 // ============================================================================
+// Tenant Types
+// ============================================================================
+
+export interface TenantDto {
+  tenantId: string
+  tenantName: string
+  tenantCode: string
+  contactName?: string | null
+  contactEmail?: string | null
+  contactPhone?: string | null
+  addressLine1?: string | null
+  addressLine2?: string | null
+  city?: string | null
+  stateProvince?: string | null
+  postalCode?: string | null
+  country?: string | null
+  subscriptionTier?: string | null
+  subscriptionStartDate?: string | null
+  subscriptionEndDate?: string | null
+  maxUsers?: number | null
+  maxLocations?: number | null
+  isActive: boolean
+  createdDate: string
+  modifiedDate: string
+}
+
+export interface CreateTenantRequest {
+  tenantName: string
+  tenantCode: string
+  contactName?: string | null
+  contactEmail?: string | null
+  contactPhone?: string | null
+  addressLine1?: string | null
+  addressLine2?: string | null
+  city?: string | null
+  stateProvince?: string | null
+  postalCode?: string | null
+  country?: string | null
+  subscriptionTier?: string | null
+  maxUsers?: number | null
+  maxLocations?: number | null
+}
+
+export interface UpdateTenantRequest {
+  tenantName: string
+  contactName?: string | null
+  contactEmail?: string | null
+  contactPhone?: string | null
+  addressLine1?: string | null
+  addressLine2?: string | null
+  city?: string | null
+  stateProvince?: string | null
+  postalCode?: string | null
+  country?: string | null
+  subscriptionTier?: string | null
+  maxUsers?: number | null
+  maxLocations?: number | null
+  isActive: boolean
+}
+
+// ============================================================================
 // Type Guards
 // ============================================================================
 

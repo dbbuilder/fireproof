@@ -23,6 +23,12 @@ const router = createRouter({
       meta: { requiresGuest: true }
     },
     {
+      path: '/select-tenant',
+      name: 'select-tenant',
+      component: () => import('../views/TenantSelectorView.vue'),
+      meta: { requiresAuth: true, skipTenantCheck: true }
+    },
+    {
       path: '/dashboard',
       name: 'dashboard',
       component: () => import('../views/DashboardView.vue'),
@@ -102,9 +108,28 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
+  // Check if tenant selection is needed (SystemAdmin or multi-tenant users without tenant selected)
+  if (
+    isAuthenticated &&
+    to.meta.requiresAuth &&
+    !to.meta.skipTenantCheck &&
+    authStore.needsTenantSelection
+  ) {
+    next({
+      name: 'select-tenant',
+      query: { redirect: to.fullPath }
+    })
+    return
+  }
+
   // Redirect authenticated users away from guest-only pages (login, register)
   if (to.meta.requiresGuest && isAuthenticated) {
-    next({ name: 'dashboard' })
+    // Check if they need to select a tenant first
+    if (authStore.needsTenantSelection) {
+      next({ name: 'select-tenant' })
+    } else {
+      next({ name: 'dashboard' })
+    }
     return
   }
 

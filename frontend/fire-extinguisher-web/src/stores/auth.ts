@@ -21,6 +21,7 @@ interface AuthState {
   isAuthenticated: boolean
   loading: boolean
   error: string | null
+  currentTenantId: string | null
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -32,7 +33,8 @@ export const useAuthStore = defineStore('auth', {
     tokenExpiresAt: null,
     isAuthenticated: false,
     loading: false,
-    error: null
+    error: null,
+    currentTenantId: localStorage.getItem('currentTenantId')
   }),
 
   getters: {
@@ -113,6 +115,42 @@ export const useAuthStore = defineStore('auth', {
         .filter(r => r.roleType === 'Tenant' && r.tenantId)
         .map(r => r.tenantId!)
         .filter((id, index, self) => self.indexOf(id) === index) // unique
+    },
+
+    /**
+     * Check if user needs to select a tenant
+     * True for:
+     * - SystemAdmin (can access all tenants)
+     * - Users with multiple tenant roles
+     * False for:
+     * - Users with exactly one tenant (auto-selected)
+     * - Users with no tenants
+     */
+    needsTenantSelection: (state): boolean => {
+      const isSystemAdmin = state.roles.some(r => r.roleType === 'System' && r.roleName === 'SystemAdmin')
+      const tenantCount = state.roles
+        .filter(r => r.roleType === 'Tenant' && r.tenantId)
+        .map(r => r.tenantId!)
+        .filter((id, index, self) => self.indexOf(id) === index).length
+
+      // If already have a tenant selected, no need for selection
+      if (state.currentTenantId) return false
+
+      // SystemAdmin always needs to select (can access all tenants)
+      if (isSystemAdmin) return true
+
+      // Users with multiple tenants need to select
+      return tenantCount > 1
+    },
+
+    /**
+     * Get primary tenant ID (first tenant role or current selection)
+     */
+    primaryTenantId: (state): string | null => {
+      if (state.currentTenantId) return state.currentTenantId
+
+      const firstTenantRole = state.roles.find(r => r.roleType === 'Tenant' && r.tenantId)
+      return firstTenantRole?.tenantId || null
     }
   },
 
@@ -287,6 +325,9 @@ export const useAuthStore = defineStore('auth', {
 
       // Set auth header for all requests
       api.defaults.headers.common['Authorization'] = `Bearer ${response.accessToken}`
+
+      // Auto-set tenant for regular users
+      this.autoSetTenantForUser()
     },
 
     /**
@@ -307,6 +348,9 @@ export const useAuthStore = defineStore('auth', {
           // Fetch user and roles
           await Promise.all([this.fetchCurrentUser(), this.fetchCurrentUserRoles()])
           this.isAuthenticated = true
+
+          // Auto-set tenant for regular users
+          this.autoSetTenantForUser()
         } catch (error: any) {
           // Token might be expired, try to refresh
           // Only try refresh if we got a 401 (Unauthorized)
@@ -335,6 +379,43 @@ export const useAuthStore = defineStore('auth', {
      */
     clearError(): void {
       this.error = null
+    },
+
+    /**
+     * Set current tenant ID (for SystemAdmin tenant switching)
+     */
+    setCurrentTenant(tenantId: string | null): void {
+      this.currentTenantId = tenantId
+
+      if (tenantId) {
+        localStorage.setItem('currentTenantId', tenantId)
+        // Update API default params to include tenantId
+        api.defaults.params = { ...api.defaults.params, tenantId }
+      } else {
+        localStorage.removeItem('currentTenantId')
+        // Remove tenantId from API default params
+        if (api.defaults.params) {
+          delete api.defaults.params.tenantId
+        }
+      }
+    },
+
+    /**
+     * Auto-set tenant for users with exactly one tenant
+     * SystemAdmins and users with multiple tenants must manually select
+     */
+    autoSetTenantForUser(): void {
+      // Get unique tenant IDs
+      const uniqueTenantIds = this.roles
+        .filter(r => r.roleType === 'Tenant' && r.tenantId)
+        .map(r => r.tenantId!)
+        .filter((id, index, self) => self.indexOf(id) === index)
+
+      // Only auto-set if user has exactly ONE tenant
+      // SystemAdmins and users with multiple tenants need to manually select
+      if (uniqueTenantIds.length === 1) {
+        this.setCurrentTenant(uniqueTenantIds[0])
+      }
     }
   }
 })

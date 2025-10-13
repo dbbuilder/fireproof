@@ -293,9 +293,18 @@ const handleLogin = async () => {
 
     toast.success('Welcome back! Login successful.')
 
-    // Redirect to intended page or dashboard
-    const redirect = (route.query.redirect as string) || '/dashboard'
-    router.push(redirect)
+    // Check if user needs to select a tenant
+    if (authStore.needsTenantSelection) {
+      const redirect = route.query.redirect as string
+      router.push({
+        name: 'select-tenant',
+        query: redirect ? { redirect } : undefined
+      })
+    } else {
+      // Redirect to intended page or dashboard
+      const redirect = (route.query.redirect as string) || '/dashboard'
+      router.push(redirect)
+    }
   } catch (err: any) {
     error.value = err.response?.data?.message || 'Login failed. Please check your credentials.'
     console.error('Login error:', err)
@@ -320,9 +329,18 @@ const handleDevLogin = async () => {
 
     toast.success('Dev login successful!')
 
-    // Redirect to intended page or dashboard
-    const redirect = (route.query.redirect as string) || '/dashboard'
-    router.push(redirect)
+    // Check if user needs to select a tenant
+    if (authStore.needsTenantSelection) {
+      const redirect = route.query.redirect as string
+      router.push({
+        name: 'select-tenant',
+        query: redirect ? { redirect } : undefined
+      })
+    } else {
+      // Redirect to intended page or dashboard
+      const redirect = (route.query.redirect as string) || '/dashboard'
+      router.push(redirect)
+    }
   } catch (err: any) {
     error.value = err.response?.data?.message || 'Dev login failed. Make sure dev mode is enabled on the server.'
     console.error('Dev login error:', err)

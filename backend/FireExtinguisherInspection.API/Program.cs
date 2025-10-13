@@ -84,6 +84,7 @@ builder.Services.AddScoped<TenantContext>();
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 
 // Register application services
+builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IExtinguisherTypeService, ExtinguisherTypeService>();
 builder.Services.AddScoped<IExtinguisherService, ExtinguisherService>();
@@ -148,6 +149,9 @@ builder.Services.AddAuthorization(options =>
 {
     // System-level policies
     options.AddPolicy(AuthorizationPolicies.SystemAdmin, policy =>
+        policy.Requirements.Add(new RoleRequirement(RoleNames.SystemAdmin)));
+
+    options.AddPolicy(AuthorizationPolicies.SystemAdminOnly, policy =>
         policy.Requirements.Add(new RoleRequirement(RoleNames.SystemAdmin)));
 
     options.AddPolicy(AuthorizationPolicies.SuperUser, policy =>

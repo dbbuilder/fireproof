@@ -7,6 +7,7 @@ public static class AuthorizationPolicies
 {
     // System-level policies
     public const string SystemAdmin = "SystemAdmin";
+    public const string SystemAdminOnly = "SystemAdminOnly";
     public const string SuperUser = "SuperUser";
 
     // Tenant-level policies
