@@ -159,6 +159,18 @@
                   </a>
                 </div>
 
+                <div class="border-t border-gray-100 py-1" v-if="canSwitchTenant">
+                  <button
+                    type="button"
+                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    role="menuitem"
+                    @click="handleSwitchTenant"
+                  >
+                    <BuildingOfficeIcon class="h-5 w-5 mr-3 text-gray-400" />
+                    Switch Tenant
+                  </button>
+                </div>
+
                 <div class="border-t border-gray-100 py-1">
                   <button
                     type="button"
@@ -194,7 +206,8 @@ import {
   UserCircleIcon,
   Cog6ToothIcon,
   QuestionMarkCircleIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  BuildingOfficeIcon
 } from '@heroicons/vue/24/outline'
 
 defineProps({
@@ -253,6 +266,29 @@ const handleHelp = () => {
   userMenuOpen.value = false
   // Open help documentation or support chat
   window.open('https://docs.fireproof.app', '_blank')
+}
+
+// Determine if user can switch tenants (SystemAdmin or multi-tenant user)
+const canSwitchTenant = computed(() => {
+  const isSystemAdmin = authStore.roles.some(
+    r => r.roleType === 'System' && r.roleName === 'SystemAdmin'
+  )
+
+  const uniqueTenantIds = authStore.roles
+    .filter(r => r.roleType === 'Tenant' && r.tenantId)
+    .map(r => r.tenantId)
+    .filter((id, index, self) => self.indexOf(id) === index)
+
+  // Can switch if SystemAdmin or has multiple tenants
+  return isSystemAdmin || uniqueTenantIds.length > 1
+})
+
+const handleSwitchTenant = () => {
+  userMenuOpen.value = false
+  // Clear current tenant selection
+  authStore.setCurrentTenant(null)
+  // Redirect to tenant selector
+  router.push('/select-tenant')
 }
 
 // Close user menu when clicking outside

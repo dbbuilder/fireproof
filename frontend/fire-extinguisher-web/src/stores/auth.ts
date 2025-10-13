@@ -241,10 +241,12 @@ export const useAuthStore = defineStore('auth', {
       this.tokenExpiresAt = null
       this.isAuthenticated = false
       this.error = null
+      this.currentTenantId = null
 
       // Clear from localStorage
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
+      localStorage.removeItem('currentTenantId')
 
       // Clear auth header
       delete api.defaults.headers.common['Authorization']
