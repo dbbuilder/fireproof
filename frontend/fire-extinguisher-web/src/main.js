@@ -5,7 +5,7 @@ import router from './router'
 import './assets/main.css'
 
 // Version tracking for cache busting verification
-const APP_VERSION = '1.0.1'
+const APP_VERSION = '1.1.2'
 const BUILD_TIMESTAMP = new Date().toISOString()
 console.log(`🔥 FireProof v${APP_VERSION}`)
 console.log(`📦 Build: ${BUILD_TIMESTAMP}`)
