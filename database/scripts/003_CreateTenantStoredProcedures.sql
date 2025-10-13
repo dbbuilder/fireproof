@@ -294,4 +294,145 @@ PRINT ''
 PRINT '============================================================================'
 PRINT 'Tenant Management Stored Procedures created successfully!'
 PRINT '============================================================================'
+
+/*============================================================================
+  SEED DATA: Add testing users (chris@servicevision.net and multi@servicevision.net)
+============================================================================*/
+PRINT ''
+PRINT 'Adding testing users for tenant selection...'
+
+-- Check if chris@servicevision.net exists
+DECLARE @ChrisUserId UNIQUEIDENTIFIER
+DECLARE @ChrisPasswordHash NVARCHAR(500)
+DECLARE @ChrisPasswordSalt NVARCHAR(500)
+
+SELECT
+    @ChrisUserId = UserId,
+    @ChrisPasswordHash = PasswordHash,
+    @ChrisPasswordSalt = PasswordSalt
+FROM dbo.Users
+WHERE Email = 'chris@servicevision.net' AND IsActive = 1
+
+IF @ChrisUserId IS NULL
+BEGIN
+    PRINT '  ✗ ERROR: chris@servicevision.net not found in database'
+    PRINT '  Please ensure chris@servicevision.net user exists before running this script'
+END
+ELSE
+BEGIN
+    PRINT '  ✓ Found chris@servicevision.net (UserId: ' + CAST(@ChrisUserId AS NVARCHAR(36)) + ')'
+
+    -- Create second tenant for multi-tenant testing
+    DECLARE @SecondTenantId UNIQUEIDENTIFIER = NEWID()
+    DECLARE @SecondTenantCode NVARCHAR(50) = 'DEMO002'
+    DECLARE @SecondSchema NVARCHAR(128) = 'tenant_' + CAST(@SecondTenantId AS NVARCHAR(36))
+
+    -- Check if second tenant already exists
+    IF NOT EXISTS (SELECT 1 FROM dbo.Tenants WHERE TenantCode = @SecondTenantCode)
+    BEGIN
+        INSERT INTO dbo.Tenants (
+            TenantId, TenantCode, CompanyName, SubscriptionTier,
+            IsActive, MaxLocations, MaxUsers, MaxExtinguishers, DatabaseSchema
+        )
+        VALUES (
+            @SecondTenantId, @SecondTenantCode, 'Demo Company Two', 'Premium',
+            1, 100, 50, 1000, @SecondSchema
+        )
+        PRINT '  ✓ Created second tenant: ' + @SecondTenantCode + ' (TenantId: ' + CAST(@SecondTenantId AS NVARCHAR(36)) + ')'
+    END
+    ELSE
+    BEGIN
+        SELECT @SecondTenantId = TenantId FROM dbo.Tenants WHERE TenantCode = @SecondTenantCode
+        PRINT '  - Second tenant already exists: ' + @SecondTenantCode
+    END
+
+    -- Create or update multi@servicevision.net user
+    DECLARE @MultiUserId UNIQUEIDENTIFIER
+
+    SELECT @MultiUserId = UserId
+    FROM dbo.Users
+    WHERE Email = 'multi@servicevision.net'
+
+    IF @MultiUserId IS NULL
+    BEGIN
+        -- Create new user with same password as chris@servicevision.net
+        SET @MultiUserId = NEWID()
+
+        INSERT INTO dbo.Users (
+            UserId, Email, FirstName, LastName,
+            PasswordHash, PasswordSalt, IsActive
+        )
+        VALUES (
+            @MultiUserId, 'multi@servicevision.net', 'Multi', 'Tenant',
+            @ChrisPasswordHash, @ChrisPasswordSalt, 1
+        )
+        PRINT '  ✓ Created multi@servicevision.net user (UserId: ' + CAST(@MultiUserId AS NVARCHAR(36)) + ')'
+        PRINT '  - Password copied from chris@servicevision.net'
+    END
+    ELSE
+    BEGIN
+        -- Update existing user with chris's password
+        UPDATE dbo.Users
+        SET PasswordHash = @ChrisPasswordHash,
+            PasswordSalt = @ChrisPasswordSalt,
+            IsActive = 1,
+            ModifiedDate = GETUTCDATE()
+        WHERE UserId = @MultiUserId
+
+        PRINT '  ✓ Updated multi@servicevision.net user (UserId: ' + CAST(@MultiUserId AS NVARCHAR(36)) + ')'
+        PRINT '  - Password synced with chris@servicevision.net'
+    END
+
+    -- Get first tenant ID (DEMO001)
+    DECLARE @FirstTenantId UNIQUEIDENTIFIER
+    SELECT @FirstTenantId = TenantId FROM dbo.Tenants WHERE TenantCode = 'DEMO001'
+
+    IF @FirstTenantId IS NOT NULL
+    BEGIN
+        -- Assign multi@ as TenantAdmin to DEMO001 (if not already assigned)
+        IF NOT EXISTS (
+            SELECT 1 FROM dbo.UserTenantRoles
+            WHERE UserId = @MultiUserId
+            AND TenantId = @FirstTenantId
+            AND RoleName = 'TenantAdmin'
+        )
+        BEGIN
+            INSERT INTO dbo.UserTenantRoles (UserId, TenantId, RoleName, IsActive)
+            VALUES (@MultiUserId, @FirstTenantId, 'TenantAdmin', 1)
+            PRINT '  ✓ Assigned multi@servicevision.net as TenantAdmin to DEMO001'
+        END
+        ELSE
+        BEGIN
+            PRINT '  - multi@servicevision.net already has TenantAdmin role in DEMO001'
+        END
+    END
+
+    -- Assign multi@ as TenantAdmin to DEMO002 (if not already assigned)
+    IF NOT EXISTS (
+        SELECT 1 FROM dbo.UserTenantRoles
+        WHERE UserId = @MultiUserId
+        AND TenantId = @SecondTenantId
+        AND RoleName = 'TenantAdmin'
+    )
+    BEGIN
+        INSERT INTO dbo.UserTenantRoles (UserId, TenantId, RoleName, IsActive)
+        VALUES (@MultiUserId, @SecondTenantId, 'TenantAdmin', 1)
+        PRINT '  ✓ Assigned multi@servicevision.net as TenantAdmin to DEMO002'
+    END
+    ELSE
+    BEGIN
+        PRINT '  - multi@servicevision.net already has TenantAdmin role in DEMO002'
+    END
+
+    PRINT ''
+    PRINT 'Testing user summary:'
+    PRINT '  chris@servicevision.net - SystemAdmin (can access all tenants)'
+    PRINT '  multi@servicevision.net - TenantAdmin in DEMO001 and DEMO002'
+    PRINT '  Both users share the same password for testing'
+END
+
+PRINT ''
+PRINT '============================================================================'
+PRINT 'Tenant selection seed data completed!'
+PRINT '============================================================================'
 GO
