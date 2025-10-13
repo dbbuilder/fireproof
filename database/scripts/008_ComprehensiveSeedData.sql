@@ -524,12 +524,13 @@ VALUES
     (''' + CAST(@Ext15Id AS NVARCHAR(36)) + ''', ''' + CAST(@TestTenantId AS NVARCHAR(36)) + ''', ''' + CAST(@Location3Id AS NVARCHAR(36)) + ''', ''' + CAST(@TypeABCId AS NVARCHAR(36)) + ''', ''FAC-005'', ''FAC005ABC'', ''First Alert'', ''FE3A40GR'', ''SN-FAC-005-2023'', ''2023-01-25'', ''2023-03-01'', ''10 lbs'', ''Shipping area'')
 '
 
--- Debug: Print just the FAC-003 line (line 23 of dynamic SQL)
+-- Debug: Print the FAC-003 line with more context
 DECLARE @DebugLine NVARCHAR(MAX) = SUBSTRING(@InsertExtSql,
-    CHARINDEX('FAC-003', @InsertExtSql) - 50,
-    200)
-PRINT '  DEBUG - FAC-003 line context:'
+    CHARINDEX('FAC-003', @InsertExtSql) - 100,
+    400)
+PRINT '  DEBUG - FAC-003 line full context:'
 PRINT @DebugLine
+PRINT ''
 
 EXEC sp_executesql @InsertExtSql
 
