@@ -186,10 +186,12 @@ curl -X POST https://fireproof-api-test-2025.azurewebsites.net/api/authenticatio
 ## User Access
 
 ### Default Admin User
-**Email**: chris@servicevision.net
-**Password**: Gv51076
+**Email**: `chris@servicevision.net`
+**Password**: `Gv51076` (no exclamation mark)
 **Role**: SystemAdmin
 **Tenant**: None (system-wide access)
+
+**Important**: Do NOT confuse this with the SQL Server password (`Gv51076!` with exclamation mark). The user account password does not have the `!` at the end.
 
 ---
 
