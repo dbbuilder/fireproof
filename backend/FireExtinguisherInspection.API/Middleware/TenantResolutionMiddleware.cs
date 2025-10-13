@@ -22,9 +22,12 @@ public class TenantResolutionMiddleware
 
     public async Task InvokeAsync(HttpContext context, TenantContext tenantContext)
     {
-        // Skip tenant resolution for health checks and swagger
+        // Skip tenant resolution for health checks, swagger, auth endpoints, and tenant selection
         if (context.Request.Path.StartsWithSegments("/health") ||
-            context.Request.Path.StartsWithSegments("/swagger"))
+            context.Request.Path.StartsWithSegments("/swagger") ||
+            context.Request.Path.StartsWithSegments("/api/authentication") ||
+            context.Request.Path.StartsWithSegments("/api/tenants/available") ||
+            context.Request.Path.StartsWithSegments("/api/tenants/diagnostic"))
         {
             await _next(context);
             return;
@@ -35,16 +38,27 @@ public class TenantResolutionMiddleware
 
         if (user.Identity?.IsAuthenticated == true)
         {
-            // Get tenant ID from claims
-            var tenantIdClaim = user.FindFirst("tenant_id") ?? user.FindFirst("tenantId");
-            if (tenantIdClaim != null && Guid.TryParse(tenantIdClaim.Value, out var tenantId))
+            // First check for X-Tenant-ID header (takes precedence over JWT claim)
+            // This allows tenant selection after authentication
+            if (context.Request.Headers.TryGetValue("X-Tenant-ID", out var tenantIdHeader) &&
+                Guid.TryParse(tenantIdHeader.ToString(), out var headerTenantId))
             {
-                tenantContext.TenantId = tenantId;
-                _logger.LogDebug("Resolved tenant ID: {TenantId}", tenantId);
+                tenantContext.TenantId = headerTenantId;
+                _logger.LogDebug("Resolved tenant ID from header: {TenantId}", headerTenantId);
             }
+            // Fallback to tenant ID from JWT claims
             else
             {
-                _logger.LogWarning("Tenant ID claim not found or invalid for authenticated user");
+                var tenantIdClaim = user.FindFirst("tenant_id") ?? user.FindFirst("tenantId");
+                if (tenantIdClaim != null && Guid.TryParse(tenantIdClaim.Value, out var tenantId))
+                {
+                    tenantContext.TenantId = tenantId;
+                    _logger.LogDebug("Resolved tenant ID from claim: {TenantId}", tenantId);
+                }
+                else
+                {
+                    _logger.LogDebug("Tenant ID not found in header or claims for authenticated user");
+                }
             }
 
             // Get user ID from claims

@@ -9,13 +9,20 @@ const api = axios.create({
   }
 })
 
-// Request interceptor - add auth token
+// Request interceptor - add auth token and tenant context
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+
+    // Add tenant ID header if available
+    const tenantId = localStorage.getItem('currentTenantId')
+    if (tenantId) {
+      config.headers['X-Tenant-ID'] = tenantId
+    }
+
     return config
   },
   (error) => {
