@@ -497,7 +497,7 @@ DECLARE @Ext13Id UNIQUEIDENTIFIER = NEWID()
 DECLARE @Ext14Id UNIQUEIDENTIFIER = NEWID()
 DECLARE @Ext15Id UNIQUEIDENTIFIER = NEWID()
 
-DECLARE @InsertExtSql NVARCHAR(MAX) = '
+DECLARE @InsertExtSql NVARCHAR(MAX) = CAST('' AS NVARCHAR(MAX)) + '
 INSERT INTO [' + @SchemaName + '].Extinguishers (
     ExtinguisherId, TenantId, LocationId, ExtinguisherTypeId, AssetTag, BarcodeData, Manufacturer, Model, SerialNumber, ManufactureDate, InstallDate, Capacity, LocationDescription
 )
@@ -609,7 +609,7 @@ DECLARE @Insp3Id UNIQUEIDENTIFIER = NEWID()
 DECLARE @Insp4Id UNIQUEIDENTIFIER = NEWID()
 DECLARE @Insp5Id UNIQUEIDENTIFIER = NEWID()
 
-DECLARE @InsertInspSql NVARCHAR(MAX) = '
+DECLARE @InsertInspSql NVARCHAR(MAX) = CAST('' AS NVARCHAR(MAX)) + '
 INSERT INTO [' + @SchemaName + '].Inspections (
     InspectionId, TenantId, ExtinguisherId, InspectionTypeId, InspectorUserId,
     InspectionStartTime, InspectionEndTime, InspectionStatus, Latitude, Longitude,
@@ -650,7 +650,7 @@ PRINT ''
 ============================================================================*/
 PRINT 'PART 10: Creating maintenance records...'
 
-DECLARE @InsertMaintSql NVARCHAR(MAX) = '
+DECLARE @InsertMaintSql NVARCHAR(MAX) = CAST('' AS NVARCHAR(MAX)) + '
 INSERT INTO [' + @SchemaName + '].MaintenanceRecords (
     ExtinguisherId, MaintenanceType, MaintenanceDate, TechnicianName, ServiceCompany, Cost, Notes
 )
