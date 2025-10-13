@@ -1,4 +1,5 @@
 using FireExtinguisherInspection.API.Authorization;
+using FireExtinguisherInspection.API.Helpers;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using FireExtinguisherInspection.API.Services;
@@ -70,15 +71,23 @@ public class InspectionsController : ControllerBase
         [FromQuery] DateTime? startDate = null,
         [FromQuery] DateTime? endDate = null,
         [FromQuery] string? inspectionType = null,
-        [FromQuery] bool? passed = null)
+        [FromQuery] bool? passed = null,
+        [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<InspectionDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
             var inspections = await _inspectionService.GetAllInspectionsAsync(
-                _tenantContext.TenantId,
+                effectiveTenantId,
                 extinguisherId,
                 inspectorUserId,
                 startDate,
@@ -90,7 +99,7 @@ public class InspectionsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving inspections for tenant {TenantId}", _tenantContext.TenantId);
+            _logger.LogError(ex, "Error retrieving inspections for tenant {TenantId}", effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve inspections", error = ex.Message });
         }
     }
@@ -104,14 +113,21 @@ public class InspectionsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<InspectionDto>> GetInspectionById(Guid id)
+    public async Task<ActionResult<InspectionDto>> GetInspectionById(Guid id, [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<InspectionDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
-            var inspection = await _inspectionService.GetInspectionByIdAsync(_tenantContext.TenantId, id);
+            var inspection = await _inspectionService.GetInspectionByIdAsync(effectiveTenantId, id);
 
             if (inspection == null)
                 return NotFound(new { message = $"Inspection {id} not found" });
@@ -121,7 +137,7 @@ public class InspectionsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving inspection {InspectionId} for tenant {TenantId}",
-                id, _tenantContext.TenantId);
+                id, effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve inspection", error = ex.Message });
         }
     }
@@ -134,20 +150,27 @@ public class InspectionsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<InspectionDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<IEnumerable<InspectionDto>>> GetExtinguisherInspectionHistory(Guid extinguisherId)
+    public async Task<ActionResult<IEnumerable<InspectionDto>>> GetExtinguisherInspectionHistory(Guid extinguisherId, [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<InspectionDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
-            var inspections = await _inspectionService.GetExtinguisherInspectionHistoryAsync(_tenantContext.TenantId, extinguisherId);
+            var inspections = await _inspectionService.GetExtinguisherInspectionHistoryAsync(effectiveTenantId, extinguisherId);
             return Ok(inspections);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving inspection history for extinguisher {ExtinguisherId} for tenant {TenantId}",
-                extinguisherId, _tenantContext.TenantId);
+                extinguisherId, effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve inspection history", error = ex.Message });
         }
     }
@@ -163,15 +186,23 @@ public class InspectionsController : ControllerBase
     public async Task<ActionResult<IEnumerable<InspectionDto>>> GetInspectorInspections(
         Guid inspectorUserId,
         [FromQuery] DateTime? startDate = null,
-        [FromQuery] DateTime? endDate = null)
+        [FromQuery] DateTime? endDate = null,
+        [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<InspectionDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
             var inspections = await _inspectionService.GetInspectorInspectionsAsync(
-                _tenantContext.TenantId,
+                effectiveTenantId,
                 inspectorUserId,
                 startDate,
                 endDate);
@@ -181,7 +212,7 @@ public class InspectionsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving inspections for inspector {InspectorUserId} for tenant {TenantId}",
-                inspectorUserId, _tenantContext.TenantId);
+                inspectorUserId, effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve inspector inspections", error = ex.Message });
         }
     }
@@ -227,19 +258,27 @@ public class InspectionsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<InspectionStatsDto>> GetInspectionStats(
         [FromQuery] DateTime? startDate = null,
-        [FromQuery] DateTime? endDate = null)
+        [FromQuery] DateTime? endDate = null,
+        [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<InspectionStatsDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
-            var stats = await _inspectionService.GetInspectionStatsAsync(_tenantContext.TenantId, startDate, endDate);
+            var stats = await _inspectionService.GetInspectionStatsAsync(effectiveTenantId, startDate, endDate);
             return Ok(stats);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving inspection stats for tenant {TenantId}", _tenantContext.TenantId);
+            _logger.LogError(ex, "Error retrieving inspection stats for tenant {TenantId}", effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve inspection statistics", error = ex.Message });
         }
     }
@@ -253,19 +292,27 @@ public class InspectionsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<InspectionDto>>> GetOverdueInspections(
-        [FromQuery] string inspectionType = "Monthly")
+        [FromQuery] string inspectionType = "Monthly",
+        [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<InspectionDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
-            var inspections = await _inspectionService.GetOverdueInspectionsAsync(_tenantContext.TenantId, inspectionType);
+            var inspections = await _inspectionService.GetOverdueInspectionsAsync(effectiveTenantId, inspectionType);
             return Ok(inspections);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving overdue inspections for tenant {TenantId}", _tenantContext.TenantId);
+            _logger.LogError(ex, "Error retrieving overdue inspections for tenant {TenantId}", effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve overdue inspections", error = ex.Message });
         }
     }

@@ -1,4 +1,5 @@
 using FireExtinguisherInspection.API.Authorization;
+using FireExtinguisherInspection.API.Helpers;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using FireExtinguisherInspection.API.Services;
@@ -68,15 +69,23 @@ public class ExtinguishersController : ControllerBase
         [FromQuery] Guid? locationId = null,
         [FromQuery] Guid? typeId = null,
         [FromQuery] bool? isActive = null,
-        [FromQuery] bool? isOutOfService = null)
+        [FromQuery] bool? isOutOfService = null,
+        [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<ExtinguisherDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
             var extinguishers = await _extinguisherService.GetAllExtinguishersAsync(
-                _tenantContext.TenantId,
+                effectiveTenantId,
                 locationId,
                 typeId,
                 isActive,
@@ -86,7 +95,7 @@ public class ExtinguishersController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving extinguishers for tenant {TenantId}", _tenantContext.TenantId);
+            _logger.LogError(ex, "Error retrieving extinguishers for tenant {TenantId}", effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve extinguishers", error = ex.Message });
         }
     }
@@ -100,14 +109,21 @@ public class ExtinguishersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<ExtinguisherDto>> GetExtinguisherById(Guid id)
+    public async Task<ActionResult<ExtinguisherDto>> GetExtinguisherById(Guid id, [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<ExtinguisherDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
-            var extinguisher = await _extinguisherService.GetExtinguisherByIdAsync(_tenantContext.TenantId, id);
+            var extinguisher = await _extinguisherService.GetExtinguisherByIdAsync(effectiveTenantId, id);
 
             if (extinguisher == null)
                 return NotFound(new { message = $"Extinguisher {id} not found" });
@@ -117,7 +133,7 @@ public class ExtinguishersController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving extinguisher {ExtinguisherId} for tenant {TenantId}",
-                id, _tenantContext.TenantId);
+                id, effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve extinguisher", error = ex.Message });
         }
     }
@@ -131,14 +147,21 @@ public class ExtinguishersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<ExtinguisherDto>> GetExtinguisherByBarcode(string barcodeData)
+    public async Task<ActionResult<ExtinguisherDto>> GetExtinguisherByBarcode(string barcodeData, [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<ExtinguisherDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
-            var extinguisher = await _extinguisherService.GetExtinguisherByBarcodeAsync(_tenantContext.TenantId, barcodeData);
+            var extinguisher = await _extinguisherService.GetExtinguisherByBarcodeAsync(effectiveTenantId, barcodeData);
 
             if (extinguisher == null)
                 return NotFound(new { message = $"Extinguisher with barcode {barcodeData} not found" });
@@ -148,7 +171,7 @@ public class ExtinguishersController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving extinguisher by barcode {BarcodeData} for tenant {TenantId}",
-                barcodeData, _tenantContext.TenantId);
+                barcodeData, effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve extinguisher", error = ex.Message });
         }
     }
@@ -317,19 +340,26 @@ public class ExtinguishersController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ExtinguisherDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<IEnumerable<ExtinguisherDto>>> GetExtinguishersNeedingService([FromQuery] int daysAhead = 30)
+    public async Task<ActionResult<IEnumerable<ExtinguisherDto>>> GetExtinguishersNeedingService([FromQuery] int daysAhead = 30, [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<ExtinguisherDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
-            var extinguishers = await _extinguisherService.GetExtinguishersNeedingServiceAsync(_tenantContext.TenantId, daysAhead);
+            var extinguishers = await _extinguisherService.GetExtinguishersNeedingServiceAsync(effectiveTenantId, daysAhead);
             return Ok(extinguishers);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving extinguishers needing service for tenant {TenantId}", _tenantContext.TenantId);
+            _logger.LogError(ex, "Error retrieving extinguishers needing service for tenant {TenantId}", effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve extinguishers needing service", error = ex.Message });
         }
     }
@@ -342,19 +372,26 @@ public class ExtinguishersController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ExtinguisherDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<IEnumerable<ExtinguisherDto>>> GetExtinguishersNeedingHydroTest([FromQuery] int daysAhead = 30)
+    public async Task<ActionResult<IEnumerable<ExtinguisherDto>>> GetExtinguishersNeedingHydroTest([FromQuery] int daysAhead = 30, [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
-            return Unauthorized(new { message = "Tenant context not found" });
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
+        {
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<ExtinguisherDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
+        }
 
         try
         {
-            var extinguishers = await _extinguisherService.GetExtinguishersNeedingHydroTestAsync(_tenantContext.TenantId, daysAhead);
+            var extinguishers = await _extinguisherService.GetExtinguishersNeedingHydroTestAsync(effectiveTenantId, daysAhead);
             return Ok(extinguishers);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving extinguishers needing hydro test for tenant {TenantId}", _tenantContext.TenantId);
+            _logger.LogError(ex, "Error retrieving extinguishers needing hydro test for tenant {TenantId}", effectiveTenantId);
             return StatusCode(500, new { message = "Failed to retrieve extinguishers needing hydro test", error = ex.Message });
         }
     }

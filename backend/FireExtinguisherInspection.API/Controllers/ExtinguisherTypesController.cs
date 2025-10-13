@@ -1,4 +1,5 @@
 using FireExtinguisherInspection.API.Authorization;
+using FireExtinguisherInspection.API.Helpers;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using FireExtinguisherInspection.API.Services;
@@ -58,23 +59,30 @@ public class ExtinguisherTypesController : ControllerBase
 
     /// <summary>
     /// Retrieves all extinguisher types for the current tenant
+    /// SystemAdmin users can optionally specify a tenantId parameter to query a specific tenant
     /// </summary>
     [HttpGet]
     [Authorize(Policy = AuthorizationPolicies.InspectorOrAbove)]
     [ProducesResponseType(typeof(IEnumerable<ExtinguisherTypeDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<IEnumerable<ExtinguisherTypeDto>>> GetAllExtinguisherTypes([FromQuery] bool? isActive = null)
+    public async Task<ActionResult<IEnumerable<ExtinguisherTypeDto>>> GetAllExtinguisherTypes(
+        [FromQuery] bool? isActive = null,
+        [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
         {
-            return Unauthorized(new { message = "Tenant context not found" });
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                // SystemAdmin without tenant parameter - return empty list
+                _logger.LogDebug("SystemAdmin fetching extinguisher types without tenantId - returning empty list");
+                return Ok(Array.Empty<ExtinguisherTypeDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
         }
 
-        _logger.LogDebug("Fetching extinguisher types for tenant {TenantId}", _tenantContext.TenantId);
-
-        var types = await _extinguisherTypeService.GetAllExtinguisherTypesAsync(_tenantContext.TenantId, isActive);
-
+        _logger.LogDebug("Fetching extinguisher types for tenant {TenantId}", effectiveTenantId);
+        var types = await _extinguisherTypeService.GetAllExtinguisherTypesAsync(effectiveTenantId, isActive);
         return Ok(types);
     }
 

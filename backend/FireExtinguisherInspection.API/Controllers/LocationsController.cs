@@ -1,4 +1,5 @@
 using FireExtinguisherInspection.API.Authorization;
+using FireExtinguisherInspection.API.Helpers;
 using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using FireExtinguisherInspection.API.Services;
@@ -74,39 +75,18 @@ public class LocationsController : ControllerBase
         [FromQuery] bool? isActive = null,
         [FromQuery] Guid? tenantId = null)
     {
-        // Check if user is SystemAdmin
-        var isSystemAdmin = User.FindAll("system_role")
-            .Any(c => c.Value.Equals("SystemAdmin", StringComparison.OrdinalIgnoreCase));
-
-        Guid effectiveTenantId;
-
-        if (isSystemAdmin && tenantId.HasValue)
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
         {
-            // SystemAdmin can query any tenant
-            effectiveTenantId = tenantId.Value;
-            _logger.LogDebug("SystemAdmin fetching locations for tenant {TenantId}", effectiveTenantId);
-        }
-        else if (isSystemAdmin && !tenantId.HasValue)
-        {
-            // SystemAdmin without tenant parameter - return empty list
-            // In future, this could return locations across all tenants
-            _logger.LogDebug("SystemAdmin fetching locations without tenantId - returning empty list");
-            return Ok(Array.Empty<LocationDto>());
-        }
-        else if (_tenantContext.TenantId != Guid.Empty)
-        {
-            // Normal user - use their tenant context
-            effectiveTenantId = _tenantContext.TenantId;
-            _logger.LogDebug("Fetching locations for tenant {TenantId}", effectiveTenantId);
-        }
-        else
-        {
-            // No tenant context and not SystemAdmin
-            return Unauthorized(new { message = "Tenant context not found" });
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<LocationDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
         }
 
+        _logger.LogDebug("Fetching locations for tenant {TenantId}", effectiveTenantId);
         var locations = await _locationService.GetAllLocationsAsync(effectiveTenantId, isActive);
-
         return Ok(locations);
     }
 
@@ -121,16 +101,21 @@ public class LocationsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<LocationDto>> GetLocationById(Guid id)
+    public async Task<ActionResult<LocationDto>> GetLocationById(Guid id, [FromQuery] Guid? tenantId = null)
     {
-        if (_tenantContext.TenantId == Guid.Empty)
+        if (!TenantResolver.TryResolveTenantId(User, _tenantContext, tenantId, out var effectiveTenantId, out var errorMessage))
         {
-            return Unauthorized(new { message = "Tenant context not found" });
+            if (TenantResolver.IsSystemAdmin(User) && !tenantId.HasValue)
+            {
+                _logger.LogDebug("SystemAdmin without tenantId - returning empty result");
+                return Ok(Array.Empty<LocationDto>());
+            }
+            return Unauthorized(new { message = errorMessage });
         }
 
-        _logger.LogDebug("Fetching location {LocationId} for tenant {TenantId}", id, _tenantContext.TenantId);
+        _logger.LogDebug("Fetching location {LocationId} for tenant {TenantId}", id, effectiveTenantId);
 
-        var location = await _locationService.GetLocationByIdAsync(_tenantContext.TenantId, id);
+        var location = await _locationService.GetLocationByIdAsync(effectiveTenantId, id);
 
         if (location == null)
         {
