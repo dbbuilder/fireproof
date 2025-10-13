@@ -419,6 +419,166 @@ PRINT '  ✓ Created MaintenanceRecords table'
 PRINT ''
 
 /*============================================================================
+  PART 4B: CREATE TENANT STORED PROCEDURES
+============================================================================*/
+PRINT 'PART 4B: Creating tenant stored procedures...'
+
+-- Include all procedures from 004_CreateTenantStoredProcedures.sql
+-- Location procedures
+DECLARE @CreateLocationGetAllProc NVARCHAR(MAX) = '
+CREATE OR ALTER PROCEDURE [' + @SchemaName + '].usp_Location_GetAll
+    @TenantId UNIQUEIDENTIFIER,
+    @IsActive BIT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        LocationId, TenantId, LocationCode, LocationName,
+        AddressLine1, AddressLine2, City, StateProvince, PostalCode, Country,
+        Latitude, Longitude, LocationBarcodeData, IsActive,
+        CreatedDate, ModifiedDate
+    FROM [' + @SchemaName + '].Locations
+    WHERE TenantId = @TenantId
+    AND (@IsActive IS NULL OR IsActive = @IsActive)
+    ORDER BY LocationName
+END'
+EXEC sp_executesql @CreateLocationGetAllProc
+
+DECLARE @CreateLocationGetByIdProc NVARCHAR(MAX) = '
+CREATE OR ALTER PROCEDURE [' + @SchemaName + '].usp_Location_GetById
+    @LocationId UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        LocationId, TenantId, LocationCode, LocationName,
+        AddressLine1, AddressLine2, City, StateProvince, PostalCode, Country,
+        Latitude, Longitude, LocationBarcodeData, IsActive,
+        CreatedDate, ModifiedDate
+    FROM [' + @SchemaName + '].Locations
+    WHERE LocationId = @LocationId
+END'
+EXEC sp_executesql @CreateLocationGetByIdProc
+
+-- Extinguisher procedures
+DECLARE @CreateExtinguisherGetAllProc NVARCHAR(MAX) = '
+CREATE OR ALTER PROCEDURE [' + @SchemaName + '].usp_Extinguisher_GetAll
+    @TenantId UNIQUEIDENTIFIER,
+    @LocationId UNIQUEIDENTIFIER = NULL,
+    @IsActive BIT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        e.ExtinguisherId, e.TenantId, e.LocationId, e.ExtinguisherTypeId,
+        e.AssetTag, e.BarcodeData, e.Manufacturer, e.Model, e.SerialNumber,
+        e.ManufactureDate, e.InstallDate, e.LastHydrostaticTestDate,
+        e.Capacity, e.LocationDescription, e.IsActive, e.CreatedDate, e.ModifiedDate,
+        l.LocationName, l.LocationCode,
+        et.TypeName, et.TypeCode
+    FROM [' + @SchemaName + '].Extinguishers e
+    INNER JOIN [' + @SchemaName + '].Locations l ON e.LocationId = l.LocationId
+    INNER JOIN [' + @SchemaName + '].ExtinguisherTypes et ON e.ExtinguisherTypeId = et.ExtinguisherTypeId
+    WHERE e.TenantId = @TenantId
+    AND (@LocationId IS NULL OR e.LocationId = @LocationId)
+    AND (@IsActive IS NULL OR e.IsActive = @IsActive)
+    ORDER BY l.LocationName, e.AssetTag
+END'
+EXEC sp_executesql @CreateExtinguisherGetAllProc
+
+DECLARE @CreateExtinguisherGetByIdProc NVARCHAR(MAX) = '
+CREATE OR ALTER PROCEDURE [' + @SchemaName + '].usp_Extinguisher_GetById
+    @ExtinguisherId UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        e.ExtinguisherId, e.TenantId, e.LocationId, e.ExtinguisherTypeId,
+        e.AssetTag, e.BarcodeData, e.Manufacturer, e.Model, e.SerialNumber,
+        e.ManufactureDate, e.InstallDate, e.LastHydrostaticTestDate,
+        e.Capacity, e.LocationDescription, e.IsActive, e.CreatedDate, e.ModifiedDate,
+        l.LocationName, l.LocationCode,
+        et.TypeName, et.TypeCode
+    FROM [' + @SchemaName + '].Extinguishers e
+    INNER JOIN [' + @SchemaName + '].Locations l ON e.LocationId = l.LocationId
+    INNER JOIN [' + @SchemaName + '].ExtinguisherTypes et ON e.ExtinguisherTypeId = et.ExtinguisherTypeId
+    WHERE e.ExtinguisherId = @ExtinguisherId
+END'
+EXEC sp_executesql @CreateExtinguisherGetByIdProc
+
+-- ExtinguisherType procedure
+DECLARE @CreateExtTypeGetAllProc NVARCHAR(MAX) = '
+CREATE OR ALTER PROCEDURE [' + @SchemaName + '].usp_ExtinguisherType_GetAll
+    @TenantId UNIQUEIDENTIFIER,
+    @IsActive BIT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        ExtinguisherTypeId, TenantId, TypeCode, TypeName, Description,
+        MonthlyInspectionRequired, AnnualInspectionRequired, HydrostaticTestYears,
+        IsActive, CreatedDate
+    FROM [' + @SchemaName + '].ExtinguisherTypes
+    WHERE TenantId = @TenantId
+    AND (@IsActive IS NULL OR IsActive = @IsActive)
+    ORDER BY TypeName
+END'
+EXEC sp_executesql @CreateExtTypeGetAllProc
+
+-- Inspection procedures
+DECLARE @CreateInspectionGetAllProc NVARCHAR(MAX) = '
+CREATE OR ALTER PROCEDURE [' + @SchemaName + '].usp_Inspection_GetAll
+    @TenantId UNIQUEIDENTIFIER,
+    @StartDate DATE = NULL,
+    @EndDate DATE = NULL
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        i.InspectionId, i.TenantId, i.ExtinguisherId, i.InspectionTypeId, i.InspectorUserId,
+        i.InspectionStartTime, i.InspectionEndTime, i.InspectionStatus, i.OverallResult,
+        e.AssetTag, l.LocationName, it.TypeName AS InspectionTypeName
+    FROM [' + @SchemaName + '].Inspections i
+    INNER JOIN [' + @SchemaName + '].Extinguishers e ON i.ExtinguisherId = e.ExtinguisherId
+    INNER JOIN [' + @SchemaName + '].Locations l ON e.LocationId = l.LocationId
+    INNER JOIN [' + @SchemaName + '].InspectionTypes it ON i.InspectionTypeId = it.InspectionTypeId
+    WHERE i.TenantId = @TenantId
+    AND (@StartDate IS NULL OR i.InspectionStartTime >= @StartDate)
+    AND (@EndDate IS NULL OR i.InspectionStartTime <= @EndDate)
+    ORDER BY i.InspectionStartTime DESC
+END'
+EXEC sp_executesql @CreateInspectionGetAllProc
+
+DECLARE @CreateInspectionGetByIdProc NVARCHAR(MAX) = '
+CREATE OR ALTER PROCEDURE [' + @SchemaName + '].usp_Inspection_GetById
+    @InspectionId UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    SELECT
+        i.InspectionId, i.TenantId, i.ExtinguisherId, i.InspectionTypeId, i.InspectorUserId,
+        i.InspectionStartTime, i.InspectionEndTime, i.InspectionStatus, i.OverallResult,
+        i.Latitude, i.Longitude, i.GpsAccuracy, i.InspectorNotes,
+        e.AssetTag, l.LocationName, it.TypeName AS InspectionTypeName
+    FROM [' + @SchemaName + '].Inspections i
+    INNER JOIN [' + @SchemaName + '].Extinguishers e ON i.ExtinguisherId = e.ExtinguisherId
+    INNER JOIN [' + @SchemaName + '].Locations l ON e.LocationId = l.LocationId
+    INNER JOIN [' + @SchemaName + '].InspectionTypes it ON i.InspectionTypeId = it.InspectionTypeId
+    WHERE i.InspectionId = @InspectionId
+END'
+EXEC sp_executesql @CreateInspectionGetByIdProc
+
+PRINT '  ✓ Created 7 essential stored procedures'
+PRINT ''
+
+/*============================================================================
   PART 5: INSERT LOCATIONS
 ============================================================================*/
 PRINT 'PART 5: Creating locations...'
