@@ -20,13 +20,16 @@ public class TenantsController : ControllerBase
 {
     private readonly ITenantService _tenantService;
     private readonly ILogger<TenantsController> _logger;
+    private readonly IConfiguration _configuration;
 
     public TenantsController(
         ITenantService tenantService,
-        ILogger<TenantsController> logger)
+        ILogger<TenantsController> logger,
+        IConfiguration configuration)
     {
         _tenantService = tenantService;
         _logger = logger;
+        _configuration = configuration;
     }
 
     /// <summary>
@@ -184,6 +187,71 @@ public class TenantsController : ControllerBase
         {
             _logger.LogError(ex, "Failed to update tenant {TenantId}", id);
             return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Diagnostic endpoint to check tenant stored procedures (development only)
+    /// </summary>
+    /// <returns>Diagnostic information</returns>
+    [HttpGet("diagnostic")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> DiagnosticCheck()
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
+            var userId = userIdClaim != null && Guid.TryParse(userIdClaim.Value, out var id) ? id : Guid.Empty;
+            var isSystemAdmin = TenantResolver.IsSystemAdmin(User);
+
+            // Check if stored procedures exist
+            var connString = _configuration.GetConnectionString("DefaultConnection");
+            using var connection = new Microsoft.Data.SqlClient.SqlConnection(connString);
+            await connection.OpenAsync();
+
+            using var command = connection.CreateCommand();
+            command.CommandText = @"
+                SELECT name
+                FROM sys.procedures
+                WHERE name LIKE 'usp_Tenant%'
+                ORDER BY name";
+
+            var procedures = new List<string>();
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                procedures.Add(reader.GetString(0));
+            }
+
+            return Ok(new
+            {
+                success = true,
+                userId = userId,
+                isAuthenticated = User.Identity?.IsAuthenticated ?? false,
+                isSystemAdmin = isSystemAdmin,
+                storedProcedures = procedures,
+                procedureCount = procedures.Count,
+                expectedProcedures = new[] {
+                    "usp_Tenant_Create",
+                    "usp_Tenant_GetAll",
+                    "usp_Tenant_GetAvailableForUser",
+                    "usp_Tenant_GetById",
+                    "usp_Tenant_Update"
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Diagnostic check failed");
+            return StatusCode(500, new
+            {
+                success = false,
+                error = ex.Message,
+                innerError = ex.InnerException?.Message,
+                stackTrace = ex.StackTrace
+            });
         }
     }
 }
