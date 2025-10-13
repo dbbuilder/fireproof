@@ -524,19 +524,6 @@ VALUES
     (''' + CAST(@Ext15Id AS NVARCHAR(36)) + ''', ''' + CAST(@TestTenantId AS NVARCHAR(36)) + ''', ''' + CAST(@Location3Id AS NVARCHAR(36)) + ''', ''' + CAST(@TypeABCId AS NVARCHAR(36)) + ''', ''FAC-005'', ''FAC005ABC'', ''First Alert'', ''FE3A40GR'', ''SN-FAC-005-2023'', ''2023-01-25'', ''2023-03-01'', ''10 lbs'', ''Shipping area'')
 '
 
--- Debug: Check the full SQL length and print FAC-003 complete line
-PRINT '  DEBUG - @InsertExtSql total length: ' + CAST(LEN(@InsertExtSql) AS VARCHAR(10))
-
-DECLARE @FAC003Start INT = CHARINDEX('FAC-003', @InsertExtSql)
-DECLARE @FAC003LineStart INT = @FAC003Start - 300
-DECLARE @NextCommaAfterFAC003 INT = CHARINDEX('),', @InsertExtSql, @FAC003Start) + 2
-DECLARE @FAC003LineLength INT = @NextCommaAfterFAC003 - @FAC003LineStart
-
-DECLARE @DebugLine NVARCHAR(MAX) = SUBSTRING(@InsertExtSql, @FAC003LineStart, @FAC003LineLength)
-PRINT '  DEBUG - Complete FAC-003 row (should end with room'')):'
-PRINT @DebugLine
-PRINT ''
-
 EXEC sp_executesql @InsertExtSql
 
 PRINT '  ✓ Created 15 extinguishers:'
