@@ -92,6 +92,7 @@ builder.Services.AddScoped<IInspectionService, InspectionService>(); // Legacy (
 builder.Services.AddScoped<IInspectionPhase1Service, InspectionPhase1Service>(); // Phase 1 checklist-based
 builder.Services.AddScoped<IChecklistTemplateService, ChecklistTemplateService>();
 builder.Services.AddScoped<IDeficiencyService, DeficiencyService>();
+builder.Services.AddScoped<IPhotoService, AzureBlobPhotoService>(); // Photo management with Azure Blob
 builder.Services.AddSingleton<IBarcodeGeneratorService, BarcodeGeneratorService>();
 builder.Services.AddSingleton<ITamperProofingService, TamperProofingService>();
 
