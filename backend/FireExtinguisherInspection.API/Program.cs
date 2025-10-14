@@ -91,6 +91,7 @@ builder.Services.AddScoped<IExtinguisherService, ExtinguisherService>();
 builder.Services.AddScoped<IInspectionService, InspectionService>(); // Legacy (pre-Phase 1)
 builder.Services.AddScoped<IInspectionPhase1Service, InspectionPhase1Service>(); // Phase 1 checklist-based
 builder.Services.AddScoped<IChecklistTemplateService, ChecklistTemplateService>();
+builder.Services.AddScoped<IDeficiencyService, DeficiencyService>();
 builder.Services.AddSingleton<IBarcodeGeneratorService, BarcodeGeneratorService>();
 builder.Services.AddSingleton<ITamperProofingService, TamperProofingService>();
 
