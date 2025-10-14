@@ -39,10 +39,11 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
         runtimeCaching: [
           {
+            // Local development API
             urlPattern: /^https:\/\/localhost:7001\/api\/.*/i,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'api-cache',
+              cacheName: 'api-cache-dev',
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 // 1 hour
@@ -53,6 +54,37 @@ export default defineConfig({
             }
           },
           {
+            // Staging API
+            urlPattern: /^https:\/\/staging-api\.fireproofapp\.net\/api\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache-staging',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 // 1 hour
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            // Production API
+            urlPattern: /^https:\/\/(api\.fireproofapp\.net|fireproof-api-test-2025\.azurewebsites\.net)\/api\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache-prod',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 // 1 hour
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            // Azure Blob Storage (photos)
             urlPattern: /^https:\/\/.*\.blob\.core\.windows\.net\/.*/i,
             handler: 'CacheFirst',
             options: {
