@@ -1,11 +1,15 @@
 <template>
   <div id="app" class="min-h-screen bg-gray-50">
+    <!-- Global Sync Status Banner -->
+    <SyncStatusBanner />
+
+    <!-- Main App Content -->
     <router-view />
   </div>
 </template>
 
 <script setup>
-// App root component
+import SyncStatusBanner from '@/components/SyncStatusBanner.vue'
 </script>
 
 <style>
