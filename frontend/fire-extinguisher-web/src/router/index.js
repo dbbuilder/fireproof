@@ -59,6 +59,30 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/inspections/new',
+      name: 'inspection-create',
+      component: () => import('../views/InspectionPhase1CreateView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/inspections/:id',
+      name: 'inspection-detail',
+      component: () => import('../views/InspectionPhase1DetailView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/inspections/:id/checklist',
+      name: 'inspection-checklist',
+      component: () => import('../views/InspectionPhase1ChecklistView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/inspections/:id/complete',
+      name: 'inspection-complete',
+      component: () => import('../views/InspectionPhase1CompleteView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/reports',
       name: 'reports',
       component: () => import('../views/ReportsView.vue'),
