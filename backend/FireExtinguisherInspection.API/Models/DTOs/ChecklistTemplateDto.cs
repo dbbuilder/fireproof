@@ -30,3 +30,13 @@ public class CreateChecklistTemplateRequest
     public required string Standard { get; set; }
     public string? Description { get; set; }
 }
+
+/// <summary>
+/// Request to update a custom checklist template
+/// </summary>
+public class UpdateChecklistTemplateRequest
+{
+    public string? TemplateName { get; set; }
+    public string? Description { get; set; }
+    public bool? IsActive { get; set; }
+}
