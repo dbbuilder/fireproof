@@ -42,31 +42,42 @@ api.interceptors.response.use(
 
       switch (status) {
         case 401:
-          // Unauthorized - don't redirect here, let the calling code handle it
-          // The auth store will handle logout and redirect if needed
-          console.warn('Unauthorized request - authentication required')
+          // Unauthorized - silent for auth endpoints, auth store handles this
+          // Only log if it's not from authentication endpoints
+          if (!error.config?.url?.includes('/authentication')) {
+            console.warn('Unauthorized request - authentication required')
+          }
           break
         case 403:
           // Forbidden
           console.error('Access forbidden:', data.message)
           break
         case 404:
-          // Not found
-          console.error('Resource not found:', data.message)
+          // Not found - only log in development mode
+          if (import.meta.env.DEV) {
+            console.error('Resource not found:', data.message)
+          }
           break
         case 500:
           // Server error
           console.error('Server error:', data.message)
           break
         default:
-          console.error('API error:', data.message || 'Unknown error')
+          // General errors - only log in development mode
+          if (import.meta.env.DEV) {
+            console.error('API error:', data.message || 'Unknown error')
+          }
       }
     } else if (error.request) {
-      // Request made but no response received
-      console.error('Network error: No response from server')
+      // Request made but no response received - only log in development mode
+      if (import.meta.env.DEV) {
+        console.error('Network error: No response from server')
+      }
     } else {
-      // Something else happened
-      console.error('Request error:', error.message)
+      // Something else happened - only log in development mode
+      if (import.meta.env.DEV) {
+        console.error('Request error:', error.message)
+      }
     }
 
     return Promise.reject(error)

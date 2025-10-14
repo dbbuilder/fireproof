@@ -215,7 +215,7 @@ export const useAuthStore = defineStore('auth', {
     /**
      * Refresh access token
      */
-    async refreshAccessToken(): Promise<void> {
+    async refreshAccessToken(silent = false): Promise<void> {
       if (!this.refreshToken) {
         throw new Error('No refresh token available')
       }
@@ -224,7 +224,9 @@ export const useAuthStore = defineStore('auth', {
         const response = await authService.refreshToken({ refreshToken: this.refreshToken })
         this.setAuthData(response)
       } catch (error: any) {
-        console.error('Token refresh error:', error)
+        if (!silent) {
+          console.error('Token refresh error:', error)
+        }
         this.logout() // Force logout on refresh failure
         throw error
       }
@@ -273,7 +275,7 @@ export const useAuthStore = defineStore('auth', {
     /**
      * Fetch current user profile
      */
-    async fetchCurrentUser(): Promise<void> {
+    async fetchCurrentUser(silent = false): Promise<void> {
       if (!this.accessToken) return
 
       this.loading = true
@@ -283,7 +285,9 @@ export const useAuthStore = defineStore('auth', {
         this.user = await authService.getCurrentUser()
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Failed to fetch user profile'
-        console.error('Fetch user error:', error)
+        if (!silent) {
+          console.error('Fetch user error:', error)
+        }
         throw error
       } finally {
         this.loading = false
@@ -293,7 +297,7 @@ export const useAuthStore = defineStore('auth', {
     /**
      * Fetch current user roles
      */
-    async fetchCurrentUserRoles(): Promise<void> {
+    async fetchCurrentUserRoles(silent = false): Promise<void> {
       if (!this.accessToken) return
 
       this.loading = true
@@ -303,7 +307,9 @@ export const useAuthStore = defineStore('auth', {
         this.roles = await authService.getCurrentUserRoles()
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Failed to fetch user roles'
-        console.error('Fetch roles error:', error)
+        if (!silent) {
+          console.error('Fetch roles error:', error)
+        }
         throw error
       } finally {
         this.loading = false
@@ -334,6 +340,7 @@ export const useAuthStore = defineStore('auth', {
 
     /**
      * Initialize auth from localStorage on app load
+     * Silently handles expired tokens without console noise
      */
     async initializeAuth(): Promise<void> {
       const token = localStorage.getItem('accessToken')
@@ -347,28 +354,33 @@ export const useAuthStore = defineStore('auth', {
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
         try {
-          // Fetch user and roles
-          await Promise.all([this.fetchCurrentUser(), this.fetchCurrentUserRoles()])
+          // Fetch user and roles silently
+          await Promise.all([
+            this.fetchCurrentUser(true),
+            this.fetchCurrentUserRoles(true)
+          ])
           this.isAuthenticated = true
 
           // Auto-set tenant for regular users
           this.autoSetTenantForUser()
         } catch (error: any) {
-          // Token might be expired, try to refresh
-          // Only try refresh if we got a 401 (Unauthorized)
+          // Token might be expired, try to refresh silently
           if (error.response?.status === 401) {
             try {
-              await this.refreshAccessToken()
+              await this.refreshAccessToken(true)
               // After refresh, try to fetch user data again
-              await Promise.all([this.fetchCurrentUser(), this.fetchCurrentUserRoles()])
+              await Promise.all([
+                this.fetchCurrentUser(true),
+                this.fetchCurrentUserRoles(true)
+              ])
               this.isAuthenticated = true
             } catch (refreshError) {
-              // Refresh failed, logout and clear everything
-              console.warn('Session expired, logging out')
+              // Refresh failed, logout silently
+              // This is expected behavior for expired sessions
               this.logout()
             }
           } else {
-            // Non-401 error, logout for safety
+            // Non-401 error, logout for safety but log it
             console.error('Failed to initialize auth:', error)
             this.logout()
           }
