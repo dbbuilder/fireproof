@@ -108,11 +108,16 @@ builder.Services.AddCors(options =>
     {
         policy
             .WithOrigins(
+                // Development
                 "http://localhost:5173",  // Vite dev server
                 "http://localhost:3000",   // Alternative frontend port
-                "https://fireproofapp.net",  // Production domain
-                "https://www.fireproofapp.net",
-                "https://nice-smoke-08dbc500f.2.azurestaticapps.net"  // Azure Static Web App
+                // Staging
+                "https://staging.fireproofapp.net",  // Staging custom domain
+                "https://witty-island-0daa2e910.2.azurestaticapps.net",  // Staging Azure hostname
+                // Production
+                "https://fireproofapp.net",  // Production custom domain
+                "https://www.fireproofapp.net",  // Production www subdomain
+                "https://nice-smoke-08dbc500f.2.azurestaticapps.net"  // Production Azure hostname
             )
             .AllowAnyMethod()
             .AllowAnyHeader()

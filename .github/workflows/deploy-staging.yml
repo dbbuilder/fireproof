@@ -1,5 +1,13 @@
 name: Deploy to Staging
 
+# Required GitHub Secrets:
+#   - AZURE_WEBAPP_PUBLISH_PROFILE_STAGING: Azure App Service publish profile for staging backend
+#   - AZURE_STATIC_WEB_APPS_API_TOKEN_STAGING: Azure Static Web Apps deployment token for staging frontend
+#
+# To obtain these secrets:
+#   Backend: Azure Portal → fireproof-api-staging → Deployment Center → Download Publish Profile
+#   Frontend: Azure Portal → fireproof-staging → Overview → Manage deployment token
+
 on:
   push:
     branches:
@@ -15,10 +23,19 @@ on:
         required: false
         default: 'Manual staging deployment'
 
+env:
+  DOTNET_VERSION: '8.0.x'
+  NODE_VERSION: '18'
+  STAGING_API_URL: 'https://staging-api.fireproofapp.net'
+  STAGING_FRONTEND_URL: 'https://staging.fireproofapp.net'
+
 jobs:
   deploy-backend-staging:
     name: Deploy Backend to Staging
     runs-on: ubuntu-latest
+    environment:
+      name: staging-api
+      url: https://staging-api.fireproofapp.net
 
     steps:
       - name: Checkout code
@@ -27,7 +44,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
         run: dotnet restore backend/FireExtinguisherInspection.API/FireExtinguisherInspection.API.csproj
@@ -45,15 +62,29 @@ jobs:
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_STAGING }}
           package: ./publish-staging
 
+      - name: Wait for API to start
+        run: sleep 45
+
       - name: Test Staging API Health
         run: |
-          sleep 30
-          curl -f https://fireproof-api-staging.azurewebsites.net/health || exit 1
+          echo "Testing health endpoint..."
+          curl -f ${{ env.STAGING_API_URL }}/health || exit 1
+
+      - name: Test CORS Configuration
+        run: |
+          echo "Testing CORS headers..."
+          curl -I -X OPTIONS ${{ env.STAGING_API_URL }}/api/authentication/login \
+            -H "Origin: ${{ env.STAGING_FRONTEND_URL }}" \
+            -H "Access-Control-Request-Method: POST" \
+            | grep -i "access-control-allow-origin" || exit 1
 
   deploy-frontend-staging:
     name: Deploy Frontend to Staging
     runs-on: ubuntu-latest
     needs: deploy-backend-staging
+    environment:
+      name: staging-frontend
+      url: https://staging.fireproofapp.net
 
     steps:
       - name: Checkout code
@@ -62,7 +93,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: frontend/fire-extinguisher-web/package-lock.json
 
@@ -87,10 +118,13 @@ jobs:
           output_location: 'dist'
           skip_app_build: true
 
+      - name: Wait for frontend deployment
+        run: sleep 20
+
       - name: Test Staging Frontend
         run: |
-          sleep 15
-          curl -f https://staging.fireproofapp.net/ || curl -f https://witty-island-0daa2e910.2.azurestaticapps.net/
+          echo "Testing frontend availability..."
+          curl -f ${{ env.STAGING_FRONTEND_URL }}/ || exit 1
 
   notify-deployment:
     name: Notify Deployment Status
@@ -103,8 +137,12 @@ jobs:
         if: needs.deploy-backend-staging.result == 'success' && needs.deploy-frontend-staging.result == 'success'
         run: |
           echo "✅ Staging deployment successful!"
-          echo "Backend: https://staging-api.fireproofapp.net"
-          echo "Frontend: https://staging.fireproofapp.net"
+          echo "Backend: ${{ env.STAGING_API_URL }}"
+          echo "Frontend: ${{ env.STAGING_FRONTEND_URL }}"
+          echo ""
+          echo "Test the deployment:"
+          echo "  - Frontend: ${{ env.STAGING_FRONTEND_URL }}"
+          echo "  - API Health: ${{ env.STAGING_API_URL }}/health"
 
       - name: Deployment Failed
         if: needs.deploy-backend-staging.result != 'success' || needs.deploy-frontend-staging.result != 'success'
