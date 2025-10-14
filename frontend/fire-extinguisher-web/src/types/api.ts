@@ -481,3 +481,271 @@ export function isExtinguisherDto(obj: any): obj is ExtinguisherDto {
     typeof obj.isOutOfService === 'boolean'
   )
 }
+
+// ============================================================================
+// Phase 1: Checklist Template Types (NFPA Compliance)
+// ============================================================================
+
+export interface ChecklistTemplateDto {
+  templateId: string
+  tenantId?: string | null
+  templateName: string
+  inspectionType: string // Monthly, Annual, 6-Year, 12-Year, Hydrostatic
+  standard: string // NFPA 10, Title 19 CCR, ULC S508
+  description?: string | null
+  isSystemTemplate: boolean
+  isActive: boolean
+  createdDate: string
+  modifiedDate: string
+  items?: ChecklistItemDto[] | null
+}
+
+export interface ChecklistItemDto {
+  itemId: string
+  templateId: string
+  itemNumber: number
+  itemText: string
+  itemCategory: string // PhysicalCondition, Signage, Gauge, etc.
+  requiresPhoto: boolean
+  requiresComment: boolean
+  allowedResponses: string // JSON array: ["Pass", "Fail", "N/A"]
+  sortOrder: number
+  isRequired: boolean
+  isActive: boolean
+  createdDate: string
+  modifiedDate: string
+}
+
+export interface CreateChecklistTemplateRequest {
+  templateName: string
+  inspectionType: string
+  standard: string
+  description?: string | null
+}
+
+export interface UpdateChecklistTemplateRequest {
+  templateName: string
+  description?: string | null
+  isActive: boolean
+}
+
+export interface CreateChecklistItemsRequest {
+  items: Array<{
+    itemNumber: number
+    itemText: string
+    itemCategory: string
+    requiresPhoto: boolean
+    requiresComment: boolean
+    allowedResponses: string
+    sortOrder: number
+    isRequired: boolean
+  }>
+}
+
+// ============================================================================
+// Phase 1: Inspection (Checklist-Based) Types
+// ============================================================================
+
+export interface InspectionPhase1Dto {
+  inspectionId: string
+  tenantId: string
+  extinguisherId: string
+  inspectorUserId: string
+  templateId: string
+  inspectionType: string
+  inspectionDate: string
+  scheduledDate?: string | null
+  completedDate?: string | null
+  status: string // Scheduled, InProgress, Completed, Failed, Cancelled
+  latitude?: number | null
+  longitude?: number | null
+  gpsAccuracyMeters?: number | null
+  locationVerified: boolean
+  overallResult?: string | null // Pass, Fail, ConditionalPass
+  notes?: string | null
+  inspectionHash?: string | null
+  previousInspectionHash?: string | null
+  hashVerified: boolean
+  inspectorSignature?: string | null
+  createdDate: string
+  modifiedDate: string
+  // Navigation properties
+  extinguisherCode?: string | null
+  extinguisherAssetTag?: string | null
+  locationName?: string | null
+  inspectorName?: string | null
+  templateName?: string | null
+  // Related data (lazy loaded)
+  checklistResponses?: InspectionChecklistResponseDto[] | null
+  photos?: InspectionPhotoDto[] | null
+  deficiencies?: InspectionDeficiencyDto[] | null
+}
+
+export interface CreateInspectionPhase1Request {
+  extinguisherId: string
+  inspectorUserId: string
+  templateId: string
+  inspectionType: string
+  scheduledDate?: string | null
+  latitude?: number | null
+  longitude?: number | null
+}
+
+export interface UpdateInspectionPhase1Request {
+  latitude?: number | null
+  longitude?: number | null
+  gpsAccuracyMeters?: number | null
+  notes?: string | null
+}
+
+export interface CompleteInspectionRequest {
+  overallResult: string // Pass, Fail, ConditionalPass
+  notes?: string | null
+  inspectorSignature?: string | null
+}
+
+export interface InspectionChecklistResponseDto {
+  responseId: string
+  inspectionId: string
+  checklistItemId: string
+  response: string // Pass, Fail, N/A
+  comment?: string | null
+  photoId?: string | null
+  respondedDate: string
+  // Navigation properties
+  itemText?: string | null
+  itemCategory?: string | null
+}
+
+export interface SaveChecklistResponsesRequest {
+  responses: Array<{
+    checklistItemId: string
+    response: string
+    comment?: string | null
+    photoId?: string | null
+  }>
+}
+
+export interface InspectionPhase1VerificationResponse {
+  inspectionId: string
+  isValid: boolean
+  validationMessage?: string | null
+  originalHash: string
+  computedHash: string
+  hashMatch: boolean
+  previousHashMatch: boolean
+  blockchainValid: boolean
+  verifiedDate: string
+}
+
+export interface InspectionPhase1StatsDto {
+  totalInspections: number
+  completedInspections: number
+  passedInspections: number
+  failedInspections: number
+  conditionalPassInspections: number
+  inProgressInspections: number
+  scheduledInspections: number
+  passRate: number
+  avgCompletionTimeMinutes: number
+  inspectionsThisMonth: number
+  inspectionsThisYear: number
+  lastInspectionDate?: string | null
+}
+
+// ============================================================================
+// Phase 1: Deficiency Types
+// ============================================================================
+
+export interface InspectionDeficiencyDto {
+  deficiencyId: string
+  inspectionId: string
+  extinguisherId: string
+  tenantId: string
+  deficiencyType: string // MissingPin, DamagedHose, GaugeNotInGreen, etc.
+  severity: string // Critical, High, Medium, Low
+  description: string
+  correctiveAction?: string | null
+  assignedToUserId?: string | null
+  dueDate?: string | null
+  status: string // Open, InProgress, Resolved, Deferred
+  resolutionNotes?: string | null
+  resolvedDate?: string | null
+  resolvedByUserId?: string | null
+  photoIds?: string[] | null
+  createdDate: string
+  modifiedDate: string
+  // Navigation properties
+  extinguisherAssetTag?: string | null
+  locationName?: string | null
+  assignedToName?: string | null
+  resolvedByName?: string | null
+}
+
+export interface CreateDeficiencyRequest {
+  inspectionId: string
+  extinguisherId: string
+  deficiencyType: string
+  severity: string
+  description: string
+  correctiveAction?: string | null
+  assignedToUserId?: string | null
+  dueDate?: string | null
+  photoIds?: string[] | null
+}
+
+export interface UpdateDeficiencyRequest {
+  deficiencyType: string
+  severity: string
+  description: string
+  correctiveAction?: string | null
+  assignedToUserId?: string | null
+  dueDate?: string | null
+  status: string
+  photoIds?: string[] | null
+}
+
+export interface ResolveDeficiencyRequest {
+  resolutionNotes: string
+}
+
+// ============================================================================
+// Phase 1: Photo Types (Mobile-First)
+// ============================================================================
+
+export interface InspectionPhotoDto {
+  photoId: string
+  inspectionId: string
+  tenantId: string
+  photoType: string // Location, PhysicalCondition, Pressure, Label, Seal, Hose, Deficiency, Other
+  blobUrl: string
+  thumbnailUrl: string
+  fileName: string
+  fileSizeBytes: number
+  contentType: string
+  captureDate?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  deviceModel?: string | null
+  deviceMake?: string | null
+  exifExtracted: boolean
+  createdDate: string
+  modifiedDate: string
+}
+
+export interface PhotoUploadResponse {
+  photoId: string
+  photoUrl: string
+  thumbnailUrl: string
+  exifExtracted: boolean
+  captureDate?: string | null
+  latitude?: number | null
+  longitude?: number | null
+}
+
+export interface UploadPhotoRequest {
+  inspectionId: string
+  photoType: string
+  file: File
+  captureDate?: string | null
+}
