@@ -239,6 +239,12 @@ tmp/
 temp/
 *.tmp
 
+## Deployment artifacts
+publish*/
+*-deploy.zip
+*deploy*.zip
+*.zip
+
 ## CI/CD
 .github/workflows/*.log
 
