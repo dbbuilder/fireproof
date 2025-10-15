@@ -35,9 +35,28 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // Setup project - runs once to authenticate
     {
-      name: 'chromium',
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+    },
+
+    // Authenticated tests - use stored auth state
+    {
+      name: 'chromium-authenticated',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
+      testIgnore: ['**/auth.spec.ts', '**/smoke.spec.ts'], // Exclude auth and smoke tests
+    },
+
+    // Unauthenticated tests (smoke tests)
+    {
+      name: 'chromium-unauthenticated',
       use: { ...devices['Desktop Chrome'] },
+      testMatch: ['**/smoke.spec.ts'], // Only run smoke tests without auth
     },
 
     // {

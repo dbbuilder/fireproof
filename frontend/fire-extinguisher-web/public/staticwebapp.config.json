@@ -1,46 +1,15 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "/*.{css,js,jpg,jpeg,png,gif,svg,ico,woff,woff2,ttf,eot}"]
+    "exclude": ["/images/*.{png,jpg,gif,ico}", "/css/*", "/js/*", "/*.{css,js,json,ico,png,jpg,gif,svg,woff,woff2,ttf,eot}"]
   },
-  "routes": [
-    {
-      "route": "/",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate"
-      }
-    },
-    {
-      "route": "/index.html",
-      "headers": {
-        "cache-control": "no-cache, no-store, must-revalidate"
-      }
-    },
-    {
-      "route": "/assets/*",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    }
-  ],
-  "responseOverrides": {
-    "404": {
-      "rewrite": "/index.html",
-      "statusCode": 200
-    }
-  },
-  "platform": {
-    "apiRuntime": "node:16"
-  },
-  "globalHeaders": {
-    "x-frame-options": "DENY",
-    "x-content-type-options": "nosniff",
-    "referrer-policy": "strict-origin-when-cross-origin",
-    "x-fireproof-version": "1.1.2"
-  },
+  "routes": [],
   "mimeTypes": {
     ".json": "application/json",
     ".js": "text/javascript",
     ".css": "text/css"
+  },
+  "globalHeaders": {
+    "cache-control": "no-cache, no-store, must-revalidate"
   }
 }

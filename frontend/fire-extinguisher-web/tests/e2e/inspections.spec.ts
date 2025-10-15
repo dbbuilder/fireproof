@@ -1,15 +1,12 @@
 import { test, expect } from '@playwright/test'
 import {
-  loginAndSelectTenant,
   navigateTo,
   waitForLoading,
   setupConsoleErrorListener,
 } from './helpers'
 
 test.describe('Inspections View', () => {
-  test.beforeEach(async ({ page }) => {
-    await loginAndSelectTenant(page)
-  })
+  // Note: These tests use stored authentication from auth.setup.ts
 
   test('should display inspections page without errors', async ({ page }) => {
     // Set up console error listener
