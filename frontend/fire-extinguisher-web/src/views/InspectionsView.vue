@@ -80,7 +80,7 @@
               <ChartBarIcon class="h-8 w-8 text-blue-400" />
             </div>
             <div class="text-2xl font-bold text-gray-900">
-              {{ inspectionStore.stats.passRate.toFixed(1) }}%
+              {{ (inspectionStore.stats.passRate || 0).toFixed(1) }}%
             </div>
           </div>
         </div>

@@ -38,19 +38,18 @@
           </router-link>
         </div>
 
-        <!-- Center Section: Search (Desktop Only) -->
-        <div class="hidden lg:block flex-1 max-w-2xl mx-8">
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <MagnifyingGlassIcon class="h-5 w-5 text-gray-400" />
+        <!-- Center Section: Tenant Display -->
+        <div class="hidden md:flex flex-1 items-center justify-center mx-8">
+          <div class="flex items-center space-x-3 px-6 py-2 bg-gradient-to-r from-primary-50 to-primary-100 border border-primary-200 rounded-lg">
+            <BuildingOfficeIcon class="h-6 w-6 text-primary-600 flex-shrink-0" />
+            <div class="text-center">
+              <p class="text-xs font-medium text-primary-600 uppercase tracking-wide">
+                Organization
+              </p>
+              <p class="text-sm font-semibold text-gray-900">
+                {{ tenantName }}
+              </p>
             </div>
-            <input
-              type="search"
-              class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-all"
-              placeholder="Search extinguishers, locations, inspections..."
-              v-model="searchQuery"
-              @keyup.enter="handleSearch"
-            />
           </div>
         </div>
 

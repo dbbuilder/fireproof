@@ -138,7 +138,7 @@
                 <ChartBarIcon class="h-8 w-8 text-green-400" />
               </div>
               <div class="text-3xl font-bold text-green-600">
-                {{ stats.passRate.toFixed(1) }}%
+                {{ (stats.passRate || 0).toFixed(1) }}%
               </div>
               <p class="text-xs text-gray-500 mt-1">
                 {{ stats.passedInspections }} passed, {{ stats.failedInspections }} failed
@@ -236,7 +236,7 @@
                       </div>
                     </div>
                     <span class="text-sm font-semibold text-gray-900 w-16 text-right">
-                      {{ stats.passedInspections }} ({{ stats.passRate.toFixed(1) }}%)
+                      {{ stats.passedInspections }} ({{ (stats.passRate || 0).toFixed(1) }}%)
                     </span>
                   </div>
                 </div>
@@ -255,7 +255,7 @@
                       </div>
                     </div>
                     <span class="text-sm font-semibold text-gray-900 w-16 text-right">
-                      {{ stats.failedInspections }} ({{ (100 - stats.passRate).toFixed(1) }}%)
+                      {{ stats.failedInspections }} ({{ (100 - (stats.passRate || 0)).toFixed(1) }}%)
                     </span>
                   </div>
                 </div>
@@ -268,7 +268,7 @@
                       :style="{ width: `${stats.passRate}%` }"
                     >
                       <span v-if="stats.passRate > 20" class="text-white font-bold text-sm">
-                        {{ stats.passRate.toFixed(0) }}%
+                        {{ (stats.passRate || 0).toFixed(0) }}%
                       </span>
                     </div>
                     <div
@@ -276,7 +276,7 @@
                       :style="{ width: `${100 - stats.passRate}%` }"
                     >
                       <span v-if="100 - stats.passRate > 20" class="text-white font-bold text-sm">
-                        {{ (100 - stats.passRate).toFixed(0) }}%
+                        {{ (100 - (stats.passRate || 0)).toFixed(0) }}%
                       </span>
                     </div>
                   </div>
@@ -330,7 +330,7 @@
                         'text-red-600'
                       ]"
                     >
-                      {{ location.passRate.toFixed(1) }}%
+                      {{ (location.passRate || 0).toFixed(1) }}%
                     </div>
                     <div class="text-xs text-gray-500">Pass Rate</div>
                   </div>
