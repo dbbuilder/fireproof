@@ -4,8 +4,8 @@ import { Page, expect } from '@playwright/test'
  * Test credentials and configuration
  */
 export const TEST_CONFIG = {
-  email: 'ted@fireproof.com',
-  password: 'Test123!',
+  email: 'chris@servicevision.net',
+  password: 'Gv51076',
   tenantId: '634f2b52-d32a-46dd-a045-d158e793adcb',
   tenantName: 'Demo Company Inc',
   apiBaseUrl: 'https://fireproof-api-test-2025.azurewebsites.net/api',
