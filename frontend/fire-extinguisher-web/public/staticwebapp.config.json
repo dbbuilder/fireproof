@@ -1,13 +1,14 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/images/*.{png,jpg,gif,ico}", "/css/*", "/js/*", "/*.{css,js,json,ico,png,jpg,gif,svg,woff,woff2,ttf,eot}"]
+    "exclude": ["/assets/*", "/images/*", "/*.{png,jpg,gif,ico,json,js,css,svg,woff,woff2,ttf,eot}"]
   },
   "routes": [],
   "mimeTypes": {
     ".json": "application/json",
     ".js": "text/javascript",
-    ".css": "text/css"
+    ".css": "text/css",
+    ".html": "text/html"
   },
   "globalHeaders": {
     "cache-control": "no-cache, no-store, must-revalidate"
