@@ -262,9 +262,10 @@
                 </div>
 
                 <!-- Visual Pie -->
-                <div class="pt-6 border-t border-gray-200">
+                <div class="pt-6 border-t border-gray-200" data-testid="visual-pie-chart">
                   <div class="flex items-center justify-center space-x-2">
                     <div
+                      data-testid="visual-pie-chart-green"
                       class="h-24 rounded-lg bg-green-500 transition-all duration-300 flex items-center justify-center"
                       :style="{ width: `${stats.passRate}%` }"
                     >
@@ -273,6 +274,7 @@
                       </span>
                     </div>
                     <div
+                      data-testid="visual-pie-chart-red"
                       class="h-24 rounded-lg bg-red-500 transition-all duration-300 flex items-center justify-center"
                       :style="{ width: `${100 - stats.passRate}%` }"
                     >
