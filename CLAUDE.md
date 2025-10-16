@@ -243,7 +243,110 @@ export const useLocationStore = defineStore('locations', {
 
 - **Component tests**: Vue Test Utils
 - **Store tests**: Pinia testing utilities
-- **E2E tests**: Playwright or Cypress (Phase 1.5)
+- **E2E tests**: Playwright (configured and running)
+
+### Test ID Guidelines
+
+**CRITICAL**: All UI components MUST include `data-testid` attributes for reliable E2E testing.
+
+#### Naming Convention
+
+Use descriptive, kebab-case test IDs that describe the element's purpose:
+
+```vue
+<!-- Good examples -->
+<h1 data-testid="page-heading">Dashboard</h1>
+<button data-testid="submit-button">Submit</button>
+<input data-testid="email-input" />
+<div data-testid="user-profile-card">...</div>
+
+<!-- Bad examples -->
+<h1 data-testid="h1">Dashboard</h1>           <!-- Too generic -->
+<button data-testid="btn1">Submit</button>    <!-- Meaningless -->
+<input data-testid="input">...</input>        <!-- Not specific -->
+```
+
+#### When to Add Test IDs
+
+Add test IDs to:
+- **Page headings** (`h1`, `h2` for major sections)
+- **Interactive elements** (buttons, links, inputs, selects)
+- **Navigation elements** (menu items, tabs)
+- **Data containers** (cards, tables, lists with dynamic content)
+- **Stat cards and metrics**
+- **Modal dialogs and their key elements**
+- **Form fields** (all inputs, textareas, selects)
+- **Status indicators** (badges, alerts, toasts)
+
+#### Component-Specific Patterns
+
+```vue
+<!-- Authentication Views -->
+<input data-testid="email-input" />
+<input data-testid="password-input" />
+<button data-testid="login-submit-button" />
+<button data-testid="register-submit-button" />
+
+<!-- List/Table Views -->
+<h1 data-testid="inspections-heading" />
+<button data-testid="new-inspection-button" />
+<div data-testid="inspections-table-container" />
+<table data-testid="inspections-table" />
+<div data-testid="inspections-empty-state" />
+
+<!-- Stats Cards -->
+<div data-testid="stats-cards">
+  <div data-testid="stat-card-total">
+    <div data-testid="total-count">42</div>
+  </div>
+  <div data-testid="stat-card-passrate">
+    <div data-testid="pass-rate">95.2%</div>
+  </div>
+</div>
+
+<!-- Selection/Navigation -->
+<div data-testid="tenant-list">
+  <div
+    data-testid="tenant-card"
+    :data-tenant-id="tenant.tenantId"
+  >
+    {{ tenant.name }}
+  </div>
+</div>
+```
+
+#### Test ID Best Practices
+
+1. **Be Specific**: Use descriptive names that make tests self-documenting
+2. **Be Consistent**: Follow the same naming patterns across the app
+3. **Avoid Implementation Details**: Don't use class names or IDs
+4. **Use Data Attributes**: Prefer `data-tenant-id` over generic attributes for list items
+5. **Add During Development**: Include test IDs when creating new components
+6. **Update Tests Together**: When adding test IDs, update corresponding tests
+
+#### Testing with Test IDs
+
+```javascript
+// Playwright E2E tests
+await page.click('[data-testid="login-submit-button"]')
+await page.fill('[data-testid="email-input"]', 'user@example.com')
+await expect(page.locator('[data-testid="dashboard-heading"]')).toBeVisible()
+
+// Selecting specific items
+await page.click('[data-tenant-id="tenant-123"]')
+```
+
+#### Checklist for New UI Components
+
+When creating a new view or component:
+- [ ] Add `data-testid` to the main heading
+- [ ] Add `data-testid` to all buttons and links
+- [ ] Add `data-testid` to all form inputs
+- [ ] Add `data-testid` to data containers (tables, cards, lists)
+- [ ] Add `data-testid` to empty states
+- [ ] Add `data-testid` to loading states
+- [ ] Add `data-testid` to error messages
+- [ ] Update or create corresponding E2E tests
 
 ## Security & Compliance
 

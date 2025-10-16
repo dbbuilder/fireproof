@@ -176,6 +176,32 @@ BEGIN
 
     EXEC sp_executesql @Sql, N'@SchemaName NVARCHAR(128)', @SchemaName
 
+    -- Create InspectionTypes table
+    SET @Sql = N'
+    DECLARE @FullTableName NVARCHAR(300) = QUOTENAME(@SchemaName) + ''.InspectionTypes''
+    IF OBJECT_ID(@FullTableName, ''U'') IS NULL
+    BEGIN
+        DECLARE @CreateSQL NVARCHAR(MAX) = N''
+        CREATE TABLE '' + QUOTENAME(@SchemaName) + ''.InspectionTypes (
+            InspectionTypeId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+            TenantId UNIQUEIDENTIFIER NOT NULL,
+            TypeName NVARCHAR(100) NOT NULL,
+            Description NVARCHAR(1000) NULL,
+            RequiresServiceTechnician BIT NOT NULL DEFAULT 0,
+            FrequencyDays INT NOT NULL,
+            IsActive BIT NOT NULL DEFAULT 1,
+            CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+            CONSTRAINT PK_'' + REPLACE(@SchemaName, ''-'', ''_'') + ''_InspTypes PRIMARY KEY CLUSTERED (InspectionTypeId)
+        )''
+
+        EXEC sp_executesql @CreateSQL
+        PRINT ''  ✓ Created InspectionTypes table''
+    END
+    ELSE
+        PRINT ''  - InspectionTypes table already exists'''
+
+    EXEC sp_executesql @Sql, N'@SchemaName NVARCHAR(128)', @SchemaName
+
     PRINT '  ✓ ' + @TenantCode + ' schema creation completed'
     PRINT ''
 

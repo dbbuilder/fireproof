@@ -22,17 +22,17 @@ export async function login(
   email: string = TEST_CONFIG.email,
   password: string = TEST_CONFIG.password
 ) {
-  await page.goto('/')
+  await page.goto('/login')
 
   // Wait for login page to load
   await expect(page.locator('h1', { hasText: 'Welcome Back' })).toBeVisible()
 
   // Fill in credentials
-  await page.fill('input#email', email)
-  await page.fill('input#password', password)
+  await page.fill('[data-testid="email-input"]', email)
+  await page.fill('[data-testid="password-input"]', password)
 
   // Submit login
-  await page.click('button[type="submit"]')
+  await page.click('[data-testid="login-submit-button"]')
 
   // Wait for navigation (either to dashboard or tenant selection)
   await page.waitForLoadState('networkidle')

@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2">
+          <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2" data-testid="reports-heading">
             Reports & Analytics
           </h1>
           <p class="text-gray-600">
@@ -15,6 +15,7 @@
           @click="generateReport"
           class="btn-primary inline-flex items-center"
           :disabled="generating"
+          data-testid="generate-report-button"
         >
           <DocumentArrowDownIcon class="h-5 w-5 mr-2" />
           {{ generating ? 'Generating...' : 'Generate Report' }}
@@ -113,15 +114,15 @@
 
       <template v-else>
         <!-- Overview Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" data-testid="overview-stats">
           <!-- Total Inspections -->
-          <div class="card">
+          <div class="card" data-testid="stat-card-total">
             <div class="p-6">
               <div class="flex items-center justify-between mb-2">
                 <span class="text-sm font-medium text-gray-500">Total Inspections</span>
                 <ClipboardDocumentCheckIcon class="h-8 w-8 text-gray-400" />
               </div>
-              <div class="text-3xl font-bold text-gray-900">
+              <div class="text-3xl font-bold text-gray-900" data-testid="total-inspections">
                 {{ stats.totalInspections }}
               </div>
               <p class="text-xs text-gray-500 mt-1">
@@ -131,13 +132,13 @@
           </div>
 
           <!-- Pass Rate -->
-          <div class="card">
+          <div class="card" data-testid="stat-card-passrate">
             <div class="p-6">
               <div class="flex items-center justify-between mb-2">
                 <span class="text-sm font-medium text-gray-500">Pass Rate</span>
                 <ChartBarIcon class="h-8 w-8 text-green-400" />
               </div>
-              <div class="text-3xl font-bold text-green-600">
+              <div class="text-3xl font-bold text-green-600" data-testid="pass-rate">
                 {{ (stats.passRate || 0).toFixed(1) }}%
               </div>
               <p class="text-xs text-gray-500 mt-1">
@@ -147,13 +148,13 @@
           </div>
 
           <!-- Require Service -->
-          <div class="card">
+          <div class="card" data-testid="stat-card-service">
             <div class="p-6">
               <div class="flex items-center justify-between mb-2">
                 <span class="text-sm font-medium text-gray-500">Require Service</span>
                 <WrenchScrewdriverIcon class="h-8 w-8 text-amber-400" />
               </div>
-              <div class="text-3xl font-bold text-amber-600">
+              <div class="text-3xl font-bold text-amber-600" data-testid="require-service">
                 {{ stats.requireingService }}
               </div>
               <p class="text-xs text-gray-500 mt-1">
@@ -163,13 +164,13 @@
           </div>
 
           <!-- Require Replacement -->
-          <div class="card">
+          <div class="card" data-testid="stat-card-replacement">
             <div class="p-6">
               <div class="flex items-center justify-between mb-2">
                 <span class="text-sm font-medium text-gray-500">Require Replacement</span>
                 <ExclamationTriangleIcon class="h-8 w-8 text-red-400" />
               </div>
-              <div class="text-3xl font-bold text-red-600">
+              <div class="text-3xl font-bold text-red-600" data-testid="require-replacement">
                 {{ stats.requiringReplacement }}
               </div>
               <p class="text-xs text-gray-500 mt-1">
@@ -180,9 +181,9 @@
         </div>
 
         <!-- Charts Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8" data-testid="charts-section">
           <!-- Inspection Type Breakdown -->
-          <div class="card">
+          <div class="card" data-testid="inspections-by-type-card">
             <div class="card-header">
               <h3 class="text-lg font-semibold text-gray-900">Inspections by Type</h3>
             </div>
@@ -216,7 +217,7 @@
           </div>
 
           <!-- Pass/Fail Distribution -->
-          <div class="card">
+          <div class="card" data-testid="pass-fail-distribution-card">
             <div class="card-header">
               <h3 class="text-lg font-semibold text-gray-900">Pass/Fail Distribution</h3>
             </div>
@@ -290,7 +291,7 @@
         </div>
 
         <!-- Inspections by Location -->
-        <div class="card mb-8">
+        <div class="card mb-8" data-testid="inspections-by-location-card">
           <div class="card-header">
             <h3 class="text-lg font-semibold text-gray-900">Inspections by Location</h3>
           </div>
@@ -344,7 +345,7 @@
         </div>
 
         <!-- Recent Activity -->
-        <div class="card">
+        <div class="card" data-testid="recent-activity-card">
           <div class="card-header">
             <h3 class="text-lg font-semibold text-gray-900">Recent Inspection Activity</h3>
           </div>

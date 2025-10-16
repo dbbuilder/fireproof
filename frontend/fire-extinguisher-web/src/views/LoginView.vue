@@ -29,7 +29,7 @@
           </div>
 
           <!-- Error Alert -->
-          <div v-if="error" class="alert-danger mb-6">
+          <div v-if="error" class="alert-danger mb-6" data-testid="login-error">
             <XCircleIcon class="h-5 w-5" />
             <div>
               <p class="text-sm font-medium">{{ error }}</p>
@@ -38,6 +38,7 @@
               type="button"
               class="text-red-400 hover:text-red-600"
               @click="clearError"
+              data-testid="close-error"
             >
               <XMarkIcon class="h-5 w-5" />
             </button>
@@ -63,6 +64,7 @@
                   class="form-input pl-10"
                   :class="{ 'border-red-500 focus:ring-red-500': emailError }"
                   placeholder="you@example.com"
+                  data-testid="email-input"
                   @blur="validateEmail"
                 />
               </div>
@@ -89,11 +91,13 @@
                   class="form-input pl-10 pr-10"
                   :class="{ 'border-red-500 focus:ring-red-500': passwordError }"
                   placeholder="••••••••"
+                  data-testid="password-input"
                   @blur="validatePassword"
                 />
                 <button
                   type="button"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  data-testid="toggle-password-visibility"
                   @click="showPassword = !showPassword"
                 >
                   <EyeIcon v-if="!showPassword" class="h-5 w-5" />
@@ -113,6 +117,7 @@
                   v-model="form.rememberMe"
                   type="checkbox"
                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                  data-testid="remember-me-checkbox"
                 />
                 <label for="remember-me" class="ml-2 block text-sm text-gray-700">
                   Remember me
@@ -120,7 +125,7 @@
               </div>
 
               <div class="text-sm">
-                <a href="#" class="font-medium text-primary-600 hover:text-primary-500" @click.prevent="handleForgotPassword">
+                <a href="#" class="font-medium text-primary-600 hover:text-primary-500" data-testid="forgot-password-link" @click.prevent="handleForgotPassword">
                   Forgot password?
                 </a>
               </div>
@@ -131,6 +136,7 @@
               type="submit"
               :disabled="loading"
               class="btn-primary w-full"
+              data-testid="login-submit-button"
             >
               <span v-if="!loading">Sign In</span>
               <span v-else class="flex items-center justify-center">
@@ -146,6 +152,7 @@
               @click="handleDevLogin"
               :disabled="loading"
               class="btn-outline w-full"
+              data-testid="dev-login-button"
             >
               <span v-if="!loading">Dev Login (No Password)</span>
               <span v-else class="flex items-center justify-center">
@@ -174,6 +181,7 @@
             <router-link
               to="/register"
               class="font-medium text-primary-600 hover:text-primary-500 transition-colors"
+              data-testid="register-link"
             >
               Create a new account
             </router-link>

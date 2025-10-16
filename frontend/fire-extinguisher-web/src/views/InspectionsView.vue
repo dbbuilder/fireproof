@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2">
+          <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2" data-testid="inspections-heading">
             Inspections
           </h1>
           <p class="text-gray-600">
@@ -14,6 +14,7 @@
         <button
           @click="startNewInspection"
           class="btn-primary inline-flex items-center"
+          data-testid="new-inspection-button"
         >
           <PlusIcon class="h-5 w-5 mr-2" />
           Start Inspection
@@ -36,50 +37,50 @@
       </div>
 
       <!-- Stats Cards -->
-      <div v-if="inspectionStore.stats" class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="card">
+      <div v-if="inspectionStore.stats" class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8" data-testid="stats-cards">
+        <div class="card" data-testid="stat-card-total">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium text-gray-500">Total</span>
               <ClipboardDocumentCheckIcon class="h-8 w-8 text-gray-400" />
             </div>
-            <div class="text-2xl font-bold text-gray-900">
+            <div class="text-2xl font-bold text-gray-900" data-testid="total-inspections">
               {{ inspectionStore.stats.totalInspections }}
             </div>
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" data-testid="stat-card-passed">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium text-gray-500">Passed</span>
               <CheckCircleIcon class="h-8 w-8 text-green-400" />
             </div>
-            <div class="text-2xl font-bold text-green-600">
+            <div class="text-2xl font-bold text-green-600" data-testid="passed-inspections">
               {{ inspectionStore.stats.passedInspections }}
             </div>
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" data-testid="stat-card-failed">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium text-gray-500">Failed</span>
               <XCircleIcon class="h-8 w-8 text-red-400" />
             </div>
-            <div class="text-2xl font-bold text-red-600">
+            <div class="text-2xl font-bold text-red-600" data-testid="failed-inspections">
               {{ inspectionStore.stats.failedInspections }}
             </div>
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" data-testid="stat-card-passrate">
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium text-gray-500">Pass Rate</span>
               <ChartBarIcon class="h-8 w-8 text-blue-400" />
             </div>
-            <div class="text-2xl font-bold text-gray-900">
+            <div class="text-2xl font-bold text-gray-900" data-testid="pass-rate">
               {{ (inspectionStore.stats.passRate || 0).toFixed(1) }}%
             </div>
           </div>
@@ -95,9 +96,9 @@
       </div>
 
       <!-- Inspections List -->
-      <div v-else-if="inspectionStore.inspections.length > 0" class="card">
+      <div v-else-if="inspectionStore.inspections.length > 0" class="card" data-testid="inspections-table-container">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
+          <table class="min-w-full divide-y divide-gray-200" data-testid="inspections-table">
             <thead class="bg-gray-50">
               <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -182,7 +183,7 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="card">
+      <div v-else class="card" data-testid="inspections-empty-state">
         <div class="p-12 text-center">
           <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 mb-4">
             <ClipboardDocumentCheckIcon class="h-8 w-8 text-primary-600" />
@@ -196,6 +197,7 @@
           <button
             @click="startNewInspection"
             class="btn-primary inline-flex items-center"
+            data-testid="empty-state-start-button"
           >
             <PlusIcon class="h-5 w-5 mr-2" />
             Start Your First Inspection

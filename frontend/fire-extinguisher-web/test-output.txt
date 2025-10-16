@@ -1,0 +1,541 @@
+
+> fire-extinguisher-web@1.1.2 test:e2e
+> playwright test
+
+
+Running 24 tests using 6 workers
+
+[1A[2K[1/24] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:107:3 › Visual Regression - Basic Page Structure › login page has expected structure
+[1A[2K[2/24] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:5:3 › Smoke Tests - No JavaScript Errors › login page should load without errors
+[1A[2K[3/24] [setup] › tests/e2e/auth.setup.ts:6:1 › authenticate
+[1A[2K[4/24] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:84:3 › Smoke Tests - No JavaScript Errors › 404 page should load without errors
+[1A[2K[setup] › tests/e2e/auth.setup.ts:6:1 › authenticate
+Starting authentication setup...
+
+[1A[2KBROWSER log: 🔥 FireProof v1.1.2
+
+[1A[2KBROWSER log: 📦 Build: 2025-10-15T08:29:29.116Z
+
+[1A[2KBROWSER log: 🔧 Environment: production
+
+[1A[2KBROWSER log: 📡 Online: true
+
+[1A[2KBROWSER log: IndexedDB object stores created
+
+[1A[2KBROWSER log: IndexedDB initialized successfully
+
+[1A[2KBROWSER log: ✓ IndexedDB initialized
+
+[1A[2KBROWSER log: OfflineSyncManager initialized {online: true}
+
+[1A[2KBROWSER log: ✓ Offline sync initialized
+
+[1A[2K[5/24] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:54:3 › Smoke Tests - No JavaScript Errors › register page should load without errors
+[1A[2KHomepage loaded, navigating to login...
+
+[1A[2KBROWSER log: 🔥 FireProof v1.1.2
+
+[1A[2KBROWSER log: 📦 Build: 2025-10-15T08:29:30.765Z
+
+[1A[2KBROWSER log: 🔧 Environment: production
+
+[1A[2KBROWSER log: 📡 Online: true
+
+[1A[2KBROWSER log: IndexedDB initialized successfully
+
+[1A[2KBROWSER log: ✓ IndexedDB initialized
+
+[1A[2KBROWSER log: OfflineSyncManager initialized {online: true}
+
+[1A[2KBROWSER log: ✓ Offline sync initialized
+
+[1A[2KLogin page loaded, filling credentials...
+
+[1A[2KSubmitting login form...
+
+[1A[2K[6/24] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:33:3 › Smoke Tests - No JavaScript Errors › homepage should load without errors
+[1A[2KNavigation successful, current URL: http://localhost:4173/select-tenant
+
+[1A[2KLogin submitted, current URL: http://localhost:4173/select-tenant
+
+[1A[2KOn tenant selection page, selecting tenant...
+
+[1A[2KTenant selected, current URL: http://localhost:4173/select-tenant
+
+[1A[2KFinal URL after auth: http://localhost:4173/select-tenant
+
+[1A[2KAuthentication successful! Saving state...
+
+[1A[2KAuthentication state saved to: playwright/.auth/user.json
+
+[1A[2K[7/24] [chromium-authenticated] › tests/e2e/inspections.spec.ts:77:3 › Inspections View › should display inspections table
+[1A[2K[8/24] [chromium-authenticated] › tests/e2e/inspections.spec.ts:11:3 › Inspections View › should display inspections page without errors
+[1A[2K[9/24] [chromium-authenticated] › tests/e2e/inspections.spec.ts:31:3 › Inspections View › should display statistics cards with valid numbers
+[1A[2K[10/24] [chromium-authenticated] › tests/e2e/inspections.spec.ts:98:3 › Inspections View › should filter inspections
+[1A[2K[11/24] [chromium-authenticated] › tests/e2e/inspections.spec.ts:136:3 › Inspections View › should create new inspection button be visible
+[1A[2K[12/24] [chromium-authenticated] › tests/e2e/inspections.spec.ts:52:3 › Inspections View › should handle empty state gracefully
+[1A[2K[13/24] [chromium-authenticated] › tests/e2e/inspections.spec.ts:119:3 › Inspections View › should navigate to inspection details
+[1A[2K[14/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:11:3 › Reports View › should display reports page without errors
+[1A[2K[15/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:33:3 › Reports View › should display all statistics cards with valid percentages
+[1A[2K  1) [chromium-authenticated] › tests/e2e/inspections.spec.ts:11:3 › Inspections View › should display inspections page without errors 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('h1').filter({ hasText: 'Inspections' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('h1').filter({ hasText: 'Inspections' })[22m
+
+
+      20 |
+      21 |     // Verify page loaded
+    > 22 |     await expect(page.locator('h1', { hasText: 'Inspections' })).toBeVisible()
+         |                                                                  ^
+      23 |
+      24 |     // Check for console errors (specifically the .toFixed() error we fixed)
+      25 |     const toFixedErrors = consoleErrors.filter((error) =>
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/inspections.spec.ts:22:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/inspections-Inspections-Vi-9f618-ections-page-without-errors-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/inspections-Inspections-Vi-9f618-ections-page-without-errors-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/inspections-Inspections-Vi-9f618-ections-page-without-errors-chromium-authenticated/error-context.md
+
+
+[1A[2K  2) [chromium-authenticated] › tests/e2e/inspections.spec.ts:31:3 › Inspections View › should display statistics cards with valid numbers 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveCount[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator:  locator('.card').filter({ hasText: /Total|Pass Rate|Pending|Overdue/ })
+    Expected: [32m4[39m
+    Received: [31m0[39m
+    Timeout:  5000ms
+
+    Call log:
+    [2m  - Expect "toHaveCount" with timeout 5000ms[22m
+    [2m  - waiting for locator('.card').filter({ hasText: /Total|Pass Rate|Pending|Overdue/ })[22m
+    [2m    9 × locator resolved to 0 elements[22m
+    [2m      - unexpected value "0"[22m
+
+
+      37 |
+      38 |     // Verify at least 4 stat cards are visible
+    > 39 |     await expect(statCards).toHaveCount(4)
+         |                             ^
+      40 |
+      41 |     // Check that pass rate is displayed with percentage
+      42 |     const passRateCard = page.locator('.card').filter({ hasText: 'Pass Rate' })
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/inspections.spec.ts:39:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/inspections-Inspections-Vi-7124c-cs-cards-with-valid-numbers-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/inspections-Inspections-Vi-7124c-cs-cards-with-valid-numbers-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/inspections-Inspections-Vi-7124c-cs-cards-with-valid-numbers-chromium-authenticated/error-context.md
+
+
+[1A[2K  3) [chromium-authenticated] › tests/e2e/inspections.spec.ts:77:3 › Inspections View › should display inspections table 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=/No inspections found|No data/i')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=/No inspections found|No data/i')[22m
+
+
+      92 |       await expect(
+      93 |         page.locator('text=/No inspections found|No data/i')
+    > 94 |       ).toBeVisible()
+         |         ^
+      95 |     }
+      96 |   })
+      97 |
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/inspections.spec.ts:94:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/inspections-Inspections-Vi-0d5f5-d-display-inspections-table-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/inspections-Inspections-Vi-0d5f5-d-display-inspections-table-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/inspections-Inspections-Vi-0d5f5-d-display-inspections-table-chromium-authenticated/error-context.md
+
+
+[1A[2K  4) [chromium-authenticated] › tests/e2e/inspections.spec.ts:136:3 › Inspections View › should create new inspection button be visible 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('button:has-text("New Inspection"), a:has-text("New Inspection")')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('button:has-text("New Inspection"), a:has-text("New Inspection")')[22m
+
+
+      144 |
+      145 |     // Button should exist
+    > 146 |     await expect(newInspectionButton).toBeVisible()
+          |                                       ^
+      147 |   })
+      148 | })
+      149 |
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/inspections.spec.ts:146:39
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/inspections-Inspections-Vi-084ab-nspection-button-be-visible-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/inspections-Inspections-Vi-084ab-nspection-button-be-visible-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/inspections-Inspections-Vi-084ab-nspection-button-be-visible-chromium-authenticated/error-context.md
+
+
+[1A[2K  5) [chromium-authenticated] › tests/e2e/reports.spec.ts:11:3 › Reports View › should display reports page without errors 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('h1').filter({ hasText: 'Reports & Analytics' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('h1').filter({ hasText: 'Reports & Analytics' })[22m
+
+
+      22 |     await expect(
+      23 |       page.locator('h1', { hasText: 'Reports & Analytics' })
+    > 24 |     ).toBeVisible()
+         |       ^
+      25 |
+      26 |     // Check for console errors (specifically the .toFixed() errors we fixed)
+      27 |     const toFixedErrors = consoleErrors.filter((error) =>
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/reports.spec.ts:24:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-0722c-reports-page-without-errors-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-0722c-reports-page-without-errors-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/reports-Reports-View-shoul-0722c-reports-page-without-errors-chromium-authenticated/error-context.md
+
+
+[1A[2K  6) [chromium-authenticated] › tests/e2e/reports.spec.ts:33:3 › Reports View › should display all statistics cards with valid percentages 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('.card').filter({ hasText: 'Pass Rate' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('.card').filter({ hasText: 'Pass Rate' })[22m
+
+
+      39 |     // Find the Pass Rate stat card
+      40 |     const passRateCard = page.locator('.card').filter({ hasText: 'Pass Rate' })
+    > 41 |     await expect(passRateCard).toBeVisible()
+         |                                ^
+      42 |
+      43 |     // The pass rate should have a percentage value (even if 0.0%)
+      44 |     const passRateValue = passRateCard.locator('div.text-3xl')
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/reports.spec.ts:41:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-3fb03-ards-with-valid-percentages-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-3fb03-ards-with-valid-percentages-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/reports-Reports-View-shoul-3fb03-ards-with-valid-percentages-chromium-authenticated/error-context.md
+
+
+[1A[2K[16/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:118:3 › Reports View › should display inspections by location with pass rates
+[1A[2K[17/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:61:3 › Reports View › should display pass/fail distribution chart with percentages
+[1A[2K[18/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:92:3 › Reports View › should display visual pie chart bars with percentages
+[1A[2K[19/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:145:3 › Reports View › should allow date range filtering
+[1A[2K  7) [chromium-authenticated] › tests/e2e/reports.spec.ts:92:3 › Reports View › should display visual pie chart bars with percentages 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      107 |     const redVisible = await redBar.isVisible().catch(() => false)
+      108 |
+    > 109 |     expect(greenVisible || redVisible).toBeTruthy()
+          |                                        ^
+      110 |
+      111 |     // No .toFixed errors should occur
+      112 |     const toFixedErrors = consoleErrors.filter((error) =>
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/reports.spec.ts:109:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-cebf7-chart-bars-with-percentages-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-cebf7-chart-bars-with-percentages-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/reports-Reports-View-shoul-cebf7-chart-bars-with-percentages-chromium-authenticated/error-context.md
+
+
+[1A[2K  8) [chromium-authenticated] › tests/e2e/reports.spec.ts:118:3 › Reports View › should display inspections by location with pass rates 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('.card').filter({ hasText: 'Inspections by Location' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('.card').filter({ hasText: 'Inspections by Location' })[22m
+
+
+      126 |       .locator('.card')
+      127 |       .filter({ hasText: 'Inspections by Location' })
+    > 128 |     await expect(locationSection).toBeVisible()
+          |                                   ^
+      129 |
+      130 |     // Look for location rows
+      131 |     const locationRows = locationSection.locator('[class*="flex"][class*="items-center"]')
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/reports.spec.ts:128:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-2956c-by-location-with-pass-rates-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-2956c-by-location-with-pass-rates-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/reports-Reports-View-shoul-2956c-by-location-with-pass-rates-chromium-authenticated/error-context.md
+
+
+[1A[2K  9) [chromium-authenticated] › tests/e2e/reports.spec.ts:61:3 › Reports View › should display pass/fail distribution chart with percentages 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('.card').filter({ hasText: 'Pass/Fail Distribution' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('.card').filter({ hasText: 'Pass/Fail Distribution' })[22m
+
+
+      69 |       .locator('.card')
+      70 |       .filter({ hasText: 'Pass/Fail Distribution' })
+    > 71 |     await expect(distributionCard).toBeVisible()
+         |                                    ^
+      72 |
+      73 |     // Look for "Passed" and "Failed" rows
+      74 |     const passedRow = distributionCard.locator('text=Passed').first()
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/reports.spec.ts:71:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-13641-tion-chart-with-percentages-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-13641-tion-chart-with-percentages-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/reports-Reports-View-shoul-13641-tion-chart-with-percentages-chromium-authenticated/error-context.md
+
+
+[1A[2K[20/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:170:3 › Reports View › should filter by location
+[1A[2K[21/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:196:3 › Reports View › should generate report
+[1A[2K  10) [chromium-authenticated] › tests/e2e/reports.spec.ts:145:3 › Reports View › should allow date range filtering 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('input[type="date"]#startDate')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('input[type="date"]#startDate')[22m
+
+
+      151 |     const endDateInput = page.locator('input[type="date"]#endDate')
+      152 |
+    > 153 |     await expect(startDateInput).toBeVisible()
+          |                                  ^
+      154 |     await expect(endDateInput).toBeVisible()
+      155 |
+      156 |     // Change date range
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/reports.spec.ts:153:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-should-allow-date-range-filtering-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-should-allow-date-range-filtering-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/reports-Reports-View-should-allow-date-range-filtering-chromium-authenticated/error-context.md
+
+
+[1A[2K[22/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:267:3 › Reports View › should display recent inspection activity
+[1A[2K[23/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:222:3 › Reports View › should handle empty state gracefully
+[1A[2K[24/24] [chromium-authenticated] › tests/e2e/reports.spec.ts:247:3 › Reports View › should display inspections by type breakdown
+[1A[2K  11) [chromium-authenticated] › tests/e2e/reports.spec.ts:196:3 › Reports View › should generate report 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('button:has-text("Generate Report")')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('button:has-text("Generate Report")')[22m
+
+
+      202 |       'button:has-text("Generate Report")'
+      203 |     )
+    > 204 |     await expect(generateButton).toBeVisible()
+          |                                  ^
+      205 |
+      206 |     // Set up download listener
+      207 |     const downloadPromise = page.waitForEvent('download', { timeout: 10000 })
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/reports.spec.ts:204:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-should-generate-report-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-should-generate-report-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/reports-Reports-View-should-generate-report-chromium-authenticated/error-context.md
+
+
+[1A[2K  12) [chromium-authenticated] › tests/e2e/reports.spec.ts:267:3 › Reports View › should display recent inspection activity 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('.card').filter({ hasText: 'Recent Inspection Activity' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('.card').filter({ hasText: 'Recent Inspection Activity' })[22m
+
+
+      273 |       .locator('.card')
+      274 |       .filter({ hasText: 'Recent Inspection Activity' })
+    > 275 |     await expect(activitySection).toBeVisible()
+          |                                   ^
+      276 |
+      277 |     // Should show inspections or empty state
+      278 |     const hasContent = await activitySection
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/reports.spec.ts:275:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-721a3--recent-inspection-activity-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-721a3--recent-inspection-activity-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/reports-Reports-View-shoul-721a3--recent-inspection-activity-chromium-authenticated/error-context.md
+
+
+[1A[2K  13) [chromium-authenticated] › tests/e2e/reports.spec.ts:247:3 › Reports View › should display inspections by type breakdown 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('.card').filter({ hasText: 'Inspections by Type' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('.card').filter({ hasText: 'Inspections by Type' })[22m
+
+
+      253 |       .locator('.card')
+      254 |       .filter({ hasText: 'Inspections by Type' })
+    > 255 |     await expect(typeSection).toBeVisible()
+          |                               ^
+      256 |
+      257 |     // Should show inspection types (Monthly, Annual, etc.) or empty state
+      258 |     const hasContent = await typeSection
+        at /mnt/d/Dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/reports.spec.ts:255:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-2dc09-spections-by-type-breakdown-chromium-authenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/reports-Reports-View-shoul-2dc09-spections-by-type-breakdown-chromium-authenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/reports-Reports-View-shoul-2dc09-spections-by-type-breakdown-chromium-authenticated/error-context.md
+
+
+[1A[2K  13 failed
+    [chromium-authenticated] › tests/e2e/inspections.spec.ts:11:3 › Inspections View › should display inspections page without errors 
+    [chromium-authenticated] › tests/e2e/inspections.spec.ts:31:3 › Inspections View › should display statistics cards with valid numbers 
+    [chromium-authenticated] › tests/e2e/inspections.spec.ts:77:3 › Inspections View › should display inspections table 
+    [chromium-authenticated] › tests/e2e/inspections.spec.ts:136:3 › Inspections View › should create new inspection button be visible 
+    [chromium-authenticated] › tests/e2e/reports.spec.ts:11:3 › Reports View › should display reports page without errors 
+    [chromium-authenticated] › tests/e2e/reports.spec.ts:33:3 › Reports View › should display all statistics cards with valid percentages 
+    [chromium-authenticated] › tests/e2e/reports.spec.ts:61:3 › Reports View › should display pass/fail distribution chart with percentages 
+    [chromium-authenticated] › tests/e2e/reports.spec.ts:92:3 › Reports View › should display visual pie chart bars with percentages 
+    [chromium-authenticated] › tests/e2e/reports.spec.ts:118:3 › Reports View › should display inspections by location with pass rates 
+    [chromium-authenticated] › tests/e2e/reports.spec.ts:145:3 › Reports View › should allow date range filtering 
+    [chromium-authenticated] › tests/e2e/reports.spec.ts:196:3 › Reports View › should generate report 
+    [chromium-authenticated] › tests/e2e/reports.spec.ts:247:3 › Reports View › should display inspections by type breakdown 
+    [chromium-authenticated] › tests/e2e/reports.spec.ts:267:3 › Reports View › should display recent inspection activity 
+  11 passed (1.2m)
+
+[36m  Serving HTML report at http://localhost:39137. Press Ctrl+C to quit.[39m

@@ -3,23 +3,23 @@ import { login, selectTenant, loginAndSelectTenant, TEST_CONFIG } from './helper
 
 test.describe('Authentication', () => {
   test('should load login page', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/login')
 
     // Check for login form elements
     await expect(page.locator('h1', { hasText: 'Welcome Back' })).toBeVisible()
-    await expect(page.locator('input#email')).toBeVisible()
-    await expect(page.locator('input#password')).toBeVisible()
-    await expect(page.locator('button[type="submit"]')).toBeVisible()
+    await expect(page.locator('[data-testid="email-input"]')).toBeVisible()
+    await expect(page.locator('[data-testid="password-input"]')).toBeVisible()
+    await expect(page.locator('[data-testid="login-submit-button"]')).toBeVisible()
   })
 
   test('should show validation errors for empty form', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/login')
 
     // Try to submit without filling form
-    await page.click('button[type="submit"]')
+    await page.click('[data-testid="login-submit-button"]')
 
     // HTML5 validation should prevent submission
-    const emailInput = page.locator('input[type="email"]')
+    const emailInput = page.locator('[data-testid="email-input"]')
     const isInvalid = await emailInput.evaluate((el: HTMLInputElement) => !el.validity.valid)
     expect(isInvalid).toBeTruthy()
   })

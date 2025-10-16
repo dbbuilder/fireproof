@@ -6,13 +6,13 @@ test.describe('Smoke Tests - No JavaScript Errors', () => {
     // Set up console error listener
     const consoleErrors = setupConsoleErrorListener(page)
 
-    // Navigate to login page
-    await page.goto('/')
+    // Navigate directly to login page
+    await page.goto('/login')
 
     // Wait for page to load
     await page.waitForLoadState('networkidle')
 
-    // Verify page loaded
+    // Verify login page loaded
     await expect(page.locator('h1', { hasText: 'Welcome Back' })).toBeVisible()
 
     // Check for critical JavaScript errors
@@ -105,14 +105,14 @@ test.describe('Smoke Tests - No JavaScript Errors', () => {
 
 test.describe('Visual Regression - Basic Page Structure', () => {
   test('login page has expected structure', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/login')
     await page.waitForLoadState('networkidle')
 
     // Check for key elements
     await expect(page.locator('h1')).toBeVisible()
-    await expect(page.locator('input#email')).toBeVisible()
-    await expect(page.locator('input#password')).toBeVisible()
-    await expect(page.locator('button[type="submit"]')).toBeVisible()
+    await expect(page.locator('[data-testid="email-input"]')).toBeVisible()
+    await expect(page.locator('[data-testid="password-input"]')).toBeVisible()
+    await expect(page.locator('[data-testid="login-submit-button"]')).toBeVisible()
 
     // Take screenshot for visual comparison
     await page.screenshot({ path: 'test-results/screenshots/login-page.png', fullPage: true })

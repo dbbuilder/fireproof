@@ -20,7 +20,7 @@
       <div class="card">
         <div class="p-8">
           <!-- Error Alert -->
-          <div v-if="error" class="alert-danger mb-6">
+          <div v-if="error" class="alert-danger mb-6" data-testid="register-error">
             <XCircleIcon class="h-5 w-5" />
             <div>
               <p class="text-sm font-medium">{{ error }}</p>
@@ -29,13 +29,14 @@
               type="button"
               class="text-red-400 hover:text-red-600"
               @click="clearError"
+              data-testid="close-error"
             >
               <XMarkIcon class="h-5 w-5" />
             </button>
           </div>
 
           <!-- Success Message -->
-          <div v-if="registrationSuccess" class="alert-success mb-6">
+          <div v-if="registrationSuccess" class="alert-success mb-6" data-testid="register-success">
             <CheckCircleIcon class="h-5 w-5" />
             <div>
               <p class="text-sm font-medium">Account created successfully!</p>
@@ -63,6 +64,7 @@
                   class="form-input pl-10"
                   :class="{ 'border-red-500 focus:ring-red-500': firstNameError }"
                   placeholder="John"
+                  data-testid="firstname-input"
                   @blur="validateFirstName"
                 />
               </div>
@@ -89,6 +91,7 @@
                   class="form-input pl-10"
                   :class="{ 'border-red-500 focus:ring-red-500': lastNameError }"
                   placeholder="Doe"
+                  data-testid="lastname-input"
                   @blur="validateLastName"
                 />
               </div>
@@ -115,6 +118,7 @@
                   class="form-input pl-10"
                   :class="{ 'border-red-500 focus:ring-red-500': emailError }"
                   placeholder="john@example.com"
+                  data-testid="register-email-input"
                   @blur="validateEmail"
                 />
               </div>
@@ -141,12 +145,14 @@
                   class="form-input pl-10 pr-10"
                   :class="{ 'border-red-500 focus:ring-red-500': passwordError }"
                   placeholder="••••••••"
+                  data-testid="register-password-input"
                   @input="checkPasswordStrength"
                   @blur="validatePassword"
                 />
                 <button
                   type="button"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  data-testid="toggle-register-password-visibility"
                   @click="showPassword = !showPassword"
                 >
                   <EyeIcon v-if="!showPassword" class="h-5 w-5" />
@@ -206,11 +212,13 @@
                   class="form-input pl-10 pr-10"
                   :class="{ 'border-red-500 focus:ring-red-500': confirmPasswordError }"
                   placeholder="••••••••"
+                  data-testid="confirm-password-input"
                   @blur="validateConfirmPassword"
                 />
                 <button
                   type="button"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  data-testid="toggle-confirm-password-visibility"
                   @click="showConfirmPassword = !showConfirmPassword"
                 >
                   <EyeIcon v-if="!showConfirmPassword" class="h-5 w-5" />
@@ -230,14 +238,15 @@
                   v-model="form.acceptTerms"
                   type="checkbox"
                   class="h-4 w-4 mt-1 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                  data-testid="accept-terms-checkbox"
                 />
                 <label for="terms" class="ml-2 block text-sm text-gray-700">
                   I agree to the
-                  <a href="#" class="font-medium text-primary-600 hover:text-primary-500" @click.prevent="showTerms">
+                  <a href="#" class="font-medium text-primary-600 hover:text-primary-500" data-testid="terms-link" @click.prevent="showTerms">
                     Terms of Service
                   </a>
                   and
-                  <a href="#" class="font-medium text-primary-600 hover:text-primary-500" @click.prevent="showPrivacy">
+                  <a href="#" class="font-medium text-primary-600 hover:text-primary-500" data-testid="privacy-link" @click.prevent="showPrivacy">
                     Privacy Policy
                   </a>
                 </label>
@@ -252,6 +261,7 @@
               type="submit"
               :disabled="loading"
               class="btn-primary w-full"
+              data-testid="register-submit-button"
             >
               <span v-if="!loading">Create Account</span>
               <span v-else class="flex items-center justify-center">
@@ -280,6 +290,7 @@
             <router-link
               to="/login"
               class="font-medium text-primary-600 hover:text-primary-500 transition-colors"
+              data-testid="login-link"
             >
               Sign in to your account
             </router-link>

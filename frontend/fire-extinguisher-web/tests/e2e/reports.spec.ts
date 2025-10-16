@@ -18,9 +18,9 @@ test.describe('Reports View', () => {
     // Wait for loading to complete
     await waitForLoading(page)
 
-    // Verify page loaded
+    // Verify page loaded using test ID
     await expect(
-      page.locator('h1', { hasText: 'Reports & Analytics' })
+      page.locator('[data-testid="reports-heading"]')
     ).toBeVisible()
 
     // Check for console errors (specifically the .toFixed() errors we fixed)
@@ -36,26 +36,17 @@ test.describe('Reports View', () => {
     await navigateTo(page, '/reports')
     await waitForLoading(page)
 
-    // Find the Pass Rate stat card
-    const passRateCard = page.locator('.card').filter({ hasText: 'Pass Rate' })
-    await expect(passRateCard).toBeVisible()
+    // Verify all stat cards using test IDs
+    await expect(page.locator('[data-testid="stat-card-total"]')).toBeVisible()
+    await expect(page.locator('[data-testid="stat-card-passrate"]')).toBeVisible()
+    await expect(page.locator('[data-testid="stat-card-service"]')).toBeVisible()
+    await expect(page.locator('[data-testid="stat-card-replacement"]')).toBeVisible()
 
-    // The pass rate should have a percentage value (even if 0.0%)
-    const passRateValue = passRateCard.locator('div.text-3xl')
+    // The pass rate should have a percentage value (even if 0.0%) using test ID
+    const passRateValue = page.locator('[data-testid="pass-rate"]')
     await expect(passRateValue).toBeVisible()
     const passRateText = await passRateValue.textContent()
     expect(passRateText).toMatch(/\d+\.\d%/)
-
-    // Verify other stat cards
-    await expect(
-      page.locator('.card').filter({ hasText: 'Total Inspections' })
-    ).toBeVisible()
-    await expect(
-      page.locator('.card').filter({ hasText: 'Require Service' })
-    ).toBeVisible()
-    await expect(
-      page.locator('.card').filter({ hasText: 'Require Replacement' })
-    ).toBeVisible()
   })
 
   test('should display pass/fail distribution chart with percentages', async ({
@@ -64,10 +55,8 @@ test.describe('Reports View', () => {
     await navigateTo(page, '/reports')
     await waitForLoading(page)
 
-    // Find the Pass/Fail Distribution card
-    const distributionCard = page
-      .locator('.card')
-      .filter({ hasText: 'Pass/Fail Distribution' })
+    // Find the Pass/Fail Distribution card using test ID
+    const distributionCard = page.locator('[data-testid="pass-fail-distribution-card"]')
     await expect(distributionCard).toBeVisible()
 
     // Look for "Passed" and "Failed" rows
@@ -121,10 +110,8 @@ test.describe('Reports View', () => {
     await navigateTo(page, '/reports')
     await waitForLoading(page)
 
-    // Find the "Inspections by Location" section
-    const locationSection = page
-      .locator('.card')
-      .filter({ hasText: 'Inspections by Location' })
+    // Find the "Inspections by Location" section using test ID
+    const locationSection = page.locator('[data-testid="inspections-by-location-card"]')
     await expect(locationSection).toBeVisible()
 
     // Look for location rows
@@ -161,9 +148,9 @@ test.describe('Reports View', () => {
     await page.waitForTimeout(1000)
     await waitForLoading(page)
 
-    // Page should not crash
+    // Page should not crash - use test ID
     await expect(
-      page.locator('h1', { hasText: 'Reports & Analytics' })
+      page.locator('[data-testid="reports-heading"]')
     ).toBeVisible()
   })
 
@@ -187,8 +174,8 @@ test.describe('Reports View', () => {
         await page.waitForTimeout(1000)
         await waitForLoading(page)
 
-        // Page should not crash
-        await expect(page.locator('h1')).toBeVisible()
+        // Page should not crash - use test ID
+        await expect(page.locator('[data-testid="reports-heading"]')).toBeVisible()
       }
     }
   })
@@ -197,10 +184,8 @@ test.describe('Reports View', () => {
     await navigateTo(page, '/reports')
     await waitForLoading(page)
 
-    // Find "Generate Report" button
-    const generateButton = page.locator(
-      'button:has-text("Generate Report")'
-    )
+    // Find "Generate Report" button using test ID
+    const generateButton = page.locator('[data-testid="generate-report-button"]')
     await expect(generateButton).toBeVisible()
 
     // Set up download listener
@@ -226,15 +211,13 @@ test.describe('Reports View', () => {
     await navigateTo(page, '/reports')
     await waitForLoading(page)
 
-    // Even with no data, all percentages should show valid values (0.0%)
-    const passRateCard = page.locator('.card').filter({ hasText: 'Pass Rate' })
-    if (await passRateCard.isVisible()) {
-      const passRateValue = await passRateCard
-        .locator('div.text-3xl')
-        .textContent()
+    // Even with no data, all percentages should show valid values (0.0%) using test ID
+    const passRateValue = page.locator('[data-testid="pass-rate"]')
+    if (await passRateValue.isVisible()) {
+      const passRateText = await passRateValue.textContent()
 
-      // Should be a valid percentage
-      expect(passRateValue).toMatch(/^\d+\.\d%$/)
+      // Should be a valid percentage (allow optional trailing whitespace)
+      expect(passRateText).toMatch(/^\d+\.\d%\s*$/)
     }
 
     // No .toFixed errors should occur
@@ -248,10 +231,8 @@ test.describe('Reports View', () => {
     await navigateTo(page, '/reports')
     await waitForLoading(page)
 
-    // Find "Inspections by Type" section
-    const typeSection = page
-      .locator('.card')
-      .filter({ hasText: 'Inspections by Type' })
+    // Find "Inspections by Type" section using test ID
+    const typeSection = page.locator('[data-testid="inspections-by-type-card"]')
     await expect(typeSection).toBeVisible()
 
     // Should show inspection types (Monthly, Annual, etc.) or empty state
@@ -268,10 +249,8 @@ test.describe('Reports View', () => {
     await navigateTo(page, '/reports')
     await waitForLoading(page)
 
-    // Find "Recent Inspection Activity" section
-    const activitySection = page
-      .locator('.card')
-      .filter({ hasText: 'Recent Inspection Activity' })
+    // Find "Recent Inspection Activity" section using test ID
+    const activitySection = page.locator('[data-testid="recent-activity-card"]')
     await expect(activitySection).toBeVisible()
 
     // Should show inspections or empty state

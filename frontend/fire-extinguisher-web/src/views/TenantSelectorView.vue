@@ -42,13 +42,15 @@
           </div>
 
           <!-- Tenant List -->
-          <div v-else-if="tenants.length > 0" class="space-y-3">
+          <div v-else-if="tenants.length > 0" class="space-y-3" data-testid="tenant-list">
             <div
               v-for="tenant in tenants"
               :key="tenant.tenantId"
               @click="selectTenant(tenant)"
               class="relative flex items-center p-4 border-2 border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 cursor-pointer transition-all group"
               :class="{ 'border-primary-500 bg-primary-50': selectedTenantId === tenant.tenantId }"
+              :data-tenant-id="tenant.tenantId"
+              data-testid="tenant-card"
             >
               <!-- Tenant Icon -->
               <div class="flex-shrink-0 mr-4">
@@ -107,6 +109,7 @@
               @click="handleContinue"
               :disabled="!selectedTenantId || continuing"
               class="btn-primary flex-1"
+              data-testid="continue-button"
             >
               <span v-if="!continuing">Continue</span>
               <span v-else class="flex items-center justify-center">
@@ -117,6 +120,7 @@
             <button
               @click="handleLogout"
               class="btn-outline"
+              data-testid="logout-button"
             >
               Logout
             </button>

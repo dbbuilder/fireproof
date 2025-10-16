@@ -1555,3 +1555,46 @@ Based on competitive analysis and market positioning:
 ---
 
 **END OF ROADMAP**
+
+---
+
+## Post-MVP Enhancements & Considerations
+
+### ExtinguisherType Schema Enhancement
+
+**Status:** Deferred until MVP is operational
+**Priority:** 🟡 P2 (Medium) - Nice to have for comprehensive equipment management
+
+The current ExtinguisherTypes table uses a simplified schema optimized for MVP:
+
+**Current Fields:**
+- ExtinguisherTypeId, TenantId, TypeCode, TypeName, Description
+- MonthlyInspectionRequired, AnnualInspectionRequired
+- HydrostaticTestYears
+- IsActive, CreatedDate
+
+**Proposed Additional Fields** (for future consideration):
+- `AgentType` (NVARCHAR) - Type of extinguishing agent (dry chemical, CO2, water, foam, etc.)
+- `Capacity` (DECIMAL) - Rated capacity of extinguisher
+- `CapacityUnit` (NVARCHAR) - Unit of measurement (lbs, kg, gallons, liters)
+- `FireClassRating` (NVARCHAR) - Fire class ratings (A, B, C, D, K combinations)
+- `ServiceLifeYears` (INT) - Expected service life before replacement
+- `HydroTestIntervalYears` (INT) - More granular than current HydrostaticTestYears
+
+**Benefits:**
+- More detailed equipment specifications
+- Better compliance tracking with manufacturer recommendations
+- Enhanced reporting capabilities
+- Improved inventory management
+
+**Implementation Path:**
+1. ✅ Complete MVP with current simplified schema
+2. ⏳ Gather user feedback on needed fields
+3. ⏳ Add migration script to extend schema
+4. ⏳ Update DTOs, services, and UI accordingly
+
+**Decision Criteria:**
+- User feedback indicates need for these fields
+- Compliance requirements necessitate additional tracking
+- Equipment management features require more detailed specifications
+

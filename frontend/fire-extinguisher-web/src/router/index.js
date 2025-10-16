@@ -108,17 +108,20 @@ const router = createRouter({
   ]
 })
 
+// Track if auth initialization has been attempted
+let authInitStarted = false
+
 // Navigation guard for authentication
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
-  // Initialize auth on first navigation if needed
-  if (!authStore.isAuthenticated && authStore.accessToken) {
-    try {
-      await authStore.initializeAuth()
-    } catch (error) {
-      console.error('Failed to initialize auth:', error)
-    }
+  // Initialize auth on first navigation if needed, but don't block
+  if (!authInitStarted && !authStore.isAuthenticated && authStore.accessToken) {
+    authInitStarted = true
+    // Initialize in background - don't block navigation
+    authStore.initializeAuth().catch(() => {
+      // Silent failure - auth store handles cleanup
+    })
   }
 
   const isAuthenticated = authStore.isLoggedIn
