@@ -1,0 +1,104 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  backend-tests:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      working-directory: ./backend
+      run: dotnet restore
+
+    - name: Build
+      working-directory: ./backend
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Run tests
+      working-directory: ./backend
+      run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+
+    - name: Publish test results
+      if: always()
+      uses: dorny/test-reporter@v1
+      with:
+        name: Backend Test Results
+        path: '**/test-results.trx'
+        reporter: dotnet-trx
+
+  frontend-tests:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        cache-dependency-path: ./frontend/fire-extinguisher-web/package-lock.json
+
+    - name: Install dependencies
+      working-directory: ./frontend/fire-extinguisher-web
+      run: npm ci
+
+    - name: Run linter
+      working-directory: ./frontend/fire-extinguisher-web
+      run: npm run lint
+
+    - name: Install Playwright browsers
+      working-directory: ./frontend/fire-extinguisher-web
+      run: npx playwright install --with-deps
+
+    - name: Start API (background)
+      working-directory: ./backend/FireExtinguisherInspection.API
+      run: |
+        dotnet restore
+        dotnet build --configuration Release
+        nohup dotnet run --configuration Release > /tmp/api.log 2>&1 &
+        echo "Waiting for API to start..."
+        timeout 60 bash -c 'until curl -s http://localhost:7001/api/health > /dev/null; do sleep 2; done' || (cat /tmp/api.log && exit 1)
+        echo "API is ready"
+
+    - name: Run E2E tests
+      working-directory: ./frontend/fire-extinguisher-web
+      env:
+        VITE_API_BASE_URL: http://localhost:7001/api
+      run: npm run test:e2e
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: ./frontend/fire-extinguisher-web/playwright-report/
+        retention-days: 30
+
+    - name: Upload API logs
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: api-logs
+        path: /tmp/api.log
+        retention-days: 7

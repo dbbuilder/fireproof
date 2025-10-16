@@ -1,0 +1,98 @@
+name: Deploy Database Migrations
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      migration_scripts:
+        description: 'Migration scripts to run (comma-separated filenames, e.g., "001_CreateCoreSchema.sql,002_CreateTenantSchema.sql")'
+        required: true
+        type: string
+
+jobs:
+  deploy-migrations:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install SQL Server tools
+      run: |
+        curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+        sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/22.04/prod.list)"
+        sudo apt-get update
+        sudo apt-get install -y sqlcmd
+
+    - name: Set environment variables
+      run: |
+        if [ "${{ inputs.environment }}" = "staging" ]; then
+          echo "SQL_SERVER=${{ secrets.STAGING_SQL_SERVER }}" >> $GITHUB_ENV
+          echo "SQL_DATABASE=${{ secrets.STAGING_SQL_DATABASE }}" >> $GITHUB_ENV
+          echo "SQL_USERNAME=${{ secrets.STAGING_SQL_USERNAME }}" >> $GITHUB_ENV
+          echo "SQL_PASSWORD=${{ secrets.STAGING_SQL_PASSWORD }}" >> $GITHUB_ENV
+        else
+          echo "SQL_SERVER=${{ secrets.PRODUCTION_SQL_SERVER }}" >> $GITHUB_ENV
+          echo "SQL_DATABASE=${{ secrets.PRODUCTION_SQL_DATABASE }}" >> $GITHUB_ENV
+          echo "SQL_USERNAME=${{ secrets.PRODUCTION_SQL_USERNAME }}" >> $GITHUB_ENV
+          echo "SQL_PASSWORD=${{ secrets.PRODUCTION_SQL_PASSWORD }}" >> $GITHUB_ENV
+        fi
+
+    - name: Create backup before migration
+      run: |
+        echo "Creating backup of ${{ env.SQL_DATABASE }}..."
+        sqlcmd -S ${{ env.SQL_SERVER }} -d ${{ env.SQL_DATABASE }} -U ${{ env.SQL_USERNAME }} -P "${{ env.SQL_PASSWORD }}" -C -Q "BACKUP DATABASE [${{ env.SQL_DATABASE }}] TO DISK = N'/tmp/${{ env.SQL_DATABASE }}_backup_$(date +%Y%m%d_%H%M%S).bak' WITH FORMAT, INIT, SKIP, NOREWIND, NOUNLOAD, STATS = 10"
+
+    - name: Run migration scripts
+      run: |
+        IFS=',' read -ra SCRIPTS <<< "${{ inputs.migration_scripts }}"
+        for script in "${SCRIPTS[@]}"; do
+          script=$(echo "$script" | xargs)  # trim whitespace
+          echo "Running migration script: $script"
+          if [ -f "database/scripts/$script" ]; then
+            sqlcmd -S ${{ env.SQL_SERVER }} -d ${{ env.SQL_DATABASE }} -U ${{ env.SQL_USERNAME }} -P "${{ env.SQL_PASSWORD }}" -C -i "database/scripts/$script"
+            if [ $? -eq 0 ]; then
+              echo "✅ Successfully executed $script"
+            else
+              echo "❌ Failed to execute $script"
+              exit 1
+            fi
+          else
+            echo "❌ Script not found: database/scripts/$script"
+            exit 1
+          fi
+        done
+
+    - name: Verify database health
+      run: |
+        echo "Verifying database health..."
+        result=$(sqlcmd -S ${{ env.SQL_SERVER }} -d ${{ env.SQL_DATABASE }} -U ${{ env.SQL_USERNAME }} -P "${{ env.SQL_PASSWORD }}" -C -Q "SELECT COUNT(*) AS TableCount FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'" -h -1 | xargs)
+        echo "Database contains $result tables"
+        if [ "$result" -gt 0 ]; then
+          echo "✅ Database health check passed"
+        else
+          echo "❌ Database health check failed"
+          exit 1
+        fi
+
+    - name: Notify migration success
+      if: success()
+      run: |
+        echo "✅ Database migration successful!"
+        echo "Environment: ${{ inputs.environment }}"
+        echo "Scripts executed: ${{ inputs.migration_scripts }}"
+
+    - name: Notify migration failure
+      if: failure()
+      run: |
+        echo "❌ Database migration failed!"
+        echo "Environment: ${{ inputs.environment }}"
+        echo "Scripts attempted: ${{ inputs.migration_scripts }}"
+        echo "⚠️  Please review logs and restore from backup if necessary"
