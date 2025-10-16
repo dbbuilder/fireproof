@@ -1,6 +1,7 @@
 <template>
   <AppLayout>
-    <div>
+    <LoadingSpinner v-if="loading" message="Loading dashboard..." size="large" />
+    <div v-else>
       <!-- Welcome Header -->
       <div class="mb-8">
         <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2">
@@ -221,11 +222,12 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useLocationStore } from '@/stores/locations'
 import { useExtinguisherStore } from '@/stores/extinguishers'
 import AppLayout from '@/components/layout/AppLayout.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import {
   MapPinIcon,
   ShieldCheckIcon,
@@ -241,10 +243,12 @@ const authStore = useAuthStore()
 const locationStore = useLocationStore()
 const extinguisherStore = useExtinguisherStore()
 
+const loading = ref(true)
 const userFirstName = computed(() => authStore.user?.firstName || 'there')
 
 onMounted(async () => {
   try {
+    loading.value = true
     // Load initial data
     await Promise.all([
       locationStore.fetchLocations(),
@@ -252,6 +256,8 @@ onMounted(async () => {
     ])
   } catch (error) {
     console.error('Failed to load dashboard data:', error)
+  } finally {
+    loading.value = false
   }
 })
 </script>
