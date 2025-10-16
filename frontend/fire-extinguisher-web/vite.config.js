@@ -39,8 +39,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
         runtimeCaching: [
           {
-            // Local development API
-            urlPattern: /^https:\/\/localhost:7001\/api\/.*/i,
+            // Local development API (HTTP and HTTPS)
+            urlPattern: /^https?:\/\/localhost:7001\/api\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache-dev',
@@ -118,10 +118,10 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // Force new hash on every build for cache busting
-        entryFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
-        chunkFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
-        assetFileNames: `assets/[name]-[hash]-${Date.now()}.[ext]`
+        // Use content-based hashing for cache busting
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     }
   },
