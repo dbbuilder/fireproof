@@ -7,6 +7,7 @@ namespace FireExtinguisherInspection.API.Services;
 
 /// <summary>
 /// Service for location management operations
+/// Uses standard schema with stored procedures (tenant-scoped data with @TenantId parameter)
 /// </summary>
 public class LocationService : ILocationService
 {
@@ -25,14 +26,15 @@ public class LocationService : ILocationService
     {
         _logger.LogInformation("Creating location for tenant {TenantId}: {LocationCode}", tenantId, request.LocationCode);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Location_Create";
-        command.CommandType = CommandType.StoredProcedure;
 
-        // Input parameters
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Location_Create";
+
+        var locationId = Guid.NewGuid();
+
+        command.Parameters.AddWithValue("@LocationId", locationId);
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@LocationCode", request.LocationCode);
         command.Parameters.AddWithValue("@LocationName", request.LocationName);
@@ -42,28 +44,13 @@ public class LocationService : ILocationService
         command.Parameters.AddWithValue("@StateProvince", (object?)request.StateProvince ?? DBNull.Value);
         command.Parameters.AddWithValue("@PostalCode", (object?)request.PostalCode ?? DBNull.Value);
         command.Parameters.AddWithValue("@Country", (object?)request.Country ?? DBNull.Value);
-        command.Parameters.AddWithValue("@Latitude", (object?)request.Latitude ?? DBNull.Value);
-        command.Parameters.AddWithValue("@Longitude", (object?)request.Longitude ?? DBNull.Value);
-
-        // Output parameter
-        var locationIdParam = new SqlParameter("@LocationId", SqlDbType.UniqueIdentifier)
-        {
-            Direction = ParameterDirection.Output
-        };
-        command.Parameters.Add(locationIdParam);
 
         using var reader = await command.ExecuteReaderAsync();
-
         if (await reader.ReadAsync())
         {
-            var locationId = reader.GetGuid(reader.GetOrdinal("LocationId"));
-            var barcodeData = reader.GetString(reader.GetOrdinal("BarcodeData"));
-
+            var result = MapLocationFromReader(reader);
             _logger.LogInformation("Location created successfully: {LocationId}", locationId);
-
-            // Fetch the created location to return full details
-            return await GetLocationByIdAsync(tenantId, locationId)
-                ?? throw new InvalidOperationException("Failed to retrieve created location");
+            return result;
         }
 
         throw new InvalidOperationException("Failed to create location");
@@ -73,15 +60,12 @@ public class LocationService : ILocationService
     {
         _logger.LogDebug("Fetching locations for tenant {TenantId}, isActive: {IsActive}", tenantId, isActive);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Location_GetAll";
-        command.CommandType = CommandType.StoredProcedure;
 
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Location_GetAll";
         command.Parameters.AddWithValue("@TenantId", tenantId);
-        command.Parameters.AddWithValue("@IsActive", (object?)isActive ?? DBNull.Value);
 
         var locations = new List<LocationDto>();
 
@@ -100,13 +84,12 @@ public class LocationService : ILocationService
     {
         _logger.LogDebug("Fetching location {LocationId} for tenant {TenantId}", locationId, tenantId);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Location_GetById";
-        command.CommandType = CommandType.StoredProcedure;
 
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Location_GetById";
+        command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@LocationId", locationId);
 
         using var reader = await command.ExecuteReaderAsync();
@@ -123,33 +106,11 @@ public class LocationService : ILocationService
     {
         _logger.LogInformation("Updating location {LocationId} for tenant {TenantId}", locationId, tenantId);
 
-        // First verify the location exists
-        var existingLocation = await GetLocationByIdAsync(tenantId, locationId);
-        if (existingLocation == null)
-        {
-            throw new KeyNotFoundException($"Location {locationId} not found");
-        }
-
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
-        // Note: Update stored procedure will be created in a future enhancement
-        // For now, we'll do a direct UPDATE (not ideal, but functional)
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $@"
-            UPDATE [{schemaName}].Locations
-            SET LocationName = @LocationName,
-                AddressLine1 = @AddressLine1,
-                AddressLine2 = @AddressLine2,
-                City = @City,
-                StateProvince = @StateProvince,
-                PostalCode = @PostalCode,
-                Country = @Country,
-                Latitude = @Latitude,
-                Longitude = @Longitude,
-                IsActive = @IsActive,
-                ModifiedDate = GETUTCDATE()
-            WHERE LocationId = @LocationId AND TenantId = @TenantId";
+
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Location_Update";
 
         command.Parameters.AddWithValue("@LocationId", locationId);
         command.Parameters.AddWithValue("@TenantId", tenantId);
@@ -160,56 +121,58 @@ public class LocationService : ILocationService
         command.Parameters.AddWithValue("@StateProvince", (object?)request.StateProvince ?? DBNull.Value);
         command.Parameters.AddWithValue("@PostalCode", (object?)request.PostalCode ?? DBNull.Value);
         command.Parameters.AddWithValue("@Country", (object?)request.Country ?? DBNull.Value);
-        command.Parameters.AddWithValue("@Latitude", (object?)request.Latitude ?? DBNull.Value);
-        command.Parameters.AddWithValue("@Longitude", (object?)request.Longitude ?? DBNull.Value);
         command.Parameters.AddWithValue("@IsActive", request.IsActive);
 
-        var rowsAffected = await command.ExecuteNonQueryAsync();
-
-        if (rowsAffected == 0)
+        using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
         {
-            throw new InvalidOperationException("Failed to update location");
+            var result = MapLocationFromReader(reader);
+            _logger.LogInformation("Location {LocationId} updated successfully", locationId);
+            return result;
         }
 
-        _logger.LogInformation("Location {LocationId} updated successfully", locationId);
-
-        // Return updated location
-        return await GetLocationByIdAsync(tenantId, locationId)
-            ?? throw new InvalidOperationException("Failed to retrieve updated location");
+        throw new InvalidOperationException("Failed to update location");
     }
 
     public async Task<bool> DeleteLocationAsync(Guid tenantId, Guid locationId)
     {
-        _logger.LogInformation("Deleting location {LocationId} for tenant {TenantId}", locationId, tenantId);
+        _logger.LogInformation("Soft deleting location {LocationId} for tenant {TenantId}", locationId, tenantId);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
-        // Soft delete by setting IsActive = 0
-        using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $@"
-            UPDATE [{schemaName}].Locations
-            SET IsActive = 0,
-                ModifiedDate = GETUTCDATE()
-            WHERE LocationId = @LocationId AND TenantId = @TenantId";
-
-        command.Parameters.AddWithValue("@LocationId", locationId);
-        command.Parameters.AddWithValue("@TenantId", tenantId);
-
-        var rowsAffected = await command.ExecuteNonQueryAsync();
-
-        if (rowsAffected > 0)
+        // Soft delete via update
+        var location = await GetLocationByIdAsync(tenantId, locationId);
+        if (location == null)
         {
-            _logger.LogInformation("Location {LocationId} deleted successfully", locationId);
-            return true;
+            return false;
         }
 
-        _logger.LogWarning("Location {LocationId} not found or already deleted", locationId);
-        return false;
+        var updateRequest = new UpdateLocationRequest
+        {
+            LocationName = location.LocationName,
+            AddressLine1 = location.AddressLine1,
+            AddressLine2 = location.AddressLine2,
+            City = location.City,
+            StateProvince = location.StateProvince,
+            PostalCode = location.PostalCode,
+            Country = location.Country,
+            Latitude = location.Latitude,
+            Longitude = location.Longitude,
+            IsActive = false
+        };
+
+        await UpdateLocationAsync(tenantId, locationId, updateRequest);
+        _logger.LogInformation("Location {LocationId} deleted successfully", locationId);
+        return true;
     }
 
     private static LocationDto MapLocationFromReader(SqlDataReader reader)
     {
+        // Helper to safely get ordinal (returns -1 if column doesn't exist)
+        int SafeGetOrdinal(string name)
+        {
+            try { return reader.GetOrdinal(name); }
+            catch { return -1; }
+        }
+
         return new LocationDto
         {
             LocationId = reader.GetGuid(reader.GetOrdinal("LocationId")),
@@ -222,9 +185,10 @@ public class LocationService : ILocationService
             StateProvince = reader.IsDBNull(reader.GetOrdinal("StateProvince")) ? null : reader.GetString(reader.GetOrdinal("StateProvince")),
             PostalCode = reader.IsDBNull(reader.GetOrdinal("PostalCode")) ? null : reader.GetString(reader.GetOrdinal("PostalCode")),
             Country = reader.IsDBNull(reader.GetOrdinal("Country")) ? null : reader.GetString(reader.GetOrdinal("Country")),
-            Latitude = reader.IsDBNull(reader.GetOrdinal("Latitude")) ? null : reader.GetDecimal(reader.GetOrdinal("Latitude")),
-            Longitude = reader.IsDBNull(reader.GetOrdinal("Longitude")) ? null : reader.GetDecimal(reader.GetOrdinal("Longitude")),
-            LocationBarcodeData = reader.IsDBNull(reader.GetOrdinal("LocationBarcodeData")) ? null : reader.GetString(reader.GetOrdinal("LocationBarcodeData")),
+            // Optional columns that may not exist in all stored procedure results
+            Latitude = SafeGetOrdinal("Latitude") >= 0 && !reader.IsDBNull(SafeGetOrdinal("Latitude")) ? reader.GetDecimal(SafeGetOrdinal("Latitude")) : null,
+            Longitude = SafeGetOrdinal("Longitude") >= 0 && !reader.IsDBNull(SafeGetOrdinal("Longitude")) ? reader.GetDecimal(SafeGetOrdinal("Longitude")) : null,
+            LocationBarcodeData = SafeGetOrdinal("LocationBarcodeData") >= 0 && !reader.IsDBNull(SafeGetOrdinal("LocationBarcodeData")) ? reader.GetString(SafeGetOrdinal("LocationBarcodeData")) : null,
             IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
             CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
             ModifiedDate = reader.GetDateTime(reader.GetOrdinal("ModifiedDate"))

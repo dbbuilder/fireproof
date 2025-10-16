@@ -7,6 +7,7 @@ namespace FireExtinguisherInspection.API.Services;
 
 /// <summary>
 /// Service for fire extinguisher type management operations
+/// Uses standard schema with stored procedures (shared reference data - no tenant isolation)
 /// </summary>
 public class ExtinguisherTypeService : IExtinguisherTypeService
 {
@@ -23,43 +24,29 @@ public class ExtinguisherTypeService : IExtinguisherTypeService
 
     public async Task<ExtinguisherTypeDto> CreateExtinguisherTypeAsync(Guid tenantId, CreateExtinguisherTypeRequest request)
     {
-        _logger.LogInformation("Creating extinguisher type for tenant {TenantId}: {TypeCode}", tenantId, request.TypeCode);
+        _logger.LogInformation("Creating extinguisher type: {TypeCode}", request.TypeCode);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_ExtinguisherType_Create";
-        command.CommandType = CommandType.StoredProcedure;
 
-        // Input parameters
-        command.Parameters.AddWithValue("@TenantId", tenantId);
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_ExtinguisherType_Create";
+
+        var typeId = Guid.NewGuid();
+        command.Parameters.AddWithValue("@ExtinguisherTypeId", typeId);
         command.Parameters.AddWithValue("@TypeCode", request.TypeCode);
         command.Parameters.AddWithValue("@TypeName", request.TypeName);
         command.Parameters.AddWithValue("@Description", (object?)request.Description ?? DBNull.Value);
-        command.Parameters.AddWithValue("@AgentType", (object?)request.AgentType ?? DBNull.Value);
-        command.Parameters.AddWithValue("@Capacity", (object?)request.Capacity ?? DBNull.Value);
-        command.Parameters.AddWithValue("@CapacityUnit", (object?)request.CapacityUnit ?? DBNull.Value);
-        command.Parameters.AddWithValue("@FireClassRating", (object?)request.FireClassRating ?? DBNull.Value);
-        command.Parameters.AddWithValue("@ServiceLifeYears", (object?)request.ServiceLifeYears ?? DBNull.Value);
-        command.Parameters.AddWithValue("@HydroTestIntervalYears", (object?)request.HydroTestIntervalYears ?? DBNull.Value);
-
-        // Output parameter
-        var typeIdParam = new SqlParameter("@ExtinguisherTypeId", SqlDbType.UniqueIdentifier)
-        {
-            Direction = ParameterDirection.Output
-        };
-        command.Parameters.Add(typeIdParam);
+        command.Parameters.AddWithValue("@MonthlyInspectionRequired", request.MonthlyInspectionRequired);
+        command.Parameters.AddWithValue("@AnnualInspectionRequired", request.AnnualInspectionRequired);
+        command.Parameters.AddWithValue("@HydrostaticTestYears", (object?)request.HydrostaticTestYears ?? DBNull.Value);
 
         using var reader = await command.ExecuteReaderAsync();
-
         if (await reader.ReadAsync())
         {
-            var typeId = reader.GetGuid(reader.GetOrdinal("ExtinguisherTypeId"));
+            var result = MapFromReader(reader, tenantId);
             _logger.LogInformation("Extinguisher type created successfully: {ExtinguisherTypeId}", typeId);
-
-            return await GetExtinguisherTypeByIdAsync(tenantId, typeId)
-                ?? throw new InvalidOperationException("Failed to retrieve created extinguisher type");
+            return result;
         }
 
         throw new InvalidOperationException("Failed to create extinguisher type");
@@ -67,156 +54,117 @@ public class ExtinguisherTypeService : IExtinguisherTypeService
 
     public async Task<IEnumerable<ExtinguisherTypeDto>> GetAllExtinguisherTypesAsync(Guid tenantId, bool? isActive = null)
     {
-        _logger.LogDebug("Fetching extinguisher types for tenant {TenantId}, isActive: {IsActive}", tenantId, isActive);
+        _logger.LogDebug("Fetching all extinguisher types");
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_ExtinguisherType_GetAll";
-        command.CommandType = CommandType.StoredProcedure;
 
-        command.Parameters.AddWithValue("@TenantId", tenantId);
-        command.Parameters.AddWithValue("@IsActive", (object?)isActive ?? DBNull.Value);
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_ExtinguisherType_GetAll";
 
         var types = new List<ExtinguisherTypeDto>();
 
         using var reader = await command.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
-            types.Add(MapExtinguisherTypeFromReader(reader));
+            types.Add(MapFromReader(reader, tenantId));
         }
 
-        _logger.LogInformation("Retrieved {Count} extinguisher types for tenant {TenantId}", types.Count, tenantId);
-
+        _logger.LogInformation("Retrieved {Count} extinguisher types", types.Count);
         return types;
     }
 
     public async Task<ExtinguisherTypeDto?> GetExtinguisherTypeByIdAsync(Guid tenantId, Guid extinguisherTypeId)
     {
-        _logger.LogDebug("Fetching extinguisher type {ExtinguisherTypeId} for tenant {TenantId}", extinguisherTypeId, tenantId);
+        _logger.LogDebug("Fetching extinguisher type {ExtinguisherTypeId}", extinguisherTypeId);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_ExtinguisherType_GetById";
-        command.CommandType = CommandType.StoredProcedure;
 
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_ExtinguisherType_GetById";
         command.Parameters.AddWithValue("@ExtinguisherTypeId", extinguisherTypeId);
 
         using var reader = await command.ExecuteReaderAsync();
         if (await reader.ReadAsync())
         {
-            return MapExtinguisherTypeFromReader(reader);
+            return MapFromReader(reader, tenantId);
         }
 
-        _logger.LogWarning("Extinguisher type {ExtinguisherTypeId} not found for tenant {TenantId}", extinguisherTypeId, tenantId);
+        _logger.LogWarning("Extinguisher type {ExtinguisherTypeId} not found", extinguisherTypeId);
         return null;
     }
 
     public async Task<ExtinguisherTypeDto> UpdateExtinguisherTypeAsync(Guid tenantId, Guid extinguisherTypeId, UpdateExtinguisherTypeRequest request)
     {
-        _logger.LogInformation("Updating extinguisher type {ExtinguisherTypeId} for tenant {TenantId}", extinguisherTypeId, tenantId);
+        _logger.LogInformation("Updating extinguisher type {ExtinguisherTypeId}", extinguisherTypeId);
 
-        // First verify the type exists
-        var existingType = await GetExtinguisherTypeByIdAsync(tenantId, extinguisherTypeId);
-        if (existingType == null)
-        {
-            throw new KeyNotFoundException($"Extinguisher type {extinguisherTypeId} not found");
-        }
-
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $@"
-            UPDATE [{schemaName}].ExtinguisherTypes
-            SET TypeName = @TypeName,
-                Description = @Description,
-                AgentType = @AgentType,
-                Capacity = @Capacity,
-                CapacityUnit = @CapacityUnit,
-                FireClassRating = @FireClassRating,
-                ServiceLifeYears = @ServiceLifeYears,
-                HydroTestIntervalYears = @HydroTestIntervalYears,
-                IsActive = @IsActive,
-                ModifiedDate = GETUTCDATE()
-            WHERE ExtinguisherTypeId = @ExtinguisherTypeId AND TenantId = @TenantId";
+
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_ExtinguisherType_Update";
 
         command.Parameters.AddWithValue("@ExtinguisherTypeId", extinguisherTypeId);
-        command.Parameters.AddWithValue("@TenantId", tenantId);
+        command.Parameters.AddWithValue("@TypeCode", string.Empty); // Cannot update TypeCode
         command.Parameters.AddWithValue("@TypeName", request.TypeName);
         command.Parameters.AddWithValue("@Description", (object?)request.Description ?? DBNull.Value);
-        command.Parameters.AddWithValue("@AgentType", (object?)request.AgentType ?? DBNull.Value);
-        command.Parameters.AddWithValue("@Capacity", (object?)request.Capacity ?? DBNull.Value);
-        command.Parameters.AddWithValue("@CapacityUnit", (object?)request.CapacityUnit ?? DBNull.Value);
-        command.Parameters.AddWithValue("@FireClassRating", (object?)request.FireClassRating ?? DBNull.Value);
-        command.Parameters.AddWithValue("@ServiceLifeYears", (object?)request.ServiceLifeYears ?? DBNull.Value);
-        command.Parameters.AddWithValue("@HydroTestIntervalYears", (object?)request.HydroTestIntervalYears ?? DBNull.Value);
+        command.Parameters.AddWithValue("@MonthlyInspectionRequired", request.MonthlyInspectionRequired);
+        command.Parameters.AddWithValue("@AnnualInspectionRequired", request.AnnualInspectionRequired);
+        command.Parameters.AddWithValue("@HydrostaticTestYears", (object?)request.HydrostaticTestYears ?? DBNull.Value);
         command.Parameters.AddWithValue("@IsActive", request.IsActive);
 
-        var rowsAffected = await command.ExecuteNonQueryAsync();
-
-        if (rowsAffected == 0)
+        using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
         {
-            throw new InvalidOperationException("Failed to update extinguisher type");
+            var result = MapFromReader(reader, tenantId);
+            _logger.LogInformation("Extinguisher type {ExtinguisherTypeId} updated successfully", extinguisherTypeId);
+            return result;
         }
 
-        _logger.LogInformation("Extinguisher type {ExtinguisherTypeId} updated successfully", extinguisherTypeId);
-
-        return await GetExtinguisherTypeByIdAsync(tenantId, extinguisherTypeId)
-            ?? throw new InvalidOperationException("Failed to retrieve updated extinguisher type");
+        throw new InvalidOperationException("Failed to update extinguisher type");
     }
 
     public async Task<bool> DeleteExtinguisherTypeAsync(Guid tenantId, Guid extinguisherTypeId)
     {
-        _logger.LogInformation("Deleting extinguisher type {ExtinguisherTypeId} for tenant {TenantId}", extinguisherTypeId, tenantId);
+        _logger.LogInformation("Soft deleting extinguisher type {ExtinguisherTypeId}", extinguisherTypeId);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
-        // Soft delete by setting IsActive = 0
-        using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $@"
-            UPDATE [{schemaName}].ExtinguisherTypes
-            SET IsActive = 0,
-                ModifiedDate = GETUTCDATE()
-            WHERE ExtinguisherTypeId = @ExtinguisherTypeId AND TenantId = @TenantId";
-
-        command.Parameters.AddWithValue("@ExtinguisherTypeId", extinguisherTypeId);
-        command.Parameters.AddWithValue("@TenantId", tenantId);
-
-        var rowsAffected = await command.ExecuteNonQueryAsync();
-
-        if (rowsAffected > 0)
+        // Soft delete via update
+        var type = await GetExtinguisherTypeByIdAsync(tenantId, extinguisherTypeId);
+        if (type == null)
         {
-            _logger.LogInformation("Extinguisher type {ExtinguisherTypeId} deleted successfully", extinguisherTypeId);
-            return true;
+            return false;
         }
 
-        _logger.LogWarning("Extinguisher type {ExtinguisherTypeId} not found or already deleted", extinguisherTypeId);
-        return false;
+        var updateRequest = new UpdateExtinguisherTypeRequest
+        {
+            TypeName = type.TypeName,
+            Description = type.Description,
+            MonthlyInspectionRequired = type.MonthlyInspectionRequired,
+            AnnualInspectionRequired = type.AnnualInspectionRequired,
+            HydrostaticTestYears = type.HydrostaticTestYears,
+            IsActive = false
+        };
+
+        await UpdateExtinguisherTypeAsync(tenantId, extinguisherTypeId, updateRequest);
+        _logger.LogInformation("Extinguisher type {ExtinguisherTypeId} deleted successfully", extinguisherTypeId);
+        return true;
     }
 
-    private static ExtinguisherTypeDto MapExtinguisherTypeFromReader(SqlDataReader reader)
+    private static ExtinguisherTypeDto MapFromReader(SqlDataReader reader, Guid tenantId)
     {
         return new ExtinguisherTypeDto
         {
             ExtinguisherTypeId = reader.GetGuid(reader.GetOrdinal("ExtinguisherTypeId")),
-            TenantId = reader.GetGuid(reader.GetOrdinal("TenantId")),
+            TenantId = tenantId, // Populate with request tenantId for compatibility
             TypeCode = reader.GetString(reader.GetOrdinal("TypeCode")),
             TypeName = reader.GetString(reader.GetOrdinal("TypeName")),
             Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? null : reader.GetString(reader.GetOrdinal("Description")),
-            AgentType = reader.IsDBNull(reader.GetOrdinal("AgentType")) ? null : reader.GetString(reader.GetOrdinal("AgentType")),
-            Capacity = reader.IsDBNull(reader.GetOrdinal("Capacity")) ? null : reader.GetDecimal(reader.GetOrdinal("Capacity")),
-            CapacityUnit = reader.IsDBNull(reader.GetOrdinal("CapacityUnit")) ? null : reader.GetString(reader.GetOrdinal("CapacityUnit")),
-            FireClassRating = reader.IsDBNull(reader.GetOrdinal("FireClassRating")) ? null : reader.GetString(reader.GetOrdinal("FireClassRating")),
-            ServiceLifeYears = reader.IsDBNull(reader.GetOrdinal("ServiceLifeYears")) ? null : reader.GetInt32(reader.GetOrdinal("ServiceLifeYears")),
-            HydroTestIntervalYears = reader.IsDBNull(reader.GetOrdinal("HydroTestIntervalYears")) ? null : reader.GetInt32(reader.GetOrdinal("HydroTestIntervalYears")),
+            MonthlyInspectionRequired = reader.GetBoolean(reader.GetOrdinal("MonthlyInspectionRequired")),
+            AnnualInspectionRequired = reader.GetBoolean(reader.GetOrdinal("AnnualInspectionRequired")),
+            HydrostaticTestYears = reader.IsDBNull(reader.GetOrdinal("HydrostaticTestYears")) ? null : reader.GetInt32(reader.GetOrdinal("HydrostaticTestYears")),
             IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
-            CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
-            ModifiedDate = reader.GetDateTime(reader.GetOrdinal("ModifiedDate"))
+            CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"))
         };
     }
 }

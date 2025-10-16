@@ -10,15 +10,11 @@ public class ExtinguisherTypeDto
     public string TypeCode { get; set; } = string.Empty;
     public string TypeName { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public string? AgentType { get; set; }
-    public decimal? Capacity { get; set; }
-    public string? CapacityUnit { get; set; }
-    public string? FireClassRating { get; set; }
-    public int? ServiceLifeYears { get; set; }
-    public int? HydroTestIntervalYears { get; set; }
+    public bool MonthlyInspectionRequired { get; set; }
+    public bool AnnualInspectionRequired { get; set; }
+    public int? HydrostaticTestYears { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedDate { get; set; }
-    public DateTime ModifiedDate { get; set; }
 }
 
 /// <summary>
@@ -29,12 +25,9 @@ public class CreateExtinguisherTypeRequest
     public string TypeCode { get; set; } = string.Empty;
     public string TypeName { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public string? AgentType { get; set; }
-    public decimal? Capacity { get; set; }
-    public string? CapacityUnit { get; set; }
-    public string? FireClassRating { get; set; }
-    public int? ServiceLifeYears { get; set; }
-    public int? HydroTestIntervalYears { get; set; }
+    public bool MonthlyInspectionRequired { get; set; }
+    public bool AnnualInspectionRequired { get; set; }
+    public int? HydrostaticTestYears { get; set; }
 }
 
 /// <summary>
@@ -44,11 +37,8 @@ public class UpdateExtinguisherTypeRequest
 {
     public string TypeName { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public string? AgentType { get; set; }
-    public decimal? Capacity { get; set; }
-    public string? CapacityUnit { get; set; }
-    public string? FireClassRating { get; set; }
-    public int? ServiceLifeYears { get; set; }
-    public int? HydroTestIntervalYears { get; set; }
+    public bool MonthlyInspectionRequired { get; set; }
+    public bool AnnualInspectionRequired { get; set; }
+    public int? HydrostaticTestYears { get; set; }
     public bool IsActive { get; set; }
 }

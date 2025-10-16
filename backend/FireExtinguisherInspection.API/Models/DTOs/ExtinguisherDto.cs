@@ -10,27 +10,19 @@ public class ExtinguisherDto
     public Guid LocationId { get; set; }
     public Guid ExtinguisherTypeId { get; set; }
 
-    public string ExtinguisherCode { get; set; } = string.Empty;
-    public string SerialNumber { get; set; } = string.Empty;
-    public string? AssetTag { get; set; }
+    // Actual database schema fields
+    public string AssetTag { get; set; } = string.Empty;
+    public string? BarcodeData { get; set; }
     public string? Manufacturer { get; set; }
+    public string? Model { get; set; }
+    public string? SerialNumber { get; set; }
     public DateTime? ManufactureDate { get; set; }
     public DateTime? InstallDate { get; set; }
-    public DateTime? LastServiceDate { get; set; }
-    public DateTime? NextServiceDueDate { get; set; }
-    public DateTime? LastHydroTestDate { get; set; }
-    public DateTime? NextHydroTestDueDate { get; set; }
-
+    public DateTime? LastHydrostaticTestDate { get; set; }
+    public string? Capacity { get; set; }
     public string? LocationDescription { get; set; }
-    public string? FloorLevel { get; set; }
-    public string? Notes { get; set; }
-
-    public string? BarcodeData { get; set; }
-    public string? QrCodeData { get; set; }
 
     public bool IsActive { get; set; }
-    public bool IsOutOfService { get; set; }
-    public string? OutOfServiceReason { get; set; }
 
     public DateTime CreatedDate { get; set; }
     public DateTime ModifiedDate { get; set; }
@@ -49,16 +41,15 @@ public class CreateExtinguisherRequest
     public Guid LocationId { get; set; }
     public Guid ExtinguisherTypeId { get; set; }
 
-    public string ExtinguisherCode { get; set; } = string.Empty;
-    public string SerialNumber { get; set; } = string.Empty;
-    public string? AssetTag { get; set; }
+    public string AssetTag { get; set; } = string.Empty;
     public string? Manufacturer { get; set; }
+    public string? Model { get; set; }
+    public string? SerialNumber { get; set; }
     public DateTime? ManufactureDate { get; set; }
     public DateTime? InstallDate { get; set; }
-
+    public DateTime? LastHydrostaticTestDate { get; set; }
+    public string? Capacity { get; set; }
     public string? LocationDescription { get; set; }
-    public string? FloorLevel { get; set; }
-    public string? Notes { get; set; }
 }
 
 /// <summary>

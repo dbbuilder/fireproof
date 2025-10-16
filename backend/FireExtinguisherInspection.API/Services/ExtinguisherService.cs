@@ -7,6 +7,7 @@ namespace FireExtinguisherInspection.API.Services;
 
 /// <summary>
 /// Service for managing fire extinguisher inventory
+/// Uses standard schema with stored procedures (tenant-scoped data with @TenantId parameter)
 /// </summary>
 public class ExtinguisherService : IExtinguisherService
 {
@@ -26,25 +27,26 @@ public class ExtinguisherService : IExtinguisherService
 
     public async Task<ExtinguisherDto> CreateExtinguisherAsync(Guid tenantId, CreateExtinguisherRequest request)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_Create";
-        command.CommandType = CommandType.StoredProcedure;
 
+        command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_Create";
+
+        var extinguisherId = Guid.NewGuid();
+        command.Parameters.AddWithValue("@ExtinguisherId", extinguisherId);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@LocationId", request.LocationId);
         command.Parameters.AddWithValue("@ExtinguisherTypeId", request.ExtinguisherTypeId);
-        command.Parameters.AddWithValue("@ExtinguisherCode", request.ExtinguisherCode);
-        command.Parameters.AddWithValue("@SerialNumber", request.SerialNumber);
-        command.Parameters.AddWithValue("@AssetTag", (object?)request.AssetTag ?? DBNull.Value);
+        command.Parameters.AddWithValue("@AssetTag", request.AssetTag);
         command.Parameters.AddWithValue("@Manufacturer", (object?)request.Manufacturer ?? DBNull.Value);
+        command.Parameters.AddWithValue("@Model", (object?)request.Model ?? DBNull.Value);
+        command.Parameters.AddWithValue("@SerialNumber", (object?)request.SerialNumber ?? DBNull.Value);
         command.Parameters.AddWithValue("@ManufactureDate", (object?)request.ManufactureDate ?? DBNull.Value);
         command.Parameters.AddWithValue("@InstallDate", (object?)request.InstallDate ?? DBNull.Value);
+        command.Parameters.AddWithValue("@LastHydrostaticTestDate", (object?)request.LastHydrostaticTestDate ?? DBNull.Value);
+        command.Parameters.AddWithValue("@Capacity", (object?)request.Capacity ?? DBNull.Value);
         command.Parameters.AddWithValue("@LocationDescription", (object?)request.LocationDescription ?? DBNull.Value);
-        command.Parameters.AddWithValue("@FloorLevel", (object?)request.FloorLevel ?? DBNull.Value);
-        command.Parameters.AddWithValue("@Notes", (object?)request.Notes ?? DBNull.Value);
-        command.Parameters.AddWithValue("@TenantId", tenantId);
 
         using var reader = await command.ExecuteReaderAsync();
         if (!await reader.ReadAsync())
@@ -53,7 +55,7 @@ public class ExtinguisherService : IExtinguisherService
         var extinguisher = MapExtinguisherFromReader(reader);
 
         // Generate barcode after creation
-        await GenerateBarcodeInternalAsync(tenantId, extinguisher.ExtinguisherId, schemaName);
+        await GenerateBarcodeInternalAsync(tenantId, extinguisher.ExtinguisherId);
 
         // Fetch the updated extinguisher with barcode data
         return await GetExtinguisherByIdAsync(tenantId, extinguisher.ExtinguisherId)
@@ -67,12 +69,11 @@ public class ExtinguisherService : IExtinguisherService
         bool? isActive = null,
         bool? isOutOfService = null)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_GetAll";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_GetAll";
 
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@LocationId", (object?)locationId ?? DBNull.Value);
@@ -93,12 +94,11 @@ public class ExtinguisherService : IExtinguisherService
 
     public async Task<ExtinguisherDto?> GetExtinguisherByIdAsync(Guid tenantId, Guid extinguisherId)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_GetById";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_GetById";
 
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@ExtinguisherId", extinguisherId);
@@ -114,12 +114,11 @@ public class ExtinguisherService : IExtinguisherService
 
     public async Task<ExtinguisherDto?> GetExtinguisherByBarcodeAsync(Guid tenantId, string barcodeData)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_GetByBarcode";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_GetByBarcode";
 
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@BarcodeData", barcodeData);
@@ -135,12 +134,11 @@ public class ExtinguisherService : IExtinguisherService
 
     public async Task<ExtinguisherDto> UpdateExtinguisherAsync(Guid tenantId, Guid extinguisherId, UpdateExtinguisherRequest request)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_Update";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_Update";
 
         command.Parameters.AddWithValue("@ExtinguisherId", extinguisherId);
         command.Parameters.AddWithValue("@TenantId", tenantId);
@@ -171,12 +169,11 @@ public class ExtinguisherService : IExtinguisherService
 
     public async Task<bool> DeleteExtinguisherAsync(Guid tenantId, Guid extinguisherId)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_Delete";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_Delete";
 
         command.Parameters.AddWithValue("@ExtinguisherId", extinguisherId);
         command.Parameters.AddWithValue("@TenantId", tenantId);
@@ -187,18 +184,16 @@ public class ExtinguisherService : IExtinguisherService
 
     public async Task<BarcodeResponse> GenerateBarcodeAsync(Guid tenantId, Guid extinguisherId)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        return await GenerateBarcodeInternalAsync(tenantId, extinguisherId, schemaName);
+        return await GenerateBarcodeInternalAsync(tenantId, extinguisherId);
     }
 
     public async Task<ExtinguisherDto> MarkOutOfServiceAsync(Guid tenantId, Guid extinguisherId, string reason)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_MarkOutOfService";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_MarkOutOfService";
 
         command.Parameters.AddWithValue("@ExtinguisherId", extinguisherId);
         command.Parameters.AddWithValue("@TenantId", tenantId);
@@ -213,12 +208,11 @@ public class ExtinguisherService : IExtinguisherService
 
     public async Task<ExtinguisherDto> ReturnToServiceAsync(Guid tenantId, Guid extinguisherId)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_ReturnToService";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_ReturnToService";
 
         command.Parameters.AddWithValue("@ExtinguisherId", extinguisherId);
         command.Parameters.AddWithValue("@TenantId", tenantId);
@@ -232,12 +226,11 @@ public class ExtinguisherService : IExtinguisherService
 
     public async Task<IEnumerable<ExtinguisherDto>> GetExtinguishersNeedingServiceAsync(Guid tenantId, int daysAhead = 30)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_GetNeedingService";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_GetNeedingService";
 
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@DaysAhead", daysAhead);
@@ -255,12 +248,11 @@ public class ExtinguisherService : IExtinguisherService
 
     public async Task<IEnumerable<ExtinguisherDto>> GetExtinguishersNeedingHydroTestAsync(Guid tenantId, int daysAhead = 30)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Extinguisher_GetNeedingHydroTest";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Extinguisher_GetNeedingHydroTest";
 
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@DaysAhead", daysAhead);
@@ -278,7 +270,7 @@ public class ExtinguisherService : IExtinguisherService
 
     #region Private Helper Methods
 
-    private async Task<BarcodeResponse> GenerateBarcodeInternalAsync(Guid tenantId, Guid extinguisherId, string schemaName)
+    private async Task<BarcodeResponse> GenerateBarcodeInternalAsync(Guid tenantId, Guid extinguisherId)
     {
         // Generate barcode data using extinguisher ID
         var barcodeData = $"FP-{extinguisherId:N}";
@@ -287,18 +279,19 @@ public class ExtinguisherService : IExtinguisherService
         var (barcode, qrCode) = _barcodeGenerator.GenerateBoth(barcodeData);
 
         // Update extinguisher with barcode data
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $@"
-            UPDATE [{schemaName}].Extinguishers
+        command.CommandText = @"
+            UPDATE dbo.Extinguishers
             SET BarcodeData = @BarcodeData,
                 QrCodeData = @QrCodeData,
                 ModifiedDate = GETUTCDATE()
-            WHERE ExtinguisherId = @ExtinguisherId";
+            WHERE ExtinguisherId = @ExtinguisherId AND TenantId = @TenantId";
 
         command.Parameters.AddWithValue("@BarcodeData", barcode);
         command.Parameters.AddWithValue("@QrCodeData", qrCode);
         command.Parameters.AddWithValue("@ExtinguisherId", extinguisherId);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
 
         await command.ExecuteNonQueryAsync();
 
@@ -318,24 +311,17 @@ public class ExtinguisherService : IExtinguisherService
             TenantId = reader.GetGuid(reader.GetOrdinal("TenantId")),
             LocationId = reader.GetGuid(reader.GetOrdinal("LocationId")),
             ExtinguisherTypeId = reader.GetGuid(reader.GetOrdinal("ExtinguisherTypeId")),
-            ExtinguisherCode = reader.GetString(reader.GetOrdinal("ExtinguisherCode")),
-            SerialNumber = reader.GetString(reader.GetOrdinal("SerialNumber")),
-            AssetTag = reader.IsDBNull(reader.GetOrdinal("AssetTag")) ? null : reader.GetString(reader.GetOrdinal("AssetTag")),
+            AssetTag = reader.GetString(reader.GetOrdinal("AssetTag")),
+            BarcodeData = reader.IsDBNull(reader.GetOrdinal("BarcodeData")) ? null : reader.GetString(reader.GetOrdinal("BarcodeData")),
             Manufacturer = reader.IsDBNull(reader.GetOrdinal("Manufacturer")) ? null : reader.GetString(reader.GetOrdinal("Manufacturer")),
+            Model = reader.IsDBNull(reader.GetOrdinal("Model")) ? null : reader.GetString(reader.GetOrdinal("Model")),
+            SerialNumber = reader.IsDBNull(reader.GetOrdinal("SerialNumber")) ? null : reader.GetString(reader.GetOrdinal("SerialNumber")),
             ManufactureDate = reader.IsDBNull(reader.GetOrdinal("ManufactureDate")) ? null : reader.GetDateTime(reader.GetOrdinal("ManufactureDate")),
             InstallDate = reader.IsDBNull(reader.GetOrdinal("InstallDate")) ? null : reader.GetDateTime(reader.GetOrdinal("InstallDate")),
-            LastServiceDate = reader.IsDBNull(reader.GetOrdinal("LastServiceDate")) ? null : reader.GetDateTime(reader.GetOrdinal("LastServiceDate")),
-            NextServiceDueDate = reader.IsDBNull(reader.GetOrdinal("NextServiceDueDate")) ? null : reader.GetDateTime(reader.GetOrdinal("NextServiceDueDate")),
-            LastHydroTestDate = reader.IsDBNull(reader.GetOrdinal("LastHydroTestDate")) ? null : reader.GetDateTime(reader.GetOrdinal("LastHydroTestDate")),
-            NextHydroTestDueDate = reader.IsDBNull(reader.GetOrdinal("NextHydroTestDueDate")) ? null : reader.GetDateTime(reader.GetOrdinal("NextHydroTestDueDate")),
+            LastHydrostaticTestDate = reader.IsDBNull(reader.GetOrdinal("LastHydrostaticTestDate")) ? null : reader.GetDateTime(reader.GetOrdinal("LastHydrostaticTestDate")),
+            Capacity = reader.IsDBNull(reader.GetOrdinal("Capacity")) ? null : reader.GetString(reader.GetOrdinal("Capacity")),
             LocationDescription = reader.IsDBNull(reader.GetOrdinal("LocationDescription")) ? null : reader.GetString(reader.GetOrdinal("LocationDescription")),
-            FloorLevel = reader.IsDBNull(reader.GetOrdinal("FloorLevel")) ? null : reader.GetString(reader.GetOrdinal("FloorLevel")),
-            Notes = reader.IsDBNull(reader.GetOrdinal("Notes")) ? null : reader.GetString(reader.GetOrdinal("Notes")),
-            BarcodeData = reader.IsDBNull(reader.GetOrdinal("BarcodeData")) ? null : reader.GetString(reader.GetOrdinal("BarcodeData")),
-            QrCodeData = reader.IsDBNull(reader.GetOrdinal("QrCodeData")) ? null : reader.GetString(reader.GetOrdinal("QrCodeData")),
             IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
-            IsOutOfService = reader.GetBoolean(reader.GetOrdinal("IsOutOfService")),
-            OutOfServiceReason = reader.IsDBNull(reader.GetOrdinal("OutOfServiceReason")) ? null : reader.GetString(reader.GetOrdinal("OutOfServiceReason")),
             CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
             ModifiedDate = reader.GetDateTime(reader.GetOrdinal("ModifiedDate")),
             // Navigation properties (if available in joined query)

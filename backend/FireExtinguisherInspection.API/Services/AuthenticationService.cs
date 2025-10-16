@@ -116,6 +116,15 @@ namespace FireExtinguisherInspection.API.Services
 
             // Get roles and generate tokens
             var roles = await GetUserRolesAsync(userWithPassword.UserId);
+
+            // DEBUG: Log roles for debugging JWT token generation
+            _logger.LogInformation("USER ROLES FOR JWT TOKEN (Count={Count}):", roles.Count);
+            foreach (var role in roles)
+            {
+                _logger.LogInformation("  Role: Type={RoleType}, Name={RoleName}, TenantId={TenantId}, HasValue={HasValue}",
+                    role.RoleType, role.RoleName, role.TenantId, role.TenantId.HasValue);
+            }
+
             var accessToken = _jwtTokenService.GenerateAccessToken(userWithPassword, roles);
             var refreshToken = _jwtTokenService.GenerateRefreshToken();
 

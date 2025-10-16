@@ -74,12 +74,11 @@ public class InspectionService : IInspectionService
         // Determine weight within spec (simple check - could be more sophisticated)
         var weightWithinSpec = !request.WeightPounds.HasValue || request.WeightPounds.Value > 0;
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Inspection_Create";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Inspection_Create";
 
         command.Parameters.AddWithValue("@ExtinguisherId", request.ExtinguisherId);
         command.Parameters.AddWithValue("@InspectorUserId", request.InspectorUserId);
@@ -132,12 +131,11 @@ public class InspectionService : IInspectionService
         string? inspectionType = null,
         bool? passed = null)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
-
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Inspection_GetAll";
+
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Inspection_GetAll";
 
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@ExtinguisherId", (object?)extinguisherId ?? DBNull.Value);
@@ -160,12 +158,12 @@ public class InspectionService : IInspectionService
 
     public async Task<InspectionDto?> GetInspectionByIdAsync(Guid tenantId, Guid inspectionId)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Inspection_GetById";
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Inspection_GetById";
 
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@InspectionId", inspectionId);
@@ -262,12 +260,12 @@ public class InspectionService : IInspectionService
 
     public async Task<InspectionStatsDto> GetInspectionStatsAsync(Guid tenantId, DateTime? startDate = null, DateTime? endDate = null)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Inspection_GetStats";
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Inspection_GetStats";
 
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@StartDate", (object?)startDate ?? DBNull.Value);
@@ -297,12 +295,12 @@ public class InspectionService : IInspectionService
 
     public async Task<IEnumerable<InspectionDto>> GetOverdueInspectionsAsync(Guid tenantId, string inspectionType = "Monthly")
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Inspection_GetOverdue";
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Inspection_GetOverdue";
 
         command.Parameters.AddWithValue("@TenantId", tenantId);
         command.Parameters.AddWithValue("@InspectionType", inspectionType);
@@ -320,12 +318,12 @@ public class InspectionService : IInspectionService
 
     public async Task<bool> DeleteInspectionAsync(Guid tenantId, Guid inspectionId)
     {
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_Inspection_Delete";
         command.CommandType = CommandType.StoredProcedure;
+        command.CommandText = "dbo.usp_Inspection_Delete";
 
         command.Parameters.AddWithValue("@InspectionId", inspectionId);
         command.Parameters.AddWithValue("@TenantId", tenantId);

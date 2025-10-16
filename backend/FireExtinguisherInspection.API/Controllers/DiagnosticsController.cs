@@ -308,6 +308,107 @@ public class DiagnosticsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Create missing InspectionTypes table for DEMO001 tenant
+    /// </summary>
+    [HttpPost("create-inspection-types-table")]
+    public async Task<ActionResult> CreateInspectionTypesTable()
+    {
+        try
+        {
+            var connString = _configuration["DatabaseConnectionString"]
+                ?? _configuration.GetConnectionString("DefaultConnection");
+
+            using var connection = new SqlConnection(connString);
+            await connection.OpenAsync();
+
+            // Get DEMO001 tenant schema
+            string? schemaName = null;
+            Guid tenantId = Guid.Empty;
+
+            using (var cmd = new SqlCommand(
+                "SELECT TenantId, DatabaseSchema FROM dbo.Tenants WHERE TenantCode = 'DEMO001'",
+                connection))
+            {
+                using var reader = await cmd.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    tenantId = reader.GetGuid(0);
+                    schemaName = reader.IsDBNull(1) ? null : reader.GetString(1);
+                }
+            }
+
+            if (string.IsNullOrEmpty(schemaName))
+            {
+                return BadRequest(new { success = false, message = "DEMO001 tenant not found or schema not set" });
+            }
+
+            // Check if table exists
+            bool tableExists = false;
+            using (var cmd = new SqlCommand(
+                $"SELECT COUNT(*) FROM sys.tables t INNER JOIN sys.schemas s ON t.schema_id = s.schema_id WHERE s.name = @SchemaName AND t.name = 'InspectionTypes'",
+                connection))
+            {
+                cmd.Parameters.AddWithValue("@SchemaName", schemaName);
+                var count = (int)(await cmd.ExecuteScalarAsync() ?? 0);
+                tableExists = count > 0;
+            }
+
+            if (tableExists)
+            {
+                return Ok(new { success = true, message = "InspectionTypes table already exists", schemaName, tableExists = true });
+            }
+
+            // Create the table
+            var createTableSql = $@"
+                CREATE TABLE [{schemaName}].InspectionTypes (
+                    InspectionTypeId UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+                    TenantId UNIQUEIDENTIFIER NOT NULL,
+                    TypeName NVARCHAR(100) NOT NULL,
+                    Description NVARCHAR(1000) NULL,
+                    RequiresServiceTechnician BIT NOT NULL DEFAULT 0,
+                    FrequencyDays INT NOT NULL,
+                    IsActive BIT NOT NULL DEFAULT 1,
+                    CreatedDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+                    CONSTRAINT PK_{schemaName.Replace("-", "_")}_InspectionTypes PRIMARY KEY CLUSTERED (InspectionTypeId)
+                )";
+
+            using (var cmd = new SqlCommand(createTableSql, connection))
+            {
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+            // Verify creation
+            using (var cmd = new SqlCommand(
+                $"SELECT COUNT(*) FROM sys.tables t INNER JOIN sys.schemas s ON t.schema_id = s.schema_id WHERE s.name = @SchemaName AND t.name = 'InspectionTypes'",
+                connection))
+            {
+                cmd.Parameters.AddWithValue("@SchemaName", schemaName);
+                var count = (int)(await cmd.ExecuteScalarAsync() ?? 0);
+                tableExists = count > 0;
+            }
+
+            return Ok(new
+            {
+                success = true,
+                message = "InspectionTypes table created successfully",
+                schemaName,
+                tenantId,
+                tableExists
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to create InspectionTypes table");
+            return StatusCode(500, new
+            {
+                success = false,
+                error = ex.Message,
+                stackTrace = ex.StackTrace
+            });
+        }
+    }
+
     private static string MaskPassword(string? connectionString)
     {
         if (string.IsNullOrEmpty(connectionString))

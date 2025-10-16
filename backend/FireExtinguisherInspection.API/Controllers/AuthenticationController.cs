@@ -9,6 +9,7 @@ namespace FireExtinguisherInspection.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Route("api/auth")] // Alias for backward compatibility
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;

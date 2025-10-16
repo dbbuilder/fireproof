@@ -87,6 +87,7 @@ builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IExtinguisherTypeService, ExtinguisherTypeService>();
+builder.Services.AddScoped<IInspectionTypeService, InspectionTypeService>();
 builder.Services.AddScoped<IExtinguisherService, ExtinguisherService>();
 builder.Services.AddScoped<IInspectionService, InspectionService>(); // Legacy (pre-Phase 1)
 builder.Services.AddScoped<IInspectionPhase1Service, InspectionPhase1Service>(); // Phase 1 checklist-based
@@ -110,6 +111,7 @@ builder.Services.AddCors(options =>
             .WithOrigins(
                 // Development
                 "http://localhost:5173",  // Vite dev server
+                "http://localhost:4173",  // Vite preview server (for e2e tests)
                 "http://localhost:3000",   // Alternative frontend port
                 // Staging
                 "https://staging.fireproofapp.net",  // Staging custom domain
