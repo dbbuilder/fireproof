@@ -34,7 +34,7 @@ jobs:
           app_build_command: "npm run build"
           ###### End of Repository/Build Configurations ######
         env:
-          VITE_API_BASE_URL: https://fireproof-api-test-2025.azurewebsites.net/api
+          VITE_API_BASE_URL: https://api.fireproofapp.net/api
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
