@@ -1,5 +1,5 @@
 name: Deploy Frontend to Production
-# Workflow updated: 2025-10-17 - Added production deployment token
+# Workflow updated: 2025-10-17 - Retry deployment
 
 on:
   push:
