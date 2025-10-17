@@ -23,6 +23,10 @@ export default defineConfig({
   reporter: 'html',
   /* Increase timeout for production testing (network latency) */
   timeout: 60000, // 60 seconds per test
+  /* Increase expect assertion timeout for production */
+  expect: {
+    timeout: 15000, // 15 seconds for expect assertions (toBeVisible, etc.)
+  },
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
