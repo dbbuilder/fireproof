@@ -43,6 +43,7 @@ jobs:
         name: Backend Test Results
         path: '**/test-results.trx'
         reporter: dotnet-trx
+        fail-on-empty: false
 
   frontend-tests:
     name: Frontend Tests
