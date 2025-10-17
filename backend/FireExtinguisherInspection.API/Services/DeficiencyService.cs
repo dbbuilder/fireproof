@@ -26,42 +26,30 @@ public class DeficiencyService : IDeficiencyService
         _logger.LogInformation("Creating deficiency for inspection {InspectionId}: {DeficiencyType} - {Severity}",
             request.InspectionId, request.DeficiencyType, request.Severity);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_InspectionDeficiency_Create";
+        command.CommandText = "dbo.usp_InspectionDeficiency_Create";
         command.CommandType = CommandType.StoredProcedure;
 
+        var deficiencyId = Guid.NewGuid();
+        command.Parameters.AddWithValue("@DeficiencyId", deficiencyId).Direction = ParameterDirection.InputOutput;
         command.Parameters.AddWithValue("@InspectionId", request.InspectionId);
         command.Parameters.AddWithValue("@DeficiencyType", request.DeficiencyType);
         command.Parameters.AddWithValue("@Severity", request.Severity);
         command.Parameters.AddWithValue("@Description", request.Description);
         command.Parameters.AddWithValue("@ActionRequired", (object?)request.ActionRequired ?? DBNull.Value);
         command.Parameters.AddWithValue("@EstimatedCost", (object?)request.EstimatedCost ?? DBNull.Value);
-        command.Parameters.AddWithValue("@AssignedToUserId", (object?)request.AssignedToUserId ?? DBNull.Value);
-        command.Parameters.AddWithValue("@DueDate", (object?)request.DueDate ?? DBNull.Value);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
 
-        // Convert PhotoIds list to JSON string for storage
-        var photoIdsJson = request.PhotoIds != null && request.PhotoIds.Any()
-            ? System.Text.Json.JsonSerializer.Serialize(request.PhotoIds)
-            : null;
-        command.Parameters.AddWithValue("@PhotoIds", (object?)photoIdsJson ?? DBNull.Value);
+        await command.ExecuteNonQueryAsync();
 
-        using var reader = await command.ExecuteReaderAsync();
+        var createdDeficiencyId = (Guid)command.Parameters["@DeficiencyId"].Value;
+        _logger.LogInformation("Deficiency created successfully: {DeficiencyId}", createdDeficiencyId);
 
-        if (await reader.ReadAsync())
-        {
-            var deficiencyId = reader.GetGuid(reader.GetOrdinal("DeficiencyId"));
-
-            _logger.LogInformation("Deficiency created successfully: {DeficiencyId}", deficiencyId);
-
-            // Fetch the created deficiency to return full details
-            return await GetDeficiencyByIdAsync(tenantId, deficiencyId)
-                ?? throw new InvalidOperationException("Failed to retrieve created deficiency");
-        }
-
-        throw new InvalidOperationException("Failed to create deficiency");
+        // Fetch the created deficiency to return full details
+        return await GetDeficiencyByIdAsync(tenantId, createdDeficiencyId)
+            ?? throw new InvalidOperationException("Failed to retrieve created deficiency");
     }
 
     public async Task<InspectionDeficiencyDto?> GetDeficiencyByIdAsync(Guid tenantId, Guid deficiencyId)
@@ -105,14 +93,14 @@ public class DeficiencyService : IDeficiencyService
     {
         _logger.LogDebug("Fetching deficiencies for inspection {InspectionId}", inspectionId);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_InspectionDeficiency_GetByInspection";
+        command.CommandText = "dbo.usp_InspectionDeficiency_GetByInspection";
         command.CommandType = CommandType.StoredProcedure;
 
         command.Parameters.AddWithValue("@InspectionId", inspectionId);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
 
         var deficiencies = new List<InspectionDeficiencyDto>();
 
@@ -298,16 +286,16 @@ public class DeficiencyService : IDeficiencyService
             throw new InvalidOperationException("Deficiency is already resolved");
         }
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_InspectionDeficiency_Resolve";
+        command.CommandText = "dbo.usp_InspectionDeficiency_Resolve";
         command.CommandType = CommandType.StoredProcedure;
 
         command.Parameters.AddWithValue("@DeficiencyId", deficiencyId);
         command.Parameters.AddWithValue("@ResolvedByUserId", request.ResolvedByUserId);
-        command.Parameters.AddWithValue("@ResolutionNotes", request.ResolutionNotes);
+        command.Parameters.AddWithValue("@ResolutionNotes", (object?)request.ResolutionNotes ?? DBNull.Value);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
 
         await command.ExecuteNonQueryAsync();
 

@@ -78,20 +78,18 @@ public class ChecklistTemplateService : IChecklistTemplateService
         return templates;
     }
 
-    public async Task<ChecklistTemplateDto?> GetTemplateByIdAsync(Guid templateId)
+    public async Task<ChecklistTemplateDto?> GetTemplateByIdAsync(Guid tenantId, Guid templateId)
     {
-        _logger.LogDebug("Fetching checklist template {TemplateId}", templateId);
+        _logger.LogDebug("Fetching checklist template {TemplateId} for tenant {TenantId}", templateId, tenantId);
 
-        // We need to query from a tenant schema - use DEMO001 as default
-        // In production, you might want to pass tenantId as well
-        var schemaName = "tenant_8b27e8a1-5a5b-4e8a-8f5e-1a2b3c4d5e6f"; // DEMO001
         using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_ChecklistTemplate_GetById";
+        command.CommandText = "dbo.usp_ChecklistTemplate_GetById";
         command.CommandType = CommandType.StoredProcedure;
 
         command.Parameters.AddWithValue("@TemplateId", templateId);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
 
         ChecklistTemplateDto? template = null;
 
@@ -125,15 +123,14 @@ public class ChecklistTemplateService : IChecklistTemplateService
     {
         _logger.LogDebug("Fetching checklist templates for tenant {TenantId}, type: {InspectionType}", tenantId, inspectionType);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_ChecklistTemplate_GetByType";
+        command.CommandText = "dbo.usp_ChecklistTemplate_GetByType";
         command.CommandType = CommandType.StoredProcedure;
 
         command.Parameters.AddWithValue("@InspectionType", inspectionType);
-        command.Parameters.AddWithValue("@IsActive", true);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
 
         var templates = new List<ChecklistTemplateDto>();
 
@@ -177,7 +174,7 @@ public class ChecklistTemplateService : IChecklistTemplateService
             _logger.LogInformation("Custom template created successfully: {TemplateId}", templateId);
 
             // Fetch the created template to return full details
-            return await GetTemplateByIdAsync(templateId)
+            return await GetTemplateByIdAsync(tenantId, templateId)
                 ?? throw new InvalidOperationException("Failed to retrieve created template");
         }
 
@@ -247,7 +244,7 @@ public class ChecklistTemplateService : IChecklistTemplateService
         _logger.LogInformation("Updating template {TemplateId} for tenant {TenantId}", templateId, tenantId);
 
         // First verify the template exists and belongs to this tenant (not a system template)
-        var existingTemplate = await GetTemplateByIdAsync(templateId);
+        var existingTemplate = await GetTemplateByIdAsync(tenantId, templateId);
         if (existingTemplate == null)
         {
             throw new KeyNotFoundException($"Template {templateId} not found");
@@ -291,7 +288,7 @@ public class ChecklistTemplateService : IChecklistTemplateService
 
         _logger.LogInformation("Template {TemplateId} updated successfully", templateId);
 
-        return await GetTemplateByIdAsync(templateId)
+        return await GetTemplateByIdAsync(tenantId, templateId)
             ?? throw new InvalidOperationException("Failed to retrieve updated template");
     }
 
@@ -300,7 +297,7 @@ public class ChecklistTemplateService : IChecklistTemplateService
         _logger.LogInformation("Deactivating template {TemplateId} for tenant {TenantId}", templateId, tenantId);
 
         // Verify template is not a system template
-        var existingTemplate = await GetTemplateByIdAsync(templateId);
+        var existingTemplate = await GetTemplateByIdAsync(tenantId, templateId);
         if (existingTemplate == null)
         {
             return false;

@@ -91,9 +91,14 @@ public class ChecklistTemplatesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<ChecklistTemplateDto>> GetTemplateById(Guid id)
     {
+        if (_tenantContext.TenantId == Guid.Empty)
+        {
+            return Unauthorized(new { message = "Tenant context not found" });
+        }
+
         _logger.LogDebug("Fetching template {TemplateId}", id);
 
-        var template = await _templateService.GetTemplateByIdAsync(id);
+        var template = await _templateService.GetTemplateByIdAsync(_tenantContext.TenantId, id);
 
         if (template == null)
         {
@@ -183,10 +188,15 @@ public class ChecklistTemplatesController : ControllerBase
         Guid id,
         [FromBody] CreateChecklistItemsRequest request)
     {
+        if (_tenantContext.TenantId == Guid.Empty)
+        {
+            return Unauthorized(new { message = "Tenant context not found" });
+        }
+
         _logger.LogInformation("Adding {Count} items to template {TemplateId}", request.Items.Count, id);
 
         // Verify template exists
-        var template = await _templateService.GetTemplateByIdAsync(id);
+        var template = await _templateService.GetTemplateByIdAsync(_tenantContext.TenantId, id);
         if (template == null)
         {
             return NotFound(new { message = $"Template {id} not found" });

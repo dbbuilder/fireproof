@@ -20,7 +20,7 @@ public interface IChecklistTemplateService
     /// <summary>
     /// Retrieves a specific template by ID with all checklist items
     /// </summary>
-    Task<ChecklistTemplateDto?> GetTemplateByIdAsync(Guid templateId);
+    Task<ChecklistTemplateDto?> GetTemplateByIdAsync(Guid tenantId, Guid templateId);
 
     /// <summary>
     /// Retrieves templates by inspection type (Monthly, Annual, SixYear, etc.)

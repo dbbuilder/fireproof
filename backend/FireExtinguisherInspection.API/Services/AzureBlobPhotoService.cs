@@ -126,32 +126,26 @@ public class AzureBlobPhotoService : IPhotoService
             var deviceModel = request.DeviceModel ?? exifData?.DeviceModel;
 
             // Store photo metadata in database
-            var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-            using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+            using var connection = await _connectionFactory.CreateConnectionAsync();
 
             using var command = (SqlCommand)connection.CreateCommand();
-            command.CommandText = $"[{schemaName}].usp_InspectionPhoto_Create";
+            command.CommandText = "dbo.usp_InspectionPhoto_Create";
             command.CommandType = CommandType.StoredProcedure;
 
+            var photoIdParam = new SqlParameter("@PhotoId", SqlDbType.UniqueIdentifier)
+            {
+                Direction = ParameterDirection.InputOutput,
+                Value = photoId
+            };
+            command.Parameters.Add(photoIdParam);
             command.Parameters.AddWithValue("@InspectionId", request.InspectionId);
             command.Parameters.AddWithValue("@PhotoType", request.PhotoType);
             command.Parameters.AddWithValue("@BlobUrl", blobUrl);
             command.Parameters.AddWithValue("@ThumbnailUrl", (object?)thumbnailUrl ?? DBNull.Value);
             command.Parameters.AddWithValue("@FileSize", request.File.Length);
             command.Parameters.AddWithValue("@MimeType", request.File.ContentType);
-            command.Parameters.AddWithValue("@CaptureDate", (object?)captureDate ?? DBNull.Value);
-            command.Parameters.AddWithValue("@Latitude", (object?)latitude ?? DBNull.Value);
-            command.Parameters.AddWithValue("@Longitude", (object?)longitude ?? DBNull.Value);
-            command.Parameters.AddWithValue("@DeviceModel", (object?)deviceModel ?? DBNull.Value);
-            command.Parameters.AddWithValue("@EXIFData", (object?)exifData?.FullExifJson ?? DBNull.Value);
             command.Parameters.AddWithValue("@Notes", (object?)request.Notes ?? DBNull.Value);
-
-            // Output parameter
-            var photoIdParam = new SqlParameter("@PhotoId", SqlDbType.UniqueIdentifier)
-            {
-                Direction = ParameterDirection.Output
-            };
-            command.Parameters.Add(photoIdParam);
+            command.Parameters.AddWithValue("@TenantId", tenantId);
 
             await command.ExecuteNonQueryAsync();
 
@@ -231,14 +225,14 @@ public class AzureBlobPhotoService : IPhotoService
     {
         _logger.LogDebug("Fetching photos for inspection {InspectionId}", inspectionId);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_InspectionPhoto_GetByInspection";
+        command.CommandText = "dbo.usp_InspectionPhoto_GetByInspection";
         command.CommandType = CommandType.StoredProcedure;
 
         command.Parameters.AddWithValue("@InspectionId", inspectionId);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
 
         var photos = new List<InspectionPhotoDto>();
 
@@ -255,15 +249,15 @@ public class AzureBlobPhotoService : IPhotoService
     {
         _logger.LogDebug("Fetching {PhotoType} photos for inspection {InspectionId}", photoType, inspectionId);
 
-        var schemaName = await _connectionFactory.GetTenantSchemaAsync(tenantId);
-        using var connection = await _connectionFactory.CreateTenantConnectionAsync(tenantId);
+        using var connection = await _connectionFactory.CreateConnectionAsync();
 
         using var command = (SqlCommand)connection.CreateCommand();
-        command.CommandText = $"[{schemaName}].usp_InspectionPhoto_GetByType";
+        command.CommandText = "dbo.usp_InspectionPhoto_GetByType";
         command.CommandType = CommandType.StoredProcedure;
 
         command.Parameters.AddWithValue("@InspectionId", inspectionId);
         command.Parameters.AddWithValue("@PhotoType", photoType);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
 
         var photos = new List<InspectionPhotoDto>();
 
