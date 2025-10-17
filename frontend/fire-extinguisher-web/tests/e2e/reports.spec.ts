@@ -3,15 +3,9 @@ import {
   navigateTo,
   waitForLoading,
   setupConsoleErrorListener,
-  loginAndSelectTenant,
 } from './helpers'
 
 test.describe('Reports View', () => {
-  // Fresh login before each test (no relying on saved auth state)
-  test.beforeEach(async ({ page }) => {
-    await loginAndSelectTenant(page)
-  })
-
   test('should display reports page without errors', async ({ page }) => {
     // Set up console error listener
     const consoleErrors = setupConsoleErrorListener(page)
