@@ -1,8 +1,20 @@
 <template>
-  <div v-if="show" class="loading-spinner-container" :class="containerClass">
-    <div class="loading-spinner" :class="sizeClass">
-      <div class="spinner"></div>
-      <p v-if="message" class="loading-message">{{ message }}</p>
+  <div
+    v-if="show"
+    class="loading-spinner-container"
+    :class="containerClass"
+  >
+    <div
+      class="loading-spinner"
+      :class="sizeClass"
+    >
+      <div class="spinner" />
+      <p
+        v-if="message"
+        class="loading-message"
+      >
+        {{ message }}
+      </p>
     </div>
   </div>
 </template>

@@ -1,6 +1,10 @@
 <template>
   <AppLayout>
-    <LoadingSpinner v-if="loading" message="Loading dashboard..." size="large" />
+    <LoadingSpinner
+      v-if="loading"
+      message="Loading dashboard..."
+      size="large"
+    />
     <div v-else>
       <!-- Welcome Header -->
       <div class="mb-8">
@@ -103,7 +107,9 @@
         <!-- Quick Actions -->
         <div class="card">
           <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Quick Actions</h2>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Quick Actions
+            </h2>
           </div>
           <div class="card-body">
             <div class="grid grid-cols-2 gap-3">
@@ -145,7 +151,9 @@
         <!-- Recent Activity -->
         <div class="card">
           <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Recent Activity</h2>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Recent Activity
+            </h2>
           </div>
           <div class="card-body">
             <!-- Empty State -->
@@ -165,7 +173,10 @@
       </div>
 
       <!-- Getting Started Guide -->
-      <div v-if="locationStore.locations.length === 0" class="card border-2 border-primary-200 bg-primary-50">
+      <div
+        v-if="locationStore.locations.length === 0"
+        class="card border-2 border-primary-200 bg-primary-50"
+      >
         <div class="p-6">
           <div class="flex items-start">
             <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary-100 flex-shrink-0">
@@ -184,8 +195,12 @@
                     1
                   </div>
                   <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-900">Add your first location</p>
-                    <p class="text-xs text-gray-600">Set up facilities where fire extinguishers are installed</p>
+                    <p class="text-sm font-medium text-gray-900">
+                      Add your first location
+                    </p>
+                    <p class="text-xs text-gray-600">
+                      Set up facilities where fire extinguishers are installed
+                    </p>
                   </div>
                 </div>
                 <div class="flex items-start">
@@ -193,8 +208,12 @@
                     2
                   </div>
                   <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-900">Register fire extinguishers</p>
-                    <p class="text-xs text-gray-600">Add equipment to your inventory with QR codes</p>
+                    <p class="text-sm font-medium text-gray-900">
+                      Register fire extinguishers
+                    </p>
+                    <p class="text-xs text-gray-600">
+                      Add equipment to your inventory with QR codes
+                    </p>
                   </div>
                 </div>
                 <div class="flex items-start">
@@ -202,13 +221,20 @@
                     3
                   </div>
                   <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-900">Perform inspections</p>
-                    <p class="text-xs text-gray-600">Complete monthly and annual inspections</p>
+                    <p class="text-sm font-medium text-gray-900">
+                      Perform inspections
+                    </p>
+                    <p class="text-xs text-gray-600">
+                      Complete monthly and annual inspections
+                    </p>
                   </div>
                 </div>
               </div>
               <div class="mt-4">
-                <router-link to="/locations" class="btn-primary inline-flex items-center">
+                <router-link
+                  to="/locations"
+                  class="btn-primary inline-flex items-center"
+                >
                   <PlusIcon class="h-5 w-5 mr-2" />
                   Add First Location
                 </router-link>

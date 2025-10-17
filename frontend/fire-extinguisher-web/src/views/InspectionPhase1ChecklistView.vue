@@ -8,14 +8,26 @@
             :to="`/inspections/${inspection?.inspectionId}`"
             class="flex items-center text-gray-600 hover:text-gray-900"
           >
-            <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            <svg
+              class="h-6 w-6 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </router-link>
-          <h1 class="text-lg font-semibold text-gray-900">Inspection Checklist</h1>
+          <h1 class="text-lg font-semibold text-gray-900">
+            Inspection Checklist
+          </h1>
           <button
-            @click="showProgress = true"
             class="text-sm text-primary-600 font-medium"
+            @click="showProgress = true"
           >
             {{ completedItems }} / {{ totalItems }}
           </button>
@@ -27,23 +39,36 @@
         <div
           class="bg-primary-600 h-1 transition-all duration-300"
           :style="{ width: `${progressPercent}%` }"
-        ></div>
+        />
       </div>
     </div>
 
     <!-- Main Content -->
-    <div v-if="inspection && checklistItems.length > 0" class="max-w-2xl mx-auto px-4 py-6">
+    <div
+      v-if="inspection && checklistItems.length > 0"
+      class="max-w-2xl mx-auto px-4 py-6"
+    >
       <!-- Inspection Info Card -->
       <div class="bg-white rounded-lg shadow-soft p-4 mb-6">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm text-gray-600">Extinguisher</p>
-            <p class="font-medium text-gray-900">{{ inspection.extinguisherAssetTag || inspection.extinguisherCode }}</p>
-            <p class="text-xs text-gray-500">{{ inspection.locationName }}</p>
+            <p class="text-sm text-gray-600">
+              Extinguisher
+            </p>
+            <p class="font-medium text-gray-900">
+              {{ inspection.extinguisherAssetTag || inspection.extinguisherCode }}
+            </p>
+            <p class="text-xs text-gray-500">
+              {{ inspection.locationName }}
+            </p>
           </div>
           <div class="text-right">
-            <p class="text-sm text-gray-600">Type</p>
-            <p class="font-medium text-gray-900">{{ inspection.inspectionType }}</p>
+            <p class="text-sm text-gray-600">
+              Type
+            </p>
+            <p class="font-medium text-gray-900">
+              {{ inspection.inspectionType }}
+            </p>
           </div>
         </div>
       </div>
@@ -61,16 +86,34 @@
               {{ item.itemNumber }}
             </div>
             <div class="ml-3 flex-1">
-              <h3 class="text-base font-medium text-gray-900">{{ item.itemText }}</h3>
-              <p class="text-xs text-gray-500 mt-1">{{ item.itemCategory }}</p>
+              <h3 class="text-base font-medium text-gray-900">
+                {{ item.itemText }}
+              </h3>
+              <p class="text-xs text-gray-500 mt-1">
+                {{ item.itemCategory }}
+              </p>
               <div class="flex items-center mt-2 space-x-2">
-                <span v-if="item.requiresPhoto" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                  <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                <span
+                  v-if="item.requiresPhoto"
+                  class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
+                >
+                  <svg
+                    class="h-3 w-3 mr-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                      clip-rule="evenodd"
+                    />
                   </svg>
                   Photo
                 </span>
-                <span v-if="item.isRequired" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                <span
+                  v-if="item.isRequired"
+                  class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800"
+                >
                   Required
                 </span>
               </div>
@@ -82,11 +125,16 @@
             <button
               v-for="response in getAllowedResponses(item)"
               :key="response"
-              @click="setResponse(item, response)"
               :class="getResponseButtonClass(item, response)"
               class="flex flex-col items-center justify-center py-3 px-2 rounded-lg border-2 transition-all text-sm font-medium"
+              @click="setResponse(item, response)"
             >
-              <svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="h-6 w-6 mb-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   v-if="response === 'Pass'"
                   stroke-linecap="round"
@@ -114,10 +162,19 @@
           </div>
 
           <!-- Comment Field -->
-          <div v-if="item.requiresComment || responses[item.itemId]?.response === 'Fail'" class="mb-4">
-            <label :for="`comment-${item.itemId}`" class="block text-sm font-medium text-gray-700 mb-1">
+          <div
+            v-if="item.requiresComment || responses[item.itemId]?.response === 'Fail'"
+            class="mb-4"
+          >
+            <label
+              :for="`comment-${item.itemId}`"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
               {{ responses[item.itemId]?.response === 'Fail' ? 'Why did this fail?' : 'Comment' }}
-              <span v-if="item.requiresComment" class="text-red-600">*</span>
+              <span
+                v-if="item.requiresComment"
+                class="text-red-600"
+              >*</span>
             </label>
             <textarea
               :id="`comment-${item.itemId}`"
@@ -125,23 +182,44 @@
               rows="2"
               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm"
               :placeholder="responses[item.itemId]?.response === 'Fail' ? 'Describe the issue...' : 'Optional comment...'"
-            ></textarea>
+            />
           </div>
 
           <!-- Photo Upload -->
           <div v-if="item.requiresPhoto || responses[item.itemId]?.photoId">
             <button
-              @click="openPhotoCapture(item)"
               class="w-full flex items-center justify-center px-4 py-2 border border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-primary-500 hover:bg-primary-50 transition-colors"
+              @click="openPhotoCapture(item)"
             >
-              <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              <svg
+                class="h-5 w-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                />
               </svg>
               {{ responses[item.itemId]?.photoId ? 'Change Photo' : 'Take Photo' }}
-              <span v-if="item.requiresPhoto" class="ml-1 text-red-600">*</span>
+              <span
+                v-if="item.requiresPhoto"
+                class="ml-1 text-red-600"
+              >*</span>
             </button>
-            <p v-if="responses[item.itemId]?.photoId" class="text-xs text-green-600 mt-1 text-center">
+            <p
+              v-if="responses[item.itemId]?.photoId"
+              class="text-xs text-green-600 mt-1 text-center"
+            >
               ✓ Photo captured
             </p>
           </div>
@@ -149,34 +227,78 @@
       </div>
 
       <!-- Auto-save Indicator -->
-      <div v-if="saving" class="mt-4 flex items-center justify-center text-sm text-gray-600">
-        <svg class="animate-spin h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      <div
+        v-if="saving"
+        class="mt-4 flex items-center justify-center text-sm text-gray-600"
+      >
+        <svg
+          class="animate-spin h-4 w-4 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          />
         </svg>
         Saving...
       </div>
 
-      <p v-else-if="lastSaved" class="mt-4 text-center text-sm text-gray-500">
+      <p
+        v-else-if="lastSaved"
+        class="mt-4 text-center text-sm text-gray-500"
+      >
         Last saved {{ lastSaved }}
       </p>
     </div>
 
     <!-- Loading State -->
-    <div v-else-if="loading" class="flex items-center justify-center min-h-screen">
-      <svg class="animate-spin h-12 w-12 text-primary-600" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    <div
+      v-else-if="loading"
+      class="flex items-center justify-center min-h-screen"
+    >
+      <svg
+        class="animate-spin h-12 w-12 text-primary-600"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        />
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        />
       </svg>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="max-w-2xl mx-auto px-4 py-12">
+    <div
+      v-else-if="error"
+      class="max-w-2xl mx-auto px-4 py-12"
+    >
       <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-        <p class="text-red-800">{{ error }}</p>
+        <p class="text-red-800">
+          {{ error }}
+        </p>
         <button
-          @click="loadInspection"
           class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          @click="loadInspection"
         >
           Retry
         </button>
@@ -184,12 +306,15 @@
     </div>
 
     <!-- Bottom Action Bar -->
-    <div v-if="inspection" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
+    <div
+      v-if="inspection"
+      class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10"
+    >
       <div class="max-w-2xl mx-auto px-4 py-3">
         <button
-          @click="completeInspection"
           :disabled="!canComplete || completing"
           class="w-full px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors shadow-sm"
+          @click="completeInspection"
         >
           {{ completing ? 'Completing...' : canComplete ? 'Complete Inspection' : `Complete ${completedItems}/${totalItems} Items` }}
         </button>
@@ -202,15 +327,23 @@
       class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
       @click="showProgress = false"
     >
-      <div @click.stop class="bg-white rounded-lg p-6 max-w-sm w-full">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Inspection Progress</h3>
+      <div
+        class="bg-white rounded-lg p-6 max-w-sm w-full"
+        @click.stop
+      >
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+          Inspection Progress
+        </h3>
         <div class="space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-sm text-gray-600">Completed</span>
             <span class="text-sm font-medium text-gray-900">{{ completedItems }} / {{ totalItems }}</span>
           </div>
           <div class="w-full bg-gray-200 rounded-full h-2">
-            <div class="bg-primary-600 h-2 rounded-full transition-all" :style="{ width: `${progressPercent}%` }"></div>
+            <div
+              class="bg-primary-600 h-2 rounded-full transition-all"
+              :style="{ width: `${progressPercent}%` }"
+            />
           </div>
           <div class="flex items-center justify-between text-xs text-gray-500">
             <span>{{ progressPercent }}% Complete</span>
@@ -218,8 +351,8 @@
           </div>
         </div>
         <button
-          @click="showProgress = false"
           class="mt-6 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+          @click="showProgress = false"
         >
           Close
         </button>

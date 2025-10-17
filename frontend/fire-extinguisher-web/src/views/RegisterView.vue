@@ -4,8 +4,18 @@
       <!-- Logo & Brand -->
       <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 shadow-glow mb-4">
-          <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          <svg
+            class="w-10 h-10 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+            />
           </svg>
         </div>
         <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2">
@@ -20,35 +30,56 @@
       <div class="card">
         <div class="p-8">
           <!-- Error Alert -->
-          <div v-if="error" class="alert-danger mb-6" data-testid="register-error">
+          <div
+            v-if="error"
+            class="alert-danger mb-6"
+            data-testid="register-error"
+          >
             <XCircleIcon class="h-5 w-5" />
             <div>
-              <p class="text-sm font-medium">{{ error }}</p>
+              <p class="text-sm font-medium">
+                {{ error }}
+              </p>
             </div>
             <button
               type="button"
               class="text-red-400 hover:text-red-600"
-              @click="clearError"
               data-testid="close-error"
+              @click="clearError"
             >
               <XMarkIcon class="h-5 w-5" />
             </button>
           </div>
 
           <!-- Success Message -->
-          <div v-if="registrationSuccess" class="alert-success mb-6" data-testid="register-success">
+          <div
+            v-if="registrationSuccess"
+            class="alert-success mb-6"
+            data-testid="register-success"
+          >
             <CheckCircleIcon class="h-5 w-5" />
             <div>
-              <p class="text-sm font-medium">Account created successfully!</p>
-              <p class="text-xs mt-1">Redirecting to dashboard...</p>
+              <p class="text-sm font-medium">
+                Account created successfully!
+              </p>
+              <p class="text-xs mt-1">
+                Redirecting to dashboard...
+              </p>
             </div>
           </div>
 
           <!-- Registration Form -->
-          <form v-if="!registrationSuccess" @submit.prevent="handleRegister" class="space-y-5">
+          <form
+            v-if="!registrationSuccess"
+            class="space-y-5"
+            @submit.prevent="handleRegister"
+          >
             <!-- First Name -->
             <div>
-              <label for="firstName" class="form-label">
+              <label
+                for="firstName"
+                class="form-label"
+              >
                 First Name
               </label>
               <div class="relative">
@@ -66,16 +97,22 @@
                   placeholder="John"
                   data-testid="firstname-input"
                   @blur="validateFirstName"
-                />
+                >
               </div>
-              <p v-if="firstNameError" class="form-error">
+              <p
+                v-if="firstNameError"
+                class="form-error"
+              >
                 {{ firstNameError }}
               </p>
             </div>
 
             <!-- Last Name -->
             <div>
-              <label for="lastName" class="form-label">
+              <label
+                for="lastName"
+                class="form-label"
+              >
                 Last Name
               </label>
               <div class="relative">
@@ -93,16 +130,22 @@
                   placeholder="Doe"
                   data-testid="lastname-input"
                   @blur="validateLastName"
-                />
+                >
               </div>
-              <p v-if="lastNameError" class="form-error">
+              <p
+                v-if="lastNameError"
+                class="form-error"
+              >
                 {{ lastNameError }}
               </p>
             </div>
 
             <!-- Email -->
             <div>
-              <label for="email" class="form-label">
+              <label
+                for="email"
+                class="form-label"
+              >
                 Email Address
               </label>
               <div class="relative">
@@ -120,16 +163,22 @@
                   placeholder="john@example.com"
                   data-testid="register-email-input"
                   @blur="validateEmail"
-                />
+                >
               </div>
-              <p v-if="emailError" class="form-error">
+              <p
+                v-if="emailError"
+                class="form-error"
+              >
                 {{ emailError }}
               </p>
             </div>
 
             <!-- Password -->
             <div>
-              <label for="password" class="form-label">
+              <label
+                for="password"
+                class="form-label"
+              >
                 Password
               </label>
               <div class="relative">
@@ -148,20 +197,29 @@
                   data-testid="register-password-input"
                   @input="checkPasswordStrength"
                   @blur="validatePassword"
-                />
+                >
                 <button
                   type="button"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                   data-testid="toggle-register-password-visibility"
                   @click="showPassword = !showPassword"
                 >
-                  <EyeIcon v-if="!showPassword" class="h-5 w-5" />
-                  <EyeSlashIcon v-else class="h-5 w-5" />
+                  <EyeIcon
+                    v-if="!showPassword"
+                    class="h-5 w-5"
+                  />
+                  <EyeSlashIcon
+                    v-else
+                    class="h-5 w-5"
+                  />
                 </button>
               </div>
 
               <!-- Password Strength Indicator -->
-              <div v-if="form.password" class="mt-2">
+              <div
+                v-if="form.password"
+                class="mt-2"
+              >
                 <div class="flex items-center justify-between text-xs mb-1">
                   <span class="text-gray-600">Password strength:</span>
                   <span
@@ -182,21 +240,30 @@
                       'bg-accent-500 w-2/3': passwordStrength === 'medium',
                       'bg-secondary-500 w-full': passwordStrength === 'strong'
                     }"
-                  ></div>
+                  />
                 </div>
               </div>
 
-              <p v-if="passwordError" class="form-error">
+              <p
+                v-if="passwordError"
+                class="form-error"
+              >
                 {{ passwordError }}
               </p>
-              <p v-else class="form-helper">
+              <p
+                v-else
+                class="form-helper"
+              >
                 Must be at least 8 characters with uppercase, lowercase, and number
               </p>
             </div>
 
             <!-- Confirm Password -->
             <div>
-              <label for="confirmPassword" class="form-label">
+              <label
+                for="confirmPassword"
+                class="form-label"
+              >
                 Confirm Password
               </label>
               <div class="relative">
@@ -214,18 +281,27 @@
                   placeholder="••••••••"
                   data-testid="confirm-password-input"
                   @blur="validateConfirmPassword"
-                />
+                >
                 <button
                   type="button"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                   data-testid="toggle-confirm-password-visibility"
                   @click="showConfirmPassword = !showConfirmPassword"
                 >
-                  <EyeIcon v-if="!showConfirmPassword" class="h-5 w-5" />
-                  <EyeSlashIcon v-else class="h-5 w-5" />
+                  <EyeIcon
+                    v-if="!showConfirmPassword"
+                    class="h-5 w-5"
+                  />
+                  <EyeSlashIcon
+                    v-else
+                    class="h-5 w-5"
+                  />
                 </button>
               </div>
-              <p v-if="confirmPasswordError" class="form-error">
+              <p
+                v-if="confirmPasswordError"
+                class="form-error"
+              >
                 {{ confirmPasswordError }}
               </p>
             </div>
@@ -239,19 +315,35 @@
                   type="checkbox"
                   class="h-4 w-4 mt-1 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                   data-testid="accept-terms-checkbox"
-                />
-                <label for="terms" class="ml-2 block text-sm text-gray-700">
+                >
+                <label
+                  for="terms"
+                  class="ml-2 block text-sm text-gray-700"
+                >
                   I agree to the
-                  <a href="#" class="font-medium text-primary-600 hover:text-primary-500" data-testid="terms-link" @click.prevent="showTerms">
+                  <a
+                    href="#"
+                    class="font-medium text-primary-600 hover:text-primary-500"
+                    data-testid="terms-link"
+                    @click.prevent="showTerms"
+                  >
                     Terms of Service
                   </a>
                   and
-                  <a href="#" class="font-medium text-primary-600 hover:text-primary-500" data-testid="privacy-link" @click.prevent="showPrivacy">
+                  <a
+                    href="#"
+                    class="font-medium text-primary-600 hover:text-primary-500"
+                    data-testid="privacy-link"
+                    @click.prevent="showPrivacy"
+                  >
                     Privacy Policy
                   </a>
                 </label>
               </div>
-              <p v-if="termsError" class="form-error ml-6">
+              <p
+                v-if="termsError"
+                class="form-error ml-6"
+              >
                 {{ termsError }}
               </p>
             </div>
@@ -264,8 +356,11 @@
               data-testid="register-submit-button"
             >
               <span v-if="!loading">Create Account</span>
-              <span v-else class="flex items-center justify-center">
-                <div class="spinner mr-2"></div>
+              <span
+                v-else
+                class="flex items-center justify-center"
+              >
+                <div class="spinner mr-2" />
                 Creating account...
               </span>
             </button>
@@ -275,7 +370,7 @@
           <div class="mt-6">
             <div class="relative">
               <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-300"></div>
+                <div class="w-full border-t border-gray-300" />
               </div>
               <div class="relative flex justify-center text-sm">
                 <span class="px-2 bg-white text-gray-500">

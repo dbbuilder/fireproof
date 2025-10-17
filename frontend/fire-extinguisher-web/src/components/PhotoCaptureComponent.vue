@@ -3,16 +3,28 @@
     <!-- Header -->
     <div class="bg-black bg-opacity-75 text-white px-4 py-3 flex items-center justify-between">
       <button
-        @click="cancel"
         class="flex items-center text-white hover:text-gray-300 transition-colors"
+        @click="cancel"
       >
-        <svg class="h-6 w-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        <svg
+          class="h-6 w-6 mr-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
         </svg>
         Cancel
       </button>
-      <h2 class="text-lg font-medium">{{ photoType }}</h2>
-      <div class="w-20"></div> <!-- Spacer for center alignment -->
+      <h2 class="text-lg font-medium">
+        {{ photoType }}
+      </h2>
+      <div class="w-20" /> <!-- Spacer for center alignment -->
     </div>
 
     <!-- Camera View or Captured Photo -->
@@ -24,7 +36,7 @@
         autoplay
         playsinline
         class="w-full h-full object-cover"
-      ></video>
+      />
 
       <!-- Captured Photo Preview -->
       <img
@@ -32,7 +44,7 @@
         :src="capturedPhoto"
         alt="Captured photo"
         class="w-full h-full object-contain"
-      />
+      >
 
       <!-- Upload Progress Overlay -->
       <div
@@ -40,12 +52,31 @@
         class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75"
       >
         <div class="text-center">
-          <svg class="animate-spin h-16 w-16 text-white mx-auto mb-4" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          <svg
+            class="animate-spin h-16 w-16 text-white mx-auto mb-4"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            />
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
           </svg>
-          <p class="text-white text-lg font-medium">Uploading...</p>
-          <p class="text-gray-300 text-sm mt-2">{{ uploadProgress }}%</p>
+          <p class="text-white text-lg font-medium">
+            Uploading...
+          </p>
+          <p class="text-gray-300 text-sm mt-2">
+            {{ uploadProgress }}%
+          </p>
         </div>
       </div>
 
@@ -55,15 +86,25 @@
         class="absolute inset-x-4 top-4 bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg"
       >
         <div class="flex items-start">
-          <svg class="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          <svg
+            class="h-5 w-5 mr-2 flex-shrink-0 mt-0.5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            />
           </svg>
           <div class="flex-1">
-            <p class="font-medium">{{ error }}</p>
+            <p class="font-medium">
+              {{ error }}
+            </p>
             <button
               v-if="error.includes('permission')"
-              @click="requestPermissions"
               class="mt-2 text-sm underline hover:text-red-100"
+              @click="requestPermissions"
             >
               Request Permission Again
             </button>
@@ -80,32 +121,62 @@
           <!-- Flash Toggle (if supported) -->
           <button
             v-if="hasFlash"
-            @click="toggleFlash"
             class="w-14 h-14 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center hover:bg-opacity-75 transition-all"
+            @click="toggleFlash"
           >
-            <svg v-if="flashEnabled" class="h-7 w-7" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+            <svg
+              v-if="flashEnabled"
+              class="h-7 w-7"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                clip-rule="evenodd"
+              />
             </svg>
-            <svg v-else class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <svg
+              v-else
+              class="h-7 w-7"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
             </svg>
           </button>
 
           <!-- Capture Button -->
           <button
-            @click="capturePhoto"
             class="w-20 h-20 rounded-full bg-white border-4 border-gray-300 hover:border-primary-500 transition-all shadow-lg flex items-center justify-center"
+            @click="capturePhoto"
           >
-            <div class="w-16 h-16 rounded-full bg-white"></div>
+            <div class="w-16 h-16 rounded-full bg-white" />
           </button>
 
           <!-- Switch Camera -->
           <button
-            @click="switchCamera"
             class="w-14 h-14 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center hover:bg-opacity-75 transition-all"
+            @click="switchCamera"
           >
-            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            <svg
+              class="h-7 w-7"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
             </svg>
           </button>
         </div>
@@ -118,14 +189,14 @@
       >
         <div class="flex items-center justify-center space-x-4">
           <button
-            @click="retake"
             class="flex-1 max-w-xs px-6 py-3 bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors shadow-lg"
+            @click="retake"
           >
             Retake
           </button>
           <button
-            @click="usePhoto"
             class="flex-1 max-w-xs px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-lg"
+            @click="usePhoto"
           >
             Use Photo
           </button>
@@ -134,7 +205,10 @@
     </div>
 
     <!-- Hidden Canvas for Photo Processing -->
-    <canvas ref="canvasElement" style="display: none;"></canvas>
+    <canvas
+      ref="canvasElement"
+      style="display: none;"
+    />
   </div>
 </template>
 

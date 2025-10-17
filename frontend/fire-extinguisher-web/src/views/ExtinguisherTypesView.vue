@@ -12,8 +12,8 @@
           </p>
         </div>
         <button
-          @click="openCreateModal"
           class="btn-primary inline-flex items-center"
+          @click="openCreateModal"
         >
           <PlusIcon class="h-5 w-5 mr-2" />
           Add Type
@@ -21,10 +21,15 @@
       </div>
 
       <!-- Error Alert -->
-      <div v-if="typeStore.error" class="alert-danger mb-6">
+      <div
+        v-if="typeStore.error"
+        class="alert-danger mb-6"
+      >
         <XCircleIcon class="h-5 w-5" />
         <div class="flex-1">
-          <p class="text-sm font-medium">{{ typeStore.error }}</p>
+          <p class="text-sm font-medium">
+            {{ typeStore.error }}
+          </p>
         </div>
         <button
           type="button"
@@ -36,15 +41,23 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="typeStore.loading && typeStore.types.length === 0" class="card">
+      <div
+        v-if="typeStore.loading && typeStore.types.length === 0"
+        class="card"
+      >
         <div class="p-12 text-center">
-          <div class="spinner-lg mx-auto mb-4"></div>
-          <p class="text-gray-600">Loading extinguisher types...</p>
+          <div class="spinner-lg mx-auto mb-4" />
+          <p class="text-gray-600">
+            Loading extinguisher types...
+          </p>
         </div>
       </div>
 
       <!-- Types Table -->
-      <div v-else-if="typeStore.types.length > 0" class="card">
+      <div
+        v-else-if="typeStore.types.length > 0"
+        class="card"
+      >
         <div class="table-container">
           <table class="table">
             <thead>
@@ -56,13 +69,22 @@
                 <th>Fire Class</th>
                 <th>Service Life</th>
                 <th>Status</th>
-                <th class="text-right">Actions</th>
+                <th class="text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="type in typeStore.types" :key="type.extinguisherTypeId">
-                <td class="font-mono text-sm">{{ type.typeCode }}</td>
-                <td class="font-medium">{{ type.typeName }}</td>
+              <tr
+                v-for="type in typeStore.types"
+                :key="type.extinguisherTypeId"
+              >
+                <td class="font-mono text-sm">
+                  {{ type.typeCode }}
+                </td>
+                <td class="font-medium">
+                  {{ type.typeName }}
+                </td>
                 <td>
                   <span class="badge-info">{{ type.agentType || 'N/A' }}</span>
                 </td>
@@ -78,7 +100,10 @@
                     >
                       Class {{ cls }}
                     </span>
-                    <span v-if="!type.fireClassRating" class="text-gray-400 text-sm">N/A</span>
+                    <span
+                      v-if="!type.fireClassRating"
+                      class="text-gray-400 text-sm"
+                    >N/A</span>
                   </div>
                 </td>
                 <td class="text-sm text-gray-600">
@@ -94,15 +119,15 @@
                 <td class="text-right">
                   <div class="flex justify-end space-x-2">
                     <button
-                      @click="openEditModal(type)"
                       class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-50 rounded hover:bg-gray-100 transition-colors"
+                      @click="openEditModal(type)"
                     >
                       <PencilIcon class="h-4 w-4 mr-1" />
                       Edit
                     </button>
                     <button
-                      @click="confirmDelete(type)"
                       class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded hover:bg-red-100 transition-colors"
+                      @click="confirmDelete(type)"
                     >
                       <TrashIcon class="h-4 w-4" />
                     </button>
@@ -115,7 +140,10 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="card">
+      <div
+        v-else
+        class="card"
+      >
         <div class="p-12 text-center">
           <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 mb-4">
             <BeakerIcon class="h-8 w-8 text-primary-600" />
@@ -127,8 +155,8 @@
             Create type specifications before adding extinguishers
           </p>
           <button
-            @click="openCreateModal"
             class="btn-primary inline-flex items-center"
+            @click="openCreateModal"
           >
             <PlusIcon class="h-5 w-5 mr-2" />
             Add First Type
@@ -176,12 +204,18 @@
               </div>
 
               <!-- Form -->
-              <form @submit.prevent="handleSubmit" class="space-y-5">
+              <form
+                class="space-y-5"
+                @submit.prevent="handleSubmit"
+              >
                 <!-- Basic Information -->
                 <div class="grid grid-cols-2 gap-4">
                   <!-- Type Code -->
                   <div>
-                    <label for="typeCode" class="form-label">
+                    <label
+                      for="typeCode"
+                      class="form-label"
+                    >
                       Type Code *
                     </label>
                     <input
@@ -193,7 +227,7 @@
                       class="form-input"
                       :class="{ 'bg-gray-50': isEditing }"
                       placeholder="ABC-10"
-                    />
+                    >
                     <p class="form-helper">
                       Unique identifier (cannot be changed)
                     </p>
@@ -201,7 +235,10 @@
 
                   <!-- Type Name -->
                   <div>
-                    <label for="typeName" class="form-label">
+                    <label
+                      for="typeName"
+                      class="form-label"
+                    >
                       Type Name *
                     </label>
                     <input
@@ -211,13 +248,16 @@
                       required
                       class="form-input"
                       placeholder="10lb ABC Dry Chemical"
-                    />
+                    >
                   </div>
                 </div>
 
                 <!-- Agent Type -->
                 <div>
-                  <label for="agentType" class="form-label">
+                  <label
+                    for="agentType"
+                    class="form-label"
+                  >
                     Agent Type
                   </label>
                   <select
@@ -225,20 +265,37 @@
                     v-model="formData.agentType"
                     class="form-input"
                   >
-                    <option value="">Select agent type...</option>
-                    <option value="Dry Chemical">Dry Chemical</option>
-                    <option value="CO2">CO2</option>
-                    <option value="Water">Water</option>
-                    <option value="Foam">Foam</option>
-                    <option value="Clean Agent">Clean Agent</option>
-                    <option value="Wet Chemical">Wet Chemical</option>
+                    <option value="">
+                      Select agent type...
+                    </option>
+                    <option value="Dry Chemical">
+                      Dry Chemical
+                    </option>
+                    <option value="CO2">
+                      CO2
+                    </option>
+                    <option value="Water">
+                      Water
+                    </option>
+                    <option value="Foam">
+                      Foam
+                    </option>
+                    <option value="Clean Agent">
+                      Clean Agent
+                    </option>
+                    <option value="Wet Chemical">
+                      Wet Chemical
+                    </option>
                   </select>
                 </div>
 
                 <!-- Capacity -->
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label for="capacity" class="form-label">
+                    <label
+                      for="capacity"
+                      class="form-label"
+                    >
                       Capacity
                     </label>
                     <input
@@ -248,11 +305,14 @@
                       step="0.1"
                       class="form-input"
                       placeholder="10"
-                    />
+                    >
                   </div>
 
                   <div>
-                    <label for="capacityUnit" class="form-label">
+                    <label
+                      for="capacityUnit"
+                      class="form-label"
+                    >
                       Capacity Unit
                     </label>
                     <select
@@ -260,11 +320,21 @@
                       v-model="formData.capacityUnit"
                       class="form-input"
                     >
-                      <option value="">Select unit...</option>
-                      <option value="lbs">lbs (pounds)</option>
-                      <option value="kg">kg (kilograms)</option>
-                      <option value="gal">gal (gallons)</option>
-                      <option value="L">L (liters)</option>
+                      <option value="">
+                        Select unit...
+                      </option>
+                      <option value="lbs">
+                        lbs (pounds)
+                      </option>
+                      <option value="kg">
+                        kg (kilograms)
+                      </option>
+                      <option value="gal">
+                        gal (gallons)
+                      </option>
+                      <option value="L">
+                        L (liters)
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -289,7 +359,7 @@
                         :checked="selectedFireClasses.includes(fireClass.value)"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                         @change="toggleFireClass(fireClass.value)"
-                      />
+                      >
                       <label class="ml-2 block text-sm font-medium text-gray-700 cursor-pointer">
                         {{ fireClass.label }}
                       </label>
@@ -303,7 +373,10 @@
                 <!-- Service Intervals -->
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label for="serviceLifeYears" class="form-label">
+                    <label
+                      for="serviceLifeYears"
+                      class="form-label"
+                    >
                       Service Life (Years)
                     </label>
                     <input
@@ -313,14 +386,17 @@
                       min="1"
                       class="form-input"
                       placeholder="12"
-                    />
+                    >
                     <p class="form-helper">
                       Expected service life before replacement
                     </p>
                   </div>
 
                   <div>
-                    <label for="hydroTestIntervalYears" class="form-label">
+                    <label
+                      for="hydroTestIntervalYears"
+                      class="form-label"
+                    >
                       Hydro Test Interval (Years)
                     </label>
                     <input
@@ -330,7 +406,7 @@
                       min="1"
                       class="form-input"
                       placeholder="5"
-                    />
+                    >
                     <p class="form-helper">
                       Hydrostatic test frequency
                     </p>
@@ -339,7 +415,10 @@
 
                 <!-- Description -->
                 <div>
-                  <label for="description" class="form-label">
+                  <label
+                    for="description"
+                    class="form-label"
+                  >
                     Description
                   </label>
                   <textarea
@@ -348,18 +427,24 @@
                     rows="3"
                     class="form-input"
                     placeholder="Additional specifications and notes..."
-                  ></textarea>
+                  />
                 </div>
 
                 <!-- Active Status (Edit only) -->
-                <div v-if="isEditing" class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div
+                  v-if="isEditing"
+                  class="flex items-center p-4 bg-gray-50 rounded-lg"
+                >
                   <input
                     id="isActive"
                     v-model="formData.isActive"
                     type="checkbox"
                     class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                  />
-                  <label for="isActive" class="ml-2 block text-sm text-gray-700">
+                  >
+                  <label
+                    for="isActive"
+                    class="ml-2 block text-sm text-gray-700"
+                  >
                     Active type (available for new extinguishers)
                   </label>
                 </div>
@@ -372,16 +457,19 @@
                     class="btn-primary flex-1"
                   >
                     <span v-if="!submitting">{{ isEditing ? 'Update Type' : 'Create Type' }}</span>
-                    <span v-else class="flex items-center justify-center">
-                      <div class="spinner mr-2"></div>
+                    <span
+                      v-else
+                      class="flex items-center justify-center"
+                    >
+                      <div class="spinner mr-2" />
                       {{ isEditing ? 'Updating...' : 'Creating...' }}
                     </span>
                   </button>
                   <button
                     type="button"
-                    @click="closeModal"
                     :disabled="submitting"
                     class="btn-outline"
+                    @click="closeModal"
                   >
                     Cancel
                   </button>

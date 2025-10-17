@@ -8,8 +8,8 @@
           <button
             type="button"
             class="lg:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 transition-colors"
-            @click="$emit('toggle-sidebar')"
             aria-label="Toggle sidebar"
+            @click="$emit('toggle-sidebar')"
           >
             <Bars3Icon class="h-6 w-6" />
           </button>
@@ -21,8 +21,18 @@
           >
             <!-- Logo Icon -->
             <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 shadow-sm group-hover:shadow-md transition-shadow">
-              <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              <svg
+                class="w-6 h-6 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
               </svg>
             </div>
 
@@ -72,13 +82,16 @@
           </button>
 
           <!-- User Menu Dropdown -->
-          <div class="relative" ref="userMenuRef">
+          <div
+            ref="userMenuRef"
+            class="relative"
+          >
             <button
               type="button"
               class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
-              @click="toggleUserMenu"
               aria-haspopup="true"
               :aria-expanded="userMenuOpen"
+              @click="toggleUserMenu"
             >
               <!-- User Avatar -->
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 text-white text-sm font-medium shadow-sm">
@@ -158,7 +171,10 @@
                   </a>
                 </div>
 
-                <div class="border-t border-gray-100 py-1" v-if="canSwitchTenant">
+                <div
+                  v-if="canSwitchTenant"
+                  class="border-t border-gray-100 py-1"
+                >
                   <button
                     type="button"
                     class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -190,7 +206,7 @@
   </header>
 
   <!-- Spacer to prevent content from hiding under fixed header -->
-  <div class="h-16"></div>
+  <div class="h-16" />
 </template>
 
 <script setup>

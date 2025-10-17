@@ -4,8 +4,18 @@
       <!-- Logo & Brand -->
       <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 shadow-glow mb-4">
-          <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          <svg
+            class="w-10 h-10 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+            />
           </svg>
         </div>
         <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2">
@@ -20,17 +30,29 @@
       <div class="card">
         <div class="p-8">
           <!-- Loading State -->
-          <div v-if="loading" class="text-center py-12">
-            <div class="spinner mx-auto mb-4"></div>
-            <p class="text-gray-600">Loading organizations...</p>
+          <div
+            v-if="loading"
+            class="text-center py-12"
+          >
+            <div class="spinner mx-auto mb-4" />
+            <p class="text-gray-600">
+              Loading organizations...
+            </p>
           </div>
 
           <!-- Error State -->
-          <div v-else-if="error" class="alert-danger">
+          <div
+            v-else-if="error"
+            class="alert-danger"
+          >
             <XCircleIcon class="h-5 w-5" />
             <div>
-              <p class="text-sm font-medium">Failed to load organizations</p>
-              <p class="text-xs mt-1">{{ error }}</p>
+              <p class="text-sm font-medium">
+                Failed to load organizations
+              </p>
+              <p class="text-xs mt-1">
+                {{ error }}
+              </p>
             </div>
             <button
               type="button"
@@ -42,15 +64,19 @@
           </div>
 
           <!-- Tenant List -->
-          <div v-else-if="tenants.length > 0" class="space-y-3" data-testid="tenant-list">
+          <div
+            v-else-if="tenants.length > 0"
+            class="space-y-3"
+            data-testid="tenant-list"
+          >
             <div
               v-for="tenant in tenants"
               :key="tenant.tenantId"
-              @click="selectTenant(tenant)"
               class="relative flex items-center p-4 border-2 border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 cursor-pointer transition-all group"
               :class="{ 'border-primary-500 bg-primary-50': selectedTenantId === tenant.tenantId }"
               :data-tenant-id="tenant.tenantId"
               data-testid="tenant-card"
+              @click="selectTenant(tenant)"
             >
               <!-- Tenant Icon -->
               <div class="flex-shrink-0 mr-4">
@@ -66,7 +92,10 @@
                 </h3>
                 <p class="text-sm text-gray-600">
                   Code: {{ tenant.tenantCode }}
-                  <span v-if="tenant.roleName" class="ml-2 text-primary-600">
+                  <span
+                    v-if="tenant.roleName"
+                    class="ml-2 text-primary-600"
+                  >
                     • {{ tenant.roleName }}
                   </span>
                 </p>
@@ -74,7 +103,10 @@
                   <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
                     {{ tenant.subscriptionTier }}
                   </span>
-                  <span v-if="isSystemAdmin" class="text-xs text-gray-500">
+                  <span
+                    v-if="isSystemAdmin"
+                    class="text-xs text-gray-500"
+                  >
                     {{ tenant.maxUsers }} users • {{ tenant.maxLocations }} locations
                   </span>
                 </div>
@@ -91,36 +123,49 @@
                 <div
                   v-else
                   class="w-6 h-6 rounded-full border-2 border-gray-300 group-hover:border-primary-500"
-                ></div>
+                />
               </div>
             </div>
           </div>
 
           <!-- No Tenants State -->
-          <div v-else class="text-center py-12">
+          <div
+            v-else
+            class="text-center py-12"
+          >
             <BuildingOfficeIcon class="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <p class="text-gray-600 mb-2">No organizations available</p>
-            <p class="text-sm text-gray-500">Please contact your administrator</p>
+            <p class="text-gray-600 mb-2">
+              No organizations available
+            </p>
+            <p class="text-sm text-gray-500">
+              Please contact your administrator
+            </p>
           </div>
 
           <!-- Action Buttons -->
-          <div v-if="tenants.length > 0" class="mt-8 flex gap-4">
+          <div
+            v-if="tenants.length > 0"
+            class="mt-8 flex gap-4"
+          >
             <button
-              @click="handleContinue"
               :disabled="!selectedTenantId || continuing"
               class="btn-primary flex-1"
               data-testid="continue-button"
+              @click="handleContinue"
             >
               <span v-if="!continuing">Continue</span>
-              <span v-else class="flex items-center justify-center">
-                <div class="spinner mr-2"></div>
+              <span
+                v-else
+                class="flex items-center justify-center"
+              >
+                <div class="spinner mr-2" />
                 Loading...
               </span>
             </button>
             <button
-              @click="handleLogout"
               class="btn-outline"
               data-testid="logout-button"
+              @click="handleLogout"
             >
               Logout
             </button>
@@ -129,7 +174,10 @@
       </div>
 
       <!-- System Admin Notice -->
-      <div v-if="isSystemAdmin" class="mt-6 text-center text-sm text-gray-600">
+      <div
+        v-if="isSystemAdmin"
+        class="mt-6 text-center text-sm text-gray-600"
+      >
         You are logged in as a System Administrator
       </div>
     </div>

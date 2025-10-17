@@ -8,13 +8,25 @@
             to="/inspections"
             class="flex items-center text-gray-600 hover:text-gray-900"
           >
-            <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            <svg
+              class="h-6 w-6 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             <span class="font-medium">Back</span>
           </router-link>
-          <h1 class="text-lg font-semibold text-gray-900">New Inspection</h1>
-          <div class="w-20"></div> <!-- Spacer for center alignment -->
+          <h1 class="text-lg font-semibold text-gray-900">
+            New Inspection
+          </h1>
+          <div class="w-20" /> <!-- Spacer for center alignment -->
         </div>
       </div>
     </div>
@@ -36,7 +48,10 @@
             </div>
             <span class="ml-2 text-sm font-medium hidden sm:inline">Extinguisher</span>
           </div>
-          <div class="w-12 h-0.5" :class="step >= 2 ? 'bg-primary-600' : 'bg-gray-300'"></div>
+          <div
+            class="w-12 h-0.5"
+            :class="step >= 2 ? 'bg-primary-600' : 'bg-gray-300'"
+          />
           <div
             class="flex items-center"
             :class="step >= 2 ? 'text-primary-600' : 'text-gray-400'"
@@ -49,7 +64,10 @@
             </div>
             <span class="ml-2 text-sm font-medium hidden sm:inline">Template</span>
           </div>
-          <div class="w-12 h-0.5" :class="step >= 3 ? 'bg-primary-600' : 'bg-gray-300'"></div>
+          <div
+            class="w-12 h-0.5"
+            :class="step >= 3 ? 'bg-primary-600' : 'bg-gray-300'"
+          />
           <div
             class="flex items-center"
             :class="step >= 3 ? 'text-primary-600' : 'text-gray-400'"
@@ -66,24 +84,39 @@
       </div>
 
       <!-- Step 1: Select Extinguisher -->
-      <div v-if="step === 1" class="animate-fade-in">
+      <div
+        v-if="step === 1"
+        class="animate-fade-in"
+      >
         <div class="bg-white rounded-lg shadow-soft p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Select Extinguisher</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Select Extinguisher
+          </h2>
 
           <!-- Scan QR Code Button -->
           <button
-            @click="scanQRCode"
             class="w-full mb-4 flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-700 hover:border-primary-500 hover:bg-primary-50 transition-colors"
+            @click="scanQRCode"
           >
-            <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+            <svg
+              class="h-6 w-6 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
+              />
             </svg>
             Scan Barcode/QR Code
           </button>
 
           <div class="relative">
             <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-300"></div>
+              <div class="w-full border-t border-gray-300" />
             </div>
             <div class="relative flex justify-center text-sm">
               <span class="px-2 bg-white text-gray-500">or select manually</span>
@@ -92,14 +125,17 @@
 
           <!-- Search/Filter -->
           <div class="mt-4">
-            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+            <label
+              for="search"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >Search</label>
             <input
-              type="text"
               id="search"
               v-model="searchQuery"
+              type="text"
               placeholder="Asset tag, location, serial..."
               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
-            />
+            >
           </div>
 
           <!-- Extinguisher List -->
@@ -107,22 +143,41 @@
             <div
               v-for="extinguisher in filteredExtinguishers"
               :key="extinguisher.extinguisherId"
-              @click="selectExtinguisher(extinguisher)"
               class="p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors"
+              @click="selectExtinguisher(extinguisher)"
             >
               <div class="flex justify-between items-start">
                 <div>
-                  <p class="font-medium text-gray-900">{{ extinguisher.assetTag || extinguisher.extinguisherCode }}</p>
-                  <p class="text-sm text-gray-600">{{ extinguisher.locationName }}</p>
-                  <p class="text-xs text-gray-500">{{ extinguisher.typeName }} • {{ extinguisher.serialNumber }}</p>
+                  <p class="font-medium text-gray-900">
+                    {{ extinguisher.assetTag || extinguisher.extinguisherCode }}
+                  </p>
+                  <p class="text-sm text-gray-600">
+                    {{ extinguisher.locationName }}
+                  </p>
+                  <p class="text-xs text-gray-500">
+                    {{ extinguisher.typeName }} • {{ extinguisher.serialNumber }}
+                  </p>
                 </div>
-                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                <svg
+                  class="h-5 w-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </div>
             </div>
 
-            <div v-if="filteredExtinguishers.length === 0" class="text-center py-8 text-gray-500">
+            <div
+              v-if="filteredExtinguishers.length === 0"
+              class="text-center py-8 text-gray-500"
+            >
               No extinguishers found
             </div>
           </div>
@@ -130,27 +185,53 @@
       </div>
 
       <!-- Step 2: Select Template -->
-      <div v-if="step === 2" class="animate-fade-in">
+      <div
+        v-if="step === 2"
+        class="animate-fade-in"
+      >
         <div class="bg-white rounded-lg shadow-soft p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Select Inspection Type</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Select Inspection Type
+          </h2>
 
           <!-- Template List -->
           <div class="space-y-3">
             <div
               v-for="template in templates"
               :key="template.templateId"
-              @click="selectTemplate(template)"
               class="p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors"
+              @click="selectTemplate(template)"
             >
               <div class="flex justify-between items-start">
                 <div class="flex-1">
-                  <p class="font-medium text-gray-900">{{ template.templateName }}</p>
-                  <p class="text-sm text-gray-600 mt-1">{{ template.inspectionType }}</p>
-                  <p class="text-xs text-gray-500 mt-1">{{ template.standard }}</p>
-                  <p v-if="template.description" class="text-sm text-gray-600 mt-2">{{ template.description }}</p>
+                  <p class="font-medium text-gray-900">
+                    {{ template.templateName }}
+                  </p>
+                  <p class="text-sm text-gray-600 mt-1">
+                    {{ template.inspectionType }}
+                  </p>
+                  <p class="text-xs text-gray-500 mt-1">
+                    {{ template.standard }}
+                  </p>
+                  <p
+                    v-if="template.description"
+                    class="text-sm text-gray-600 mt-2"
+                  >
+                    {{ template.description }}
+                  </p>
                 </div>
-                <svg class="h-5 w-5 text-gray-400 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                <svg
+                  class="h-5 w-5 text-gray-400 ml-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </div>
             </div>
@@ -158,8 +239,8 @@
 
           <!-- Back Button -->
           <button
-            @click="step = 1"
             class="mt-6 w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+            @click="step = 1"
           >
             Back
           </button>
@@ -167,57 +248,84 @@
       </div>
 
       <!-- Step 3: Confirm and Start -->
-      <div v-if="step === 3" class="animate-fade-in">
+      <div
+        v-if="step === 3"
+        class="animate-fade-in"
+      >
         <div class="bg-white rounded-lg shadow-soft p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Confirm Inspection</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Confirm Inspection
+          </h2>
 
           <!-- Summary -->
           <div class="space-y-4">
             <div class="p-4 bg-gray-50 rounded-lg">
-              <p class="text-sm text-gray-600 mb-1">Extinguisher</p>
-              <p class="font-medium text-gray-900">{{ selectedExtinguisher?.assetTag || selectedExtinguisher?.extinguisherCode }}</p>
-              <p class="text-sm text-gray-600">{{ selectedExtinguisher?.locationName }}</p>
+              <p class="text-sm text-gray-600 mb-1">
+                Extinguisher
+              </p>
+              <p class="font-medium text-gray-900">
+                {{ selectedExtinguisher?.assetTag || selectedExtinguisher?.extinguisherCode }}
+              </p>
+              <p class="text-sm text-gray-600">
+                {{ selectedExtinguisher?.locationName }}
+              </p>
             </div>
 
             <div class="p-4 bg-gray-50 rounded-lg">
-              <p class="text-sm text-gray-600 mb-1">Inspection Type</p>
-              <p class="font-medium text-gray-900">{{ selectedTemplate?.templateName }}</p>
-              <p class="text-sm text-gray-600">{{ selectedTemplate?.inspectionType }}</p>
+              <p class="text-sm text-gray-600 mb-1">
+                Inspection Type
+              </p>
+              <p class="font-medium text-gray-900">
+                {{ selectedTemplate?.templateName }}
+              </p>
+              <p class="text-sm text-gray-600">
+                {{ selectedTemplate?.inspectionType }}
+              </p>
             </div>
 
             <!-- GPS Location (optional) -->
             <div class="p-4 bg-gray-50 rounded-lg">
               <div class="flex items-center justify-between mb-2">
-                <p class="text-sm text-gray-600">GPS Location</p>
+                <p class="text-sm text-gray-600">
+                  GPS Location
+                </p>
                 <button
-                  @click="captureLocation"
                   :disabled="capturingLocation"
                   class="text-sm text-primary-600 hover:text-primary-700 disabled:text-gray-400"
+                  @click="captureLocation"
                 >
                   {{ capturingLocation ? 'Capturing...' : gpsLocation ? 'Update' : 'Capture' }}
                 </button>
               </div>
-              <p v-if="gpsLocation" class="text-sm text-gray-900">
+              <p
+                v-if="gpsLocation"
+                class="text-sm text-gray-900"
+              >
                 {{ gpsLocation.latitude.toFixed(6) }}, {{ gpsLocation.longitude.toFixed(6) }}
               </p>
-              <p v-else class="text-sm text-gray-500">Not captured</p>
+              <p
+                v-else
+                class="text-sm text-gray-500"
+              >
+                Not captured
+              </p>
             </div>
           </div>
 
           <!-- Actions -->
           <div class="mt-6 space-y-3">
             <button
-              @click="startInspection"
               :disabled="creatingInspection"
               class="w-full px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors shadow-sm"
+              @click="startInspection"
             >
               {{ creatingInspection ? 'Starting...' : 'Start Inspection' }}
             </button>
 
             <button
-              @click="step = 2"
               :disabled="creatingInspection"
               class="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              @click="step = 2"
             >
               Back
             </button>
@@ -226,12 +334,25 @@
       </div>
 
       <!-- Error Message -->
-      <div v-if="error" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+      <div
+        v-if="error"
+        class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg"
+      >
         <div class="flex">
-          <svg class="h-5 w-5 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          <svg
+            class="h-5 w-5 text-red-600 mr-2"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            />
           </svg>
-          <p class="text-sm text-red-800">{{ error }}</p>
+          <p class="text-sm text-red-800">
+            {{ error }}
+          </p>
         </div>
       </div>
     </div>

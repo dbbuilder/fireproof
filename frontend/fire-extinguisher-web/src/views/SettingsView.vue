@@ -18,15 +18,18 @@
             <button
               v-for="tab in tabs"
               :key="tab.id"
-              @click="activeTab = tab.id"
               class="py-4 px-1 border-b-2 font-medium text-sm transition-colors"
               :class="[
                 activeTab === tab.id
                   ? 'border-primary-500 text-primary-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               ]"
+              @click="activeTab = tab.id"
             >
-              <component :is="tab.icon" class="h-5 w-5 inline-block mr-2" />
+              <component
+                :is="tab.icon"
+                class="h-5 w-5 inline-block mr-2"
+              />
               {{ tab.name }}
             </button>
           </nav>
@@ -34,60 +37,80 @@
       </div>
 
       <!-- Profile Tab -->
-      <div v-if="activeTab === 'profile'" class="space-y-6">
+      <div
+        v-if="activeTab === 'profile'"
+        class="space-y-6"
+      >
         <div class="card">
           <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Profile Information</h2>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Profile Information
+            </h2>
           </div>
           <div class="card-body">
-            <form @submit.prevent="saveProfile" class="space-y-5">
+            <form
+              class="space-y-5"
+              @submit.prevent="saveProfile"
+            >
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label for="firstName" class="form-label">First Name *</label>
+                  <label
+                    for="firstName"
+                    class="form-label"
+                  >First Name *</label>
                   <input
                     id="firstName"
                     v-model="profileForm.firstName"
                     type="text"
                     required
                     class="form-input"
-                  />
+                  >
                 </div>
 
                 <div>
-                  <label for="lastName" class="form-label">Last Name *</label>
+                  <label
+                    for="lastName"
+                    class="form-label"
+                  >Last Name *</label>
                   <input
                     id="lastName"
                     v-model="profileForm.lastName"
                     type="text"
                     required
                     class="form-input"
-                  />
+                  >
                 </div>
               </div>
 
               <div>
-                <label for="email" class="form-label">Email Address</label>
+                <label
+                  for="email"
+                  class="form-label"
+                >Email Address</label>
                 <input
                   id="email"
                   v-model="profileForm.email"
                   type="email"
                   disabled
                   class="form-input bg-gray-50"
-                />
+                >
                 <p class="form-helper">
                   Email address cannot be changed. Contact support if you need to update it.
                 </p>
               </div>
 
               <div>
-                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <label
+                  for="phoneNumber"
+                  class="form-label"
+                >Phone Number</label>
                 <input
                   id="phoneNumber"
                   v-model="profileForm.phoneNumber"
                   type="tel"
                   class="form-input"
                   placeholder="+1 (555) 123-4567"
-                />
+                >
               </div>
 
               <div class="flex items-center justify-between pt-4 border-t border-gray-200">
@@ -100,8 +123,11 @@
                   class="btn-primary"
                 >
                   <span v-if="!savingProfile">Save Changes</span>
-                  <span v-else class="flex items-center">
-                    <div class="spinner mr-2"></div>
+                  <span
+                    v-else
+                    class="flex items-center"
+                  >
+                    <div class="spinner mr-2" />
                     Saving...
                   </span>
                 </button>
@@ -112,15 +138,26 @@
       </div>
 
       <!-- Security Tab -->
-      <div v-if="activeTab === 'security'" class="space-y-6">
+      <div
+        v-if="activeTab === 'security'"
+        class="space-y-6"
+      >
         <div class="card">
           <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Change Password</h2>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Change Password
+            </h2>
           </div>
           <div class="card-body">
-            <form @submit.prevent="changePassword" class="space-y-5">
+            <form
+              class="space-y-5"
+              @submit.prevent="changePassword"
+            >
               <div>
-                <label for="currentPassword" class="form-label">Current Password *</label>
+                <label
+                  for="currentPassword"
+                  class="form-label"
+                >Current Password *</label>
                 <div class="relative">
                   <input
                     id="currentPassword"
@@ -128,20 +165,29 @@
                     :type="showCurrentPassword ? 'text' : 'password'"
                     required
                     class="form-input pr-10"
-                  />
+                  >
                   <button
                     type="button"
-                    @click="showCurrentPassword = !showCurrentPassword"
                     class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                    @click="showCurrentPassword = !showCurrentPassword"
                   >
-                    <EyeIcon v-if="!showCurrentPassword" class="h-5 w-5" />
-                    <EyeSlashIcon v-else class="h-5 w-5" />
+                    <EyeIcon
+                      v-if="!showCurrentPassword"
+                      class="h-5 w-5"
+                    />
+                    <EyeSlashIcon
+                      v-else
+                      class="h-5 w-5"
+                    />
                   </button>
                 </div>
               </div>
 
               <div>
-                <label for="newPassword" class="form-label">New Password *</label>
+                <label
+                  for="newPassword"
+                  class="form-label"
+                >New Password *</label>
                 <div class="relative">
                   <input
                     id="newPassword"
@@ -150,19 +196,28 @@
                     required
                     class="form-input pr-10"
                     @input="checkPasswordStrength"
-                  />
+                  >
                   <button
                     type="button"
-                    @click="showNewPassword = !showNewPassword"
                     class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                    @click="showNewPassword = !showNewPassword"
                   >
-                    <EyeIcon v-if="!showNewPassword" class="h-5 w-5" />
-                    <EyeSlashIcon v-else class="h-5 w-5" />
+                    <EyeIcon
+                      v-if="!showNewPassword"
+                      class="h-5 w-5"
+                    />
+                    <EyeSlashIcon
+                      v-else
+                      class="h-5 w-5"
+                    />
                   </button>
                 </div>
 
                 <!-- Password Strength Indicator -->
-                <div v-if="passwordForm.newPassword" class="mt-2">
+                <div
+                  v-if="passwordForm.newPassword"
+                  class="mt-2"
+                >
                   <div class="flex items-center space-x-2">
                     <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                       <div
@@ -172,7 +227,7 @@
                           passwordStrength === 'medium' ? 'bg-amber-500 w-2/3' :
                           'bg-green-500 w-full'
                         ]"
-                      ></div>
+                      />
                     </div>
                     <span
                       class="text-xs font-medium capitalize"
@@ -192,7 +247,10 @@
               </div>
 
               <div>
-                <label for="confirmPassword" class="form-label">Confirm New Password *</label>
+                <label
+                  for="confirmPassword"
+                  class="form-label"
+                >Confirm New Password *</label>
                 <div class="relative">
                   <input
                     id="confirmPassword"
@@ -200,17 +258,26 @@
                     :type="showConfirmPassword ? 'text' : 'password'"
                     required
                     class="form-input pr-10"
-                  />
+                  >
                   <button
                     type="button"
-                    @click="showConfirmPassword = !showConfirmPassword"
                     class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                    @click="showConfirmPassword = !showConfirmPassword"
                   >
-                    <EyeIcon v-if="!showConfirmPassword" class="h-5 w-5" />
-                    <EyeSlashIcon v-else class="h-5 w-5" />
+                    <EyeIcon
+                      v-if="!showConfirmPassword"
+                      class="h-5 w-5"
+                    />
+                    <EyeSlashIcon
+                      v-else
+                      class="h-5 w-5"
+                    />
                   </button>
                 </div>
-                <p v-if="passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword" class="text-sm text-red-600 mt-1">
+                <p
+                  v-if="passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword"
+                  class="text-sm text-red-600 mt-1"
+                >
                   Passwords do not match
                 </p>
               </div>
@@ -222,8 +289,11 @@
                   class="btn-primary"
                 >
                   <span v-if="!changingPassword">Change Password</span>
-                  <span v-else class="flex items-center">
-                    <div class="spinner mr-2"></div>
+                  <span
+                    v-else
+                    class="flex items-center"
+                  >
+                    <div class="spinner mr-2" />
                     Changing...
                   </span>
                 </button>
@@ -235,7 +305,9 @@
         <!-- Two-Factor Authentication -->
         <div class="card">
           <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Two-Factor Authentication</h2>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Two-Factor Authentication
+            </h2>
           </div>
           <div class="card-body">
             <div class="flex items-start justify-between">
@@ -248,9 +320,9 @@
                 </p>
               </div>
               <button
-                @click="toggle2FA"
                 class="ml-4 btn-outline"
                 :disabled="toggling2FA"
+                @click="toggle2FA"
               >
                 {{ authStore.user?.mfaEnabled ? 'Disable' : 'Enable' }}
               </button>
@@ -260,15 +332,22 @@
       </div>
 
       <!-- Notifications Tab -->
-      <div v-if="activeTab === 'notifications'" class="space-y-6">
+      <div
+        v-if="activeTab === 'notifications'"
+        class="space-y-6"
+      >
         <div class="card">
           <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Email Notifications</h2>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Email Notifications
+            </h2>
           </div>
           <div class="card-body space-y-4">
             <div class="flex items-start justify-between py-3">
               <div class="flex-1">
-                <h3 class="font-medium text-gray-900 mb-1">Inspection Reminders</h3>
+                <h3 class="font-medium text-gray-900 mb-1">
+                  Inspection Reminders
+                </h3>
                 <p class="text-sm text-gray-600">
                   Receive email reminders when inspections are due
                 </p>
@@ -279,14 +358,16 @@
                   type="checkbox"
                   class="sr-only peer"
                   @change="saveNotificationSettings"
-                />
-                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                >
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600" />
               </label>
             </div>
 
             <div class="flex items-start justify-between py-3 border-t border-gray-200">
               <div class="flex-1">
-                <h3 class="font-medium text-gray-900 mb-1">Failed Inspection Alerts</h3>
+                <h3 class="font-medium text-gray-900 mb-1">
+                  Failed Inspection Alerts
+                </h3>
                 <p class="text-sm text-gray-600">
                   Get notified when an extinguisher fails inspection
                 </p>
@@ -297,14 +378,16 @@
                   type="checkbox"
                   class="sr-only peer"
                   @change="saveNotificationSettings"
-                />
-                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                >
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600" />
               </label>
             </div>
 
             <div class="flex items-start justify-between py-3 border-t border-gray-200">
               <div class="flex-1">
-                <h3 class="font-medium text-gray-900 mb-1">Weekly Reports</h3>
+                <h3 class="font-medium text-gray-900 mb-1">
+                  Weekly Reports
+                </h3>
                 <p class="text-sm text-gray-600">
                   Receive a weekly summary of inspection activity
                 </p>
@@ -315,14 +398,16 @@
                   type="checkbox"
                   class="sr-only peer"
                   @change="saveNotificationSettings"
-                />
-                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                >
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600" />
               </label>
             </div>
 
             <div class="flex items-start justify-between py-3 border-t border-gray-200">
               <div class="flex-1">
-                <h3 class="font-medium text-gray-900 mb-1">System Updates</h3>
+                <h3 class="font-medium text-gray-900 mb-1">
+                  System Updates
+                </h3>
                 <p class="text-sm text-gray-600">
                   Stay informed about new features and updates
                 </p>
@@ -333,8 +418,8 @@
                   type="checkbox"
                   class="sr-only peer"
                   @change="saveNotificationSettings"
-                />
-                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                >
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600" />
               </label>
             </div>
           </div>
@@ -342,51 +427,83 @@
       </div>
 
       <!-- Preferences Tab -->
-      <div v-if="activeTab === 'preferences'" class="space-y-6">
+      <div
+        v-if="activeTab === 'preferences'"
+        class="space-y-6"
+      >
         <div class="card">
           <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Display Preferences</h2>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Display Preferences
+            </h2>
           </div>
           <div class="card-body space-y-4">
             <div>
-              <label for="dateFormat" class="form-label">Date Format</label>
+              <label
+                for="dateFormat"
+                class="form-label"
+              >Date Format</label>
               <select
                 id="dateFormat"
                 v-model="preferences.dateFormat"
                 class="form-input"
                 @change="savePreferences"
               >
-                <option value="MM/DD/YYYY">MM/DD/YYYY (US)</option>
-                <option value="DD/MM/YYYY">DD/MM/YYYY (UK)</option>
-                <option value="YYYY-MM-DD">YYYY-MM-DD (ISO)</option>
+                <option value="MM/DD/YYYY">
+                  MM/DD/YYYY (US)
+                </option>
+                <option value="DD/MM/YYYY">
+                  DD/MM/YYYY (UK)
+                </option>
+                <option value="YYYY-MM-DD">
+                  YYYY-MM-DD (ISO)
+                </option>
               </select>
             </div>
 
             <div>
-              <label for="timeFormat" class="form-label">Time Format</label>
+              <label
+                for="timeFormat"
+                class="form-label"
+              >Time Format</label>
               <select
                 id="timeFormat"
                 v-model="preferences.timeFormat"
                 class="form-input"
                 @change="savePreferences"
               >
-                <option value="12">12-hour (AM/PM)</option>
-                <option value="24">24-hour</option>
+                <option value="12">
+                  12-hour (AM/PM)
+                </option>
+                <option value="24">
+                  24-hour
+                </option>
               </select>
             </div>
 
             <div>
-              <label for="itemsPerPage" class="form-label">Items Per Page</label>
+              <label
+                for="itemsPerPage"
+                class="form-label"
+              >Items Per Page</label>
               <select
                 id="itemsPerPage"
                 v-model.number="preferences.itemsPerPage"
                 class="form-input"
                 @change="savePreferences"
               >
-                <option :value="10">10</option>
-                <option :value="25">25</option>
-                <option :value="50">50</option>
-                <option :value="100">100</option>
+                <option :value="10">
+                  10
+                </option>
+                <option :value="25">
+                  25
+                </option>
+                <option :value="50">
+                  50
+                </option>
+                <option :value="100">
+                  100
+                </option>
               </select>
             </div>
           </div>
@@ -394,20 +511,24 @@
 
         <div class="card">
           <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Data Management</h2>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Data Management
+            </h2>
           </div>
           <div class="card-body space-y-4">
             <div class="flex items-start justify-between">
               <div class="flex-1">
-                <h3 class="font-medium text-gray-900 mb-1">Export All Data</h3>
+                <h3 class="font-medium text-gray-900 mb-1">
+                  Export All Data
+                </h3>
                 <p class="text-sm text-gray-600">
                   Download a complete backup of your data in CSV format
                 </p>
               </div>
               <button
-                @click="exportData"
                 class="ml-4 btn-outline"
                 :disabled="exporting"
+                @click="exportData"
               >
                 {{ exporting ? 'Exporting...' : 'Export' }}
               </button>

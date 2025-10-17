@@ -4,8 +4,18 @@
       <!-- Logo & Brand -->
       <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 shadow-glow mb-4">
-          <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          <svg
+            class="w-10 h-10 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+            />
           </svg>
         </div>
         <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2">
@@ -20,35 +30,54 @@
       <div class="card">
         <div class="p-8">
           <!-- Dev Mode Notice (Only shown in development) -->
-          <div v-if="showDevMode" class="alert-info mb-6">
+          <div
+            v-if="showDevMode"
+            class="alert-info mb-6"
+          >
             <InformationCircleIcon class="h-5 w-5" />
             <div>
-              <p class="text-sm font-medium">Development Mode</p>
-              <p class="text-xs mt-1">You can use dev login (no password required) or register a test account</p>
+              <p class="text-sm font-medium">
+                Development Mode
+              </p>
+              <p class="text-xs mt-1">
+                You can use dev login (no password required) or register a test account
+              </p>
             </div>
           </div>
 
           <!-- Error Alert -->
-          <div v-if="error" class="alert-danger mb-6" data-testid="login-error">
+          <div
+            v-if="error"
+            class="alert-danger mb-6"
+            data-testid="login-error"
+          >
             <XCircleIcon class="h-5 w-5" />
             <div>
-              <p class="text-sm font-medium">{{ error }}</p>
+              <p class="text-sm font-medium">
+                {{ error }}
+              </p>
             </div>
             <button
               type="button"
               class="text-red-400 hover:text-red-600"
-              @click="clearError"
               data-testid="close-error"
+              @click="clearError"
             >
               <XMarkIcon class="h-5 w-5" />
             </button>
           </div>
 
           <!-- Login Form -->
-          <form @submit.prevent="handleLogin" class="space-y-6">
+          <form
+            class="space-y-6"
+            @submit.prevent="handleLogin"
+          >
             <!-- Email Field -->
             <div>
-              <label for="email" class="form-label">
+              <label
+                for="email"
+                class="form-label"
+              >
                 Email Address
               </label>
               <div class="relative">
@@ -66,16 +95,22 @@
                   placeholder="you@example.com"
                   data-testid="email-input"
                   @blur="validateEmail"
-                />
+                >
               </div>
-              <p v-if="emailError" class="form-error">
+              <p
+                v-if="emailError"
+                class="form-error"
+              >
                 {{ emailError }}
               </p>
             </div>
 
             <!-- Password Field -->
             <div>
-              <label for="password" class="form-label">
+              <label
+                for="password"
+                class="form-label"
+              >
                 Password
               </label>
               <div class="relative">
@@ -93,18 +128,27 @@
                   placeholder="••••••••"
                   data-testid="password-input"
                   @blur="validatePassword"
-                />
+                >
                 <button
                   type="button"
                   class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                   data-testid="toggle-password-visibility"
                   @click="showPassword = !showPassword"
                 >
-                  <EyeIcon v-if="!showPassword" class="h-5 w-5" />
-                  <EyeSlashIcon v-else class="h-5 w-5" />
+                  <EyeIcon
+                    v-if="!showPassword"
+                    class="h-5 w-5"
+                  />
+                  <EyeSlashIcon
+                    v-else
+                    class="h-5 w-5"
+                  />
                 </button>
               </div>
-              <p v-if="passwordError" class="form-error">
+              <p
+                v-if="passwordError"
+                class="form-error"
+              >
                 {{ passwordError }}
               </p>
             </div>
@@ -118,14 +162,22 @@
                   type="checkbox"
                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                   data-testid="remember-me-checkbox"
-                />
-                <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                >
+                <label
+                  for="remember-me"
+                  class="ml-2 block text-sm text-gray-700"
+                >
                   Remember me
                 </label>
               </div>
 
               <div class="text-sm">
-                <a href="#" class="font-medium text-primary-600 hover:text-primary-500" data-testid="forgot-password-link" @click.prevent="handleForgotPassword">
+                <a
+                  href="#"
+                  class="font-medium text-primary-600 hover:text-primary-500"
+                  data-testid="forgot-password-link"
+                  @click.prevent="handleForgotPassword"
+                >
                   Forgot password?
                 </a>
               </div>
@@ -139,8 +191,11 @@
               data-testid="login-submit-button"
             >
               <span v-if="!loading">Sign In</span>
-              <span v-else class="flex items-center justify-center">
-                <div class="spinner mr-2"></div>
+              <span
+                v-else
+                class="flex items-center justify-center"
+              >
+                <div class="spinner mr-2" />
                 Signing in...
               </span>
             </button>
@@ -149,14 +204,17 @@
             <button
               v-if="showDevMode"
               type="button"
-              @click="handleDevLogin"
               :disabled="loading"
               class="btn-outline w-full"
               data-testid="dev-login-button"
+              @click="handleDevLogin"
             >
               <span v-if="!loading">Dev Login (No Password)</span>
-              <span v-else class="flex items-center justify-center">
-                <div class="spinner mr-2"></div>
+              <span
+                v-else
+                class="flex items-center justify-center"
+              >
+                <div class="spinner mr-2" />
                 Logging in...
               </span>
             </button>
@@ -166,7 +224,7 @@
           <div class="mt-6">
             <div class="relative">
               <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-300"></div>
+                <div class="w-full border-t border-gray-300" />
               </div>
               <div class="relative flex justify-center text-sm">
                 <span class="px-2 bg-white text-gray-500">

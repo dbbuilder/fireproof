@@ -4,7 +4,10 @@
       <!-- Header -->
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2" data-testid="inspections-heading">
+          <h1
+            class="text-3xl font-display font-semibold text-gray-900 mb-2"
+            data-testid="inspections-heading"
+          >
             Inspections
           </h1>
           <p class="text-gray-600">
@@ -12,9 +15,9 @@
           </p>
         </div>
         <button
-          @click="startNewInspection"
           class="btn-primary inline-flex items-center"
           data-testid="new-inspection-button"
+          @click="startNewInspection"
         >
           <PlusIcon class="h-5 w-5 mr-2" />
           Start Inspection
@@ -22,10 +25,15 @@
       </div>
 
       <!-- Error Alert -->
-      <div v-if="inspectionStore.error" class="alert-danger mb-6">
+      <div
+        v-if="inspectionStore.error"
+        class="alert-danger mb-6"
+      >
         <XCircleIcon class="h-5 w-5" />
         <div class="flex-1">
-          <p class="text-sm font-medium">{{ inspectionStore.error }}</p>
+          <p class="text-sm font-medium">
+            {{ inspectionStore.error }}
+          </p>
         </div>
         <button
           type="button"
@@ -37,50 +45,78 @@
       </div>
 
       <!-- Stats Cards -->
-      <div v-if="inspectionStore.stats" class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8" data-testid="stats-cards">
-        <div class="card" data-testid="stat-card-total">
+      <div
+        v-if="inspectionStore.stats"
+        class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
+        data-testid="stats-cards"
+      >
+        <div
+          class="card"
+          data-testid="stat-card-total"
+        >
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium text-gray-500">Total</span>
               <ClipboardDocumentCheckIcon class="h-8 w-8 text-gray-400" />
             </div>
-            <div class="text-2xl font-bold text-gray-900" data-testid="total-inspections">
+            <div
+              class="text-2xl font-bold text-gray-900"
+              data-testid="total-inspections"
+            >
               {{ inspectionStore.stats.totalInspections }}
             </div>
           </div>
         </div>
 
-        <div class="card" data-testid="stat-card-passed">
+        <div
+          class="card"
+          data-testid="stat-card-passed"
+        >
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium text-gray-500">Passed</span>
               <CheckCircleIcon class="h-8 w-8 text-green-400" />
             </div>
-            <div class="text-2xl font-bold text-green-600" data-testid="passed-inspections">
+            <div
+              class="text-2xl font-bold text-green-600"
+              data-testid="passed-inspections"
+            >
               {{ inspectionStore.stats.passedInspections }}
             </div>
           </div>
         </div>
 
-        <div class="card" data-testid="stat-card-failed">
+        <div
+          class="card"
+          data-testid="stat-card-failed"
+        >
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium text-gray-500">Failed</span>
               <XCircleIcon class="h-8 w-8 text-red-400" />
             </div>
-            <div class="text-2xl font-bold text-red-600" data-testid="failed-inspections">
+            <div
+              class="text-2xl font-bold text-red-600"
+              data-testid="failed-inspections"
+            >
               {{ inspectionStore.stats.failedInspections }}
             </div>
           </div>
         </div>
 
-        <div class="card" data-testid="stat-card-passrate">
+        <div
+          class="card"
+          data-testid="stat-card-passrate"
+        >
           <div class="p-6">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-medium text-gray-500">Pass Rate</span>
               <ChartBarIcon class="h-8 w-8 text-blue-400" />
             </div>
-            <div class="text-2xl font-bold text-gray-900" data-testid="pass-rate">
+            <div
+              class="text-2xl font-bold text-gray-900"
+              data-testid="pass-rate"
+            >
               {{ (inspectionStore.stats.passRate || 0).toFixed(1) }}%
             </div>
           </div>
@@ -88,17 +124,29 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="inspectionStore.loading" class="card">
+      <div
+        v-if="inspectionStore.loading"
+        class="card"
+      >
         <div class="p-12 text-center">
-          <div class="spinner-lg mx-auto mb-4"></div>
-          <p class="text-gray-600">Loading inspections...</p>
+          <div class="spinner-lg mx-auto mb-4" />
+          <p class="text-gray-600">
+            Loading inspections...
+          </p>
         </div>
       </div>
 
       <!-- Inspections List -->
-      <div v-else-if="inspectionStore.inspections.length > 0" class="card" data-testid="inspections-table-container">
+      <div
+        v-else-if="inspectionStore.inspections.length > 0"
+        class="card"
+        data-testid="inspections-table-container"
+      >
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200" data-testid="inspections-table">
+          <table
+            class="min-w-full divide-y divide-gray-200"
+            data-testid="inspections-table"
+          >
             <thead class="bg-gray-50">
               <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -155,23 +203,29 @@
                   >
                     {{ inspection.passed ? 'Passed' : 'Failed' }}
                   </span>
-                  <span v-if="inspection.requiresService" class="badge-warning ml-2">
+                  <span
+                    v-if="inspection.requiresService"
+                    class="badge-warning ml-2"
+                  >
                     Service
                   </span>
-                  <span v-if="inspection.requiresReplacement" class="badge-danger ml-2">
+                  <span
+                    v-if="inspection.requiresReplacement"
+                    class="badge-danger ml-2"
+                  >
                     Replace
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
-                    @click="viewInspection(inspection)"
                     class="text-primary-600 hover:text-primary-900 mr-3"
+                    @click="viewInspection(inspection)"
                   >
                     View
                   </button>
                   <button
-                    @click="confirmDelete(inspection)"
                     class="text-red-600 hover:text-red-900"
+                    @click="confirmDelete(inspection)"
                   >
                     Delete
                   </button>
@@ -183,7 +237,11 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="card" data-testid="inspections-empty-state">
+      <div
+        v-else
+        class="card"
+        data-testid="inspections-empty-state"
+      >
         <div class="p-12 text-center">
           <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 mb-4">
             <ClipboardDocumentCheckIcon class="h-8 w-8 text-primary-600" />
@@ -195,9 +253,9 @@
             Get started by performing your first extinguisher inspection
           </p>
           <button
-            @click="startNewInspection"
             class="btn-primary inline-flex items-center"
             data-testid="empty-state-start-button"
+            @click="startNewInspection"
           >
             <PlusIcon class="h-5 w-5 mr-2" />
             Start Your First Inspection
@@ -253,7 +311,10 @@
                         'bg-gray-200 text-gray-500'
                       ]"
                     >
-                      <CheckIcon v-if="currentStep > index" class="h-5 w-5" />
+                      <CheckIcon
+                        v-if="currentStep > index"
+                        class="h-5 w-5"
+                      />
                       <span v-else>{{ index + 1 }}</span>
                     </div>
                     <span
@@ -271,7 +332,7 @@
                     :class="[
                       currentStep > index ? 'bg-green-500' : 'bg-gray-200'
                     ]"
-                  ></div>
+                  />
                 </div>
               </div>
             </div>
@@ -279,13 +340,19 @@
             <!-- Step Content -->
             <div class="min-h-[400px]">
               <!-- Step 1: Select Extinguisher -->
-              <div v-if="currentStep === 0" class="space-y-4">
+              <div
+                v-if="currentStep === 0"
+                class="space-y-4"
+              >
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">
                   Select Extinguisher
                 </h3>
 
                 <div class="form-group">
-                  <label for="extinguisher" class="form-label">
+                  <label
+                    for="extinguisher"
+                    class="form-label"
+                  >
                     Extinguisher *
                   </label>
                   <select
@@ -295,7 +362,9 @@
                     class="form-input"
                     @change="onExtinguisherSelected"
                   >
-                    <option value="">-- Select Extinguisher --</option>
+                    <option value="">
+                      -- Select Extinguisher --
+                    </option>
                     <option
                       v-for="extinguisher in extinguisherStore.activeExtinguishers"
                       :key="extinguisher.extinguisherId"
@@ -306,8 +375,13 @@
                   </select>
                 </div>
 
-                <div v-if="selectedExtinguisher" class="card bg-gray-50 p-4">
-                  <h4 class="font-medium text-gray-900 mb-2">Extinguisher Details</h4>
+                <div
+                  v-if="selectedExtinguisher"
+                  class="card bg-gray-50 p-4"
+                >
+                  <h4 class="font-medium text-gray-900 mb-2">
+                    Extinguisher Details
+                  </h4>
                   <div class="grid grid-cols-2 gap-3 text-sm">
                     <div>
                       <span class="text-gray-500">Code:</span>
@@ -337,7 +411,10 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="inspectionType" class="form-label">
+                  <label
+                    for="inspectionType"
+                    class="form-label"
+                  >
                     Inspection Type *
                   </label>
                   <select
@@ -346,11 +423,21 @@
                     required
                     class="form-input"
                   >
-                    <option value="">-- Select Type --</option>
-                    <option value="Monthly">Monthly</option>
-                    <option value="Annual">Annual</option>
-                    <option value="5-Year">5-Year</option>
-                    <option value="12-Year">12-Year</option>
+                    <option value="">
+                      -- Select Type --
+                    </option>
+                    <option value="Monthly">
+                      Monthly
+                    </option>
+                    <option value="Annual">
+                      Annual
+                    </option>
+                    <option value="5-Year">
+                      5-Year
+                    </option>
+                    <option value="12-Year">
+                      12-Year
+                    </option>
                   </select>
                   <p class="form-helper">
                     Monthly: Visual inspection. Annual: Full inspection. 5-Year: Internal examination. 12-Year: Hydrostatic test.
@@ -358,7 +445,10 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="inspectionDate" class="form-label">
+                  <label
+                    for="inspectionDate"
+                    class="form-label"
+                  >
                     Inspection Date *
                   </label>
                   <input
@@ -367,26 +457,31 @@
                     type="date"
                     required
                     class="form-input"
-                  />
+                  >
                 </div>
               </div>
 
               <!-- Step 2: Checklist -->
-              <div v-if="currentStep === 1" class="space-y-6">
+              <div
+                v-if="currentStep === 1"
+                class="space-y-6"
+              >
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">
                   Inspection Checklist
                 </h3>
 
                 <!-- Accessibility & Location -->
                 <div class="card bg-gray-50 p-4">
-                  <h4 class="font-medium text-gray-900 mb-3">Accessibility & Location</h4>
+                  <h4 class="font-medium text-gray-900 mb-3">
+                    Accessibility & Location
+                  </h4>
                   <div class="space-y-3">
                     <label class="flex items-center">
                       <input
                         v-model="inspectionData.isAccessible"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Extinguisher is accessible</span>
                     </label>
 
@@ -395,7 +490,7 @@
                         v-model="inspectionData.hasObstructions"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Obstructions present (check if YES)</span>
                     </label>
 
@@ -404,7 +499,7 @@
                         v-model="inspectionData.signageVisible"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Signage visible</span>
                     </label>
                   </div>
@@ -412,14 +507,16 @@
 
                 <!-- Physical Condition -->
                 <div class="card bg-gray-50 p-4">
-                  <h4 class="font-medium text-gray-900 mb-3">Physical Condition</h4>
+                  <h4 class="font-medium text-gray-900 mb-3">
+                    Physical Condition
+                  </h4>
                   <div class="space-y-3">
                     <label class="flex items-center">
                       <input
                         v-model="inspectionData.sealIntact"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Tamper seal intact</span>
                     </label>
 
@@ -428,7 +525,7 @@
                         v-model="inspectionData.pinInPlace"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Safety pin in place</span>
                     </label>
 
@@ -437,7 +534,7 @@
                         v-model="inspectionData.nozzleClear"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Nozzle clear and unobstructed</span>
                     </label>
 
@@ -446,7 +543,7 @@
                         v-model="inspectionData.hoseConditionGood"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Hose in good condition</span>
                     </label>
 
@@ -455,7 +552,7 @@
                         v-model="inspectionData.inspectionTagAttached"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Inspection tag attached</span>
                     </label>
                   </div>
@@ -463,19 +560,24 @@
 
                 <!-- Gauge & Pressure -->
                 <div class="card bg-gray-50 p-4">
-                  <h4 class="font-medium text-gray-900 mb-3">Gauge & Pressure</h4>
+                  <h4 class="font-medium text-gray-900 mb-3">
+                    Gauge & Pressure
+                  </h4>
                   <div class="space-y-3">
                     <label class="flex items-center">
                       <input
                         v-model="inspectionData.gaugeInGreenZone"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Gauge needle in green zone</span>
                     </label>
 
                     <div>
-                      <label for="gaugePressure" class="form-label">
+                      <label
+                        for="gaugePressure"
+                        class="form-label"
+                      >
                         Gauge Pressure (PSI)
                       </label>
                       <input
@@ -485,26 +587,31 @@
                         step="0.1"
                         class="form-input"
                         placeholder="150"
-                      />
+                      >
                     </div>
                   </div>
                 </div>
 
                 <!-- Damage Assessment -->
                 <div class="card bg-gray-50 p-4">
-                  <h4 class="font-medium text-gray-900 mb-3">Damage Assessment</h4>
+                  <h4 class="font-medium text-gray-900 mb-3">
+                    Damage Assessment
+                  </h4>
                   <div class="space-y-3">
                     <label class="flex items-center">
                       <input
                         v-model="inspectionData.physicalDamagePresent"
                         type="checkbox"
                         class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
+                      >
                       <span class="ml-2 text-sm text-gray-700">Physical damage present (check if YES)</span>
                     </label>
 
                     <div v-if="inspectionData.physicalDamagePresent">
-                      <label for="damageDescription" class="form-label">
+                      <label
+                        for="damageDescription"
+                        class="form-label"
+                      >
                         Damage Description *
                       </label>
                       <textarea
@@ -513,17 +620,22 @@
                         rows="3"
                         class="form-input"
                         placeholder="Describe the damage..."
-                      ></textarea>
+                      />
                     </div>
                   </div>
                 </div>
 
                 <!-- Weight Check (if applicable) -->
                 <div class="card bg-gray-50 p-4">
-                  <h4 class="font-medium text-gray-900 mb-3">Weight Check</h4>
+                  <h4 class="font-medium text-gray-900 mb-3">
+                    Weight Check
+                  </h4>
                   <div class="space-y-3">
                     <div>
-                      <label for="weight" class="form-label">
+                      <label
+                        for="weight"
+                        class="form-label"
+                      >
                         Weight (pounds)
                       </label>
                       <input
@@ -533,7 +645,7 @@
                         step="0.1"
                         class="form-input"
                         placeholder="10.5"
-                      />
+                      >
                       <p class="form-helper">
                         Required for CO2 and halon extinguishers
                       </p>
@@ -543,13 +655,19 @@
               </div>
 
               <!-- Step 3: Results & Notes -->
-              <div v-if="currentStep === 2" class="space-y-6">
+              <div
+                v-if="currentStep === 2"
+                class="space-y-6"
+              >
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">
                   Results & Corrective Actions
                 </h3>
 
                 <div class="form-group">
-                  <label for="notes" class="form-label">
+                  <label
+                    for="notes"
+                    class="form-label"
+                  >
                     General Notes
                   </label>
                   <textarea
@@ -558,7 +676,7 @@
                     rows="4"
                     class="form-input"
                     placeholder="Additional observations or comments..."
-                  ></textarea>
+                  />
                 </div>
 
                 <div class="space-y-3">
@@ -567,7 +685,7 @@
                       v-model="inspectionData.requiresService"
                       type="checkbox"
                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    />
+                    >
                     <span class="ml-2 text-sm font-medium text-gray-700">Requires service</span>
                   </label>
 
@@ -576,13 +694,19 @@
                       v-model="inspectionData.requiresReplacement"
                       type="checkbox"
                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    />
+                    >
                     <span class="ml-2 text-sm font-medium text-gray-700">Requires replacement</span>
                   </label>
                 </div>
 
-                <div v-if="inspectionData.requiresService || inspectionData.requiresReplacement" class="form-group">
-                  <label for="failureReason" class="form-label">
+                <div
+                  v-if="inspectionData.requiresService || inspectionData.requiresReplacement"
+                  class="form-group"
+                >
+                  <label
+                    for="failureReason"
+                    class="form-label"
+                  >
                     Failure Reason
                   </label>
                   <textarea
@@ -591,11 +715,17 @@
                     rows="3"
                     class="form-input"
                     placeholder="Explain why the extinguisher failed..."
-                  ></textarea>
+                  />
                 </div>
 
-                <div v-if="inspectionData.requiresService || inspectionData.requiresReplacement" class="form-group">
-                  <label for="correctiveAction" class="form-label">
+                <div
+                  v-if="inspectionData.requiresService || inspectionData.requiresReplacement"
+                  class="form-group"
+                >
+                  <label
+                    for="correctiveAction"
+                    class="form-label"
+                  >
                     Corrective Action Required
                   </label>
                   <textarea
@@ -604,19 +734,34 @@
                     rows="3"
                     class="form-input"
                     placeholder="Describe required corrective actions..."
-                  ></textarea>
+                  />
                 </div>
 
                 <!-- Pass/Fail Summary -->
-                <div class="card p-6" :class="inspectionPassed ? 'bg-green-50 border-2 border-green-500' : 'bg-red-50 border-2 border-red-500'">
+                <div
+                  class="card p-6"
+                  :class="inspectionPassed ? 'bg-green-50 border-2 border-green-500' : 'bg-red-50 border-2 border-red-500'"
+                >
                   <div class="flex items-center">
-                    <CheckCircleIcon v-if="inspectionPassed" class="h-12 w-12 text-green-600 mr-4" />
-                    <XCircleIcon v-else class="h-12 w-12 text-red-600 mr-4" />
+                    <CheckCircleIcon
+                      v-if="inspectionPassed"
+                      class="h-12 w-12 text-green-600 mr-4"
+                    />
+                    <XCircleIcon
+                      v-else
+                      class="h-12 w-12 text-red-600 mr-4"
+                    />
                     <div>
-                      <h4 class="text-lg font-semibold" :class="inspectionPassed ? 'text-green-900' : 'text-red-900'">
+                      <h4
+                        class="text-lg font-semibold"
+                        :class="inspectionPassed ? 'text-green-900' : 'text-red-900'"
+                      >
                         {{ inspectionPassed ? 'Inspection Passed' : 'Inspection Failed' }}
                       </h4>
-                      <p class="text-sm" :class="inspectionPassed ? 'text-green-700' : 'text-red-700'">
+                      <p
+                        class="text-sm"
+                        :class="inspectionPassed ? 'text-green-700' : 'text-red-700'"
+                      >
                         {{ inspectionPassed ? 'Extinguisher meets all inspection criteria' : 'Extinguisher requires attention' }}
                       </p>
                     </div>
@@ -629,43 +774,46 @@
             <div class="flex items-center justify-between pt-6 border-t border-gray-200 mt-6">
               <button
                 v-if="currentStep > 0"
-                @click="previousStep"
                 type="button"
                 class="btn-outline inline-flex items-center"
+                @click="previousStep"
               >
                 <ChevronLeftIcon class="h-5 w-5 mr-1" />
                 Previous
               </button>
-              <div v-else></div>
+              <div v-else />
 
               <div class="flex space-x-3">
                 <button
-                  @click="closeWizard"
                   type="button"
                   class="btn-outline"
+                  @click="closeWizard"
                 >
                   Cancel
                 </button>
                 <button
                   v-if="currentStep < steps.length - 1"
-                  @click="nextStep"
                   type="button"
                   class="btn-primary inline-flex items-center"
                   :disabled="!canProceedToNextStep"
+                  @click="nextStep"
                 >
                   Next
                   <ChevronRightIcon class="h-5 w-5 ml-1" />
                 </button>
                 <button
                   v-else
-                  @click="submitInspection"
                   type="button"
                   class="btn-primary"
                   :disabled="submitting"
+                  @click="submitInspection"
                 >
                   <span v-if="!submitting">Submit Inspection</span>
-                  <span v-else class="flex items-center">
-                    <div class="spinner mr-2"></div>
+                  <span
+                    v-else
+                    class="flex items-center"
+                  >
+                    <div class="spinner mr-2" />
                     Submitting...
                   </span>
                 </button>
@@ -691,7 +839,10 @@
         @click.self="closeViewModal"
       >
         <div class="modal-container max-w-3xl">
-          <div class="modal-content" v-if="viewingInspection">
+          <div
+            v-if="viewingInspection"
+            class="modal-content"
+          >
             <div class="flex items-center justify-between mb-6">
               <h2 class="text-2xl font-display font-semibold text-gray-900">
                 Inspection Details
@@ -710,19 +861,27 @@
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <span class="text-sm text-gray-500">Date:</span>
-                  <p class="font-medium">{{ formatDate(viewingInspection.inspectionDate) }}</p>
+                  <p class="font-medium">
+                    {{ formatDate(viewingInspection.inspectionDate) }}
+                  </p>
                 </div>
                 <div>
                   <span class="text-sm text-gray-500">Type:</span>
-                  <p class="font-medium">{{ viewingInspection.inspectionType }}</p>
+                  <p class="font-medium">
+                    {{ viewingInspection.inspectionType }}
+                  </p>
                 </div>
                 <div>
                   <span class="text-sm text-gray-500">Extinguisher:</span>
-                  <p class="font-medium">{{ viewingInspection.extinguisherCode }}</p>
+                  <p class="font-medium">
+                    {{ viewingInspection.extinguisherCode }}
+                  </p>
                 </div>
                 <div>
                   <span class="text-sm text-gray-500">Inspector:</span>
-                  <p class="font-medium">{{ viewingInspection.inspectorName }}</p>
+                  <p class="font-medium">
+                    {{ viewingInspection.inspectorName }}
+                  </p>
                 </div>
               </div>
 
@@ -734,56 +893,112 @@
                 >
                   {{ viewingInspection.passed ? 'Passed' : 'Failed' }}
                 </span>
-                <span v-if="viewingInspection.requiresService" class="ml-2 badge-warning">
+                <span
+                  v-if="viewingInspection.requiresService"
+                  class="ml-2 badge-warning"
+                >
                   Requires Service
                 </span>
-                <span v-if="viewingInspection.requiresReplacement" class="ml-2 badge-danger">
+                <span
+                  v-if="viewingInspection.requiresReplacement"
+                  class="ml-2 badge-danger"
+                >
                   Requires Replacement
                 </span>
               </div>
 
               <!-- Checklist Results -->
               <div class="card bg-gray-50 p-4">
-                <h3 class="font-medium text-gray-900 mb-3">Checklist Results</h3>
+                <h3 class="font-medium text-gray-900 mb-3">
+                  Checklist Results
+                </h3>
                 <div class="grid grid-cols-2 gap-2 text-sm">
                   <div class="flex items-center">
-                    <CheckIcon v-if="viewingInspection.isAccessible" class="h-4 w-4 text-green-600 mr-2" />
-                    <XMarkIcon v-else class="h-4 w-4 text-red-600 mr-2" />
+                    <CheckIcon
+                      v-if="viewingInspection.isAccessible"
+                      class="h-4 w-4 text-green-600 mr-2"
+                    />
+                    <XMarkIcon
+                      v-else
+                      class="h-4 w-4 text-red-600 mr-2"
+                    />
                     <span>Accessible</span>
                   </div>
                   <div class="flex items-center">
-                    <XMarkIcon v-if="viewingInspection.hasObstructions" class="h-4 w-4 text-red-600 mr-2" />
-                    <CheckIcon v-else class="h-4 w-4 text-green-600 mr-2" />
+                    <XMarkIcon
+                      v-if="viewingInspection.hasObstructions"
+                      class="h-4 w-4 text-red-600 mr-2"
+                    />
+                    <CheckIcon
+                      v-else
+                      class="h-4 w-4 text-green-600 mr-2"
+                    />
                     <span>No Obstructions</span>
                   </div>
                   <div class="flex items-center">
-                    <CheckIcon v-if="viewingInspection.signageVisible" class="h-4 w-4 text-green-600 mr-2" />
-                    <XMarkIcon v-else class="h-4 w-4 text-red-600 mr-2" />
+                    <CheckIcon
+                      v-if="viewingInspection.signageVisible"
+                      class="h-4 w-4 text-green-600 mr-2"
+                    />
+                    <XMarkIcon
+                      v-else
+                      class="h-4 w-4 text-red-600 mr-2"
+                    />
                     <span>Signage Visible</span>
                   </div>
                   <div class="flex items-center">
-                    <CheckIcon v-if="viewingInspection.sealIntact" class="h-4 w-4 text-green-600 mr-2" />
-                    <XMarkIcon v-else class="h-4 w-4 text-red-600 mr-2" />
+                    <CheckIcon
+                      v-if="viewingInspection.sealIntact"
+                      class="h-4 w-4 text-green-600 mr-2"
+                    />
+                    <XMarkIcon
+                      v-else
+                      class="h-4 w-4 text-red-600 mr-2"
+                    />
                     <span>Seal Intact</span>
                   </div>
                   <div class="flex items-center">
-                    <CheckIcon v-if="viewingInspection.pinInPlace" class="h-4 w-4 text-green-600 mr-2" />
-                    <XMarkIcon v-else class="h-4 w-4 text-red-600 mr-2" />
+                    <CheckIcon
+                      v-if="viewingInspection.pinInPlace"
+                      class="h-4 w-4 text-green-600 mr-2"
+                    />
+                    <XMarkIcon
+                      v-else
+                      class="h-4 w-4 text-red-600 mr-2"
+                    />
                     <span>Pin in Place</span>
                   </div>
                   <div class="flex items-center">
-                    <CheckIcon v-if="viewingInspection.nozzleClear" class="h-4 w-4 text-green-600 mr-2" />
-                    <XMarkIcon v-else class="h-4 w-4 text-red-600 mr-2" />
+                    <CheckIcon
+                      v-if="viewingInspection.nozzleClear"
+                      class="h-4 w-4 text-green-600 mr-2"
+                    />
+                    <XMarkIcon
+                      v-else
+                      class="h-4 w-4 text-red-600 mr-2"
+                    />
                     <span>Nozzle Clear</span>
                   </div>
                   <div class="flex items-center">
-                    <CheckIcon v-if="viewingInspection.hoseConditionGood" class="h-4 w-4 text-green-600 mr-2" />
-                    <XMarkIcon v-else class="h-4 w-4 text-red-600 mr-2" />
+                    <CheckIcon
+                      v-if="viewingInspection.hoseConditionGood"
+                      class="h-4 w-4 text-green-600 mr-2"
+                    />
+                    <XMarkIcon
+                      v-else
+                      class="h-4 w-4 text-red-600 mr-2"
+                    />
                     <span>Hose Good</span>
                   </div>
                   <div class="flex items-center">
-                    <CheckIcon v-if="viewingInspection.gaugeInGreenZone" class="h-4 w-4 text-green-600 mr-2" />
-                    <XMarkIcon v-else class="h-4 w-4 text-red-600 mr-2" />
+                    <CheckIcon
+                      v-if="viewingInspection.gaugeInGreenZone"
+                      class="h-4 w-4 text-green-600 mr-2"
+                    />
+                    <XMarkIcon
+                      v-else
+                      class="h-4 w-4 text-red-600 mr-2"
+                    />
                     <span>Gauge Green</span>
                   </div>
                 </div>
@@ -791,24 +1006,36 @@
 
               <!-- Notes -->
               <div v-if="viewingInspection.notes">
-                <h3 class="font-medium text-gray-900 mb-2">Notes</h3>
-                <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ viewingInspection.notes }}</p>
+                <h3 class="font-medium text-gray-900 mb-2">
+                  Notes
+                </h3>
+                <p class="text-sm text-gray-700 whitespace-pre-wrap">
+                  {{ viewingInspection.notes }}
+                </p>
               </div>
 
               <!-- Failure Info -->
               <div v-if="viewingInspection.failureReason">
-                <h3 class="font-medium text-gray-900 mb-2">Failure Reason</h3>
-                <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ viewingInspection.failureReason }}</p>
+                <h3 class="font-medium text-gray-900 mb-2">
+                  Failure Reason
+                </h3>
+                <p class="text-sm text-gray-700 whitespace-pre-wrap">
+                  {{ viewingInspection.failureReason }}
+                </p>
               </div>
 
               <div v-if="viewingInspection.correctiveAction">
-                <h3 class="font-medium text-gray-900 mb-2">Corrective Action</h3>
-                <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ viewingInspection.correctiveAction }}</p>
+                <h3 class="font-medium text-gray-900 mb-2">
+                  Corrective Action
+                </h3>
+                <p class="text-sm text-gray-700 whitespace-pre-wrap">
+                  {{ viewingInspection.correctiveAction }}
+                </p>
               </div>
 
               <button
-                @click="closeViewModal"
                 class="btn-outline w-full"
+                @click="closeViewModal"
               >
                 Close
               </button>

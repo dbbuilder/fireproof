@@ -12,8 +12,8 @@
           </p>
         </div>
         <button
-          @click="openCreateModal"
           class="btn-primary inline-flex items-center"
+          @click="openCreateModal"
         >
           <PlusIcon class="h-5 w-5 mr-2" />
           Add Location
@@ -21,10 +21,15 @@
       </div>
 
       <!-- Error Alert -->
-      <div v-if="locationStore.error" class="alert-danger mb-6">
+      <div
+        v-if="locationStore.error"
+        class="alert-danger mb-6"
+      >
         <XCircleIcon class="h-5 w-5" />
         <div class="flex-1">
-          <p class="text-sm font-medium">{{ locationStore.error }}</p>
+          <p class="text-sm font-medium">
+            {{ locationStore.error }}
+          </p>
         </div>
         <button
           type="button"
@@ -36,15 +41,23 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="locationStore.loading" class="card">
+      <div
+        v-if="locationStore.loading"
+        class="card"
+      >
         <div class="p-12 text-center">
-          <div class="spinner-lg mx-auto mb-4"></div>
-          <p class="text-gray-600">Loading locations...</p>
+          <div class="spinner-lg mx-auto mb-4" />
+          <p class="text-gray-600">
+            Loading locations...
+          </p>
         </div>
       </div>
 
       <!-- Locations Grid -->
-      <div v-else-if="locationStore.locations.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        v-else-if="locationStore.locations.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
         <div
           v-for="location in locationStore.locations"
           :key="location.locationId"
@@ -73,11 +86,16 @@
 
             <!-- Address -->
             <div class="space-y-1 text-sm text-gray-600 mb-4">
-              <div v-if="location.addressLine1" class="flex items-start">
+              <div
+                v-if="location.addressLine1"
+                class="flex items-start"
+              >
                 <MapPinIcon class="h-4 w-4 mr-2 mt-0.5 flex-shrink-0 text-gray-400" />
                 <div>
                   <p>{{ location.addressLine1 }}</p>
-                  <p v-if="location.addressLine2">{{ location.addressLine2 }}</p>
+                  <p v-if="location.addressLine2">
+                    {{ location.addressLine2 }}
+                  </p>
                   <p v-if="location.city">
                     {{ location.city }}{{ location.stateProvince ? ', ' + location.stateProvince : '' }}
                     {{ location.postalCode }}
@@ -86,7 +104,10 @@
               </div>
 
               <!-- GPS Coordinates -->
-              <div v-if="location.latitude && location.longitude" class="flex items-center text-xs text-gray-500 mt-2">
+              <div
+                v-if="location.latitude && location.longitude"
+                class="flex items-center text-xs text-gray-500 mt-2"
+              >
                 <GlobeAltIcon class="h-4 w-4 mr-1" />
                 {{ location.latitude.toFixed(6) }}, {{ location.longitude.toFixed(6) }}
               </div>
@@ -95,15 +116,15 @@
             <!-- Actions -->
             <div class="flex space-x-2 pt-4 border-t border-gray-100">
               <button
-                @click="openEditModal(location)"
                 class="flex-1 inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                @click="openEditModal(location)"
               >
                 <PencilIcon class="h-4 w-4 mr-1.5" />
                 Edit
               </button>
               <button
-                @click="confirmDelete(location)"
                 class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                @click="confirmDelete(location)"
               >
                 <TrashIcon class="h-4 w-4" />
               </button>
@@ -113,7 +134,10 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="card">
+      <div
+        v-else
+        class="card"
+      >
         <div class="p-12 text-center">
           <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 mb-4">
             <MapPinIcon class="h-8 w-8 text-primary-600" />
@@ -125,8 +149,8 @@
             Get started by adding your first facility location
           </p>
           <button
-            @click="openCreateModal"
             class="btn-primary inline-flex items-center"
+            @click="openCreateModal"
           >
             <PlusIcon class="h-5 w-5 mr-2" />
             Add Your First Location
@@ -174,11 +198,17 @@
               </div>
 
               <!-- Form -->
-              <form @submit.prevent="handleSubmit" class="space-y-5">
+              <form
+                class="space-y-5"
+                @submit.prevent="handleSubmit"
+              >
                 <div class="grid grid-cols-2 gap-4">
                   <!-- Location Code -->
                   <div>
-                    <label for="locationCode" class="form-label">
+                    <label
+                      for="locationCode"
+                      class="form-label"
+                    >
                       Location Code *
                     </label>
                     <input
@@ -190,7 +220,7 @@
                       class="form-input"
                       :class="{ 'bg-gray-50': isEditing }"
                       placeholder="LOC001"
-                    />
+                    >
                     <p class="form-helper">
                       Unique identifier (cannot be changed)
                     </p>
@@ -198,7 +228,10 @@
 
                   <!-- Location Name -->
                   <div>
-                    <label for="locationName" class="form-label">
+                    <label
+                      for="locationName"
+                      class="form-label"
+                    >
                       Location Name *
                     </label>
                     <input
@@ -208,13 +241,16 @@
                       required
                       class="form-input"
                       placeholder="Main Office"
-                    />
+                    >
                   </div>
                 </div>
 
                 <!-- Address Line 1 -->
                 <div>
-                  <label for="addressLine1" class="form-label">
+                  <label
+                    for="addressLine1"
+                    class="form-label"
+                  >
                     Address Line 1
                   </label>
                   <input
@@ -223,12 +259,15 @@
                     type="text"
                     class="form-input"
                     placeholder="123 Main Street"
-                  />
+                  >
                 </div>
 
                 <!-- Address Line 2 -->
                 <div>
-                  <label for="addressLine2" class="form-label">
+                  <label
+                    for="addressLine2"
+                    class="form-label"
+                  >
                     Address Line 2
                   </label>
                   <input
@@ -237,13 +276,16 @@
                     type="text"
                     class="form-input"
                     placeholder="Suite 100"
-                  />
+                  >
                 </div>
 
                 <div class="grid grid-cols-3 gap-4">
                   <!-- City -->
                   <div>
-                    <label for="city" class="form-label">
+                    <label
+                      for="city"
+                      class="form-label"
+                    >
                       City
                     </label>
                     <input
@@ -252,12 +294,15 @@
                       type="text"
                       class="form-input"
                       placeholder="Seattle"
-                    />
+                    >
                   </div>
 
                   <!-- State/Province -->
                   <div>
-                    <label for="stateProvince" class="form-label">
+                    <label
+                      for="stateProvince"
+                      class="form-label"
+                    >
                       State/Province
                     </label>
                     <input
@@ -266,12 +311,15 @@
                       type="text"
                       class="form-input"
                       placeholder="WA"
-                    />
+                    >
                   </div>
 
                   <!-- Postal Code -->
                   <div>
-                    <label for="postalCode" class="form-label">
+                    <label
+                      for="postalCode"
+                      class="form-label"
+                    >
                       Postal Code
                     </label>
                     <input
@@ -280,14 +328,17 @@
                       type="text"
                       class="form-input"
                       placeholder="98101"
-                    />
+                    >
                   </div>
                 </div>
 
                 <!-- GPS Coordinates -->
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label for="latitude" class="form-label">
+                    <label
+                      for="latitude"
+                      class="form-label"
+                    >
                       Latitude
                     </label>
                     <input
@@ -297,11 +348,14 @@
                       step="0.000001"
                       class="form-input"
                       placeholder="47.606209"
-                    />
+                    >
                   </div>
 
                   <div>
-                    <label for="longitude" class="form-label">
+                    <label
+                      for="longitude"
+                      class="form-label"
+                    >
                       Longitude
                     </label>
                     <input
@@ -311,19 +365,25 @@
                       step="0.000001"
                       class="form-input"
                       placeholder="-122.332069"
-                    />
+                    >
                   </div>
                 </div>
 
                 <!-- Active Status (Edit only) -->
-                <div v-if="isEditing" class="flex items-center">
+                <div
+                  v-if="isEditing"
+                  class="flex items-center"
+                >
                   <input
                     id="isActive"
                     v-model="formData.isActive"
                     type="checkbox"
                     class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                  />
-                  <label for="isActive" class="ml-2 block text-sm text-gray-700">
+                  >
+                  <label
+                    for="isActive"
+                    class="ml-2 block text-sm text-gray-700"
+                  >
                     Active location
                   </label>
                 </div>
@@ -336,16 +396,19 @@
                     class="btn-primary flex-1"
                   >
                     <span v-if="!submitting">{{ isEditing ? 'Update Location' : 'Create Location' }}</span>
-                    <span v-else class="flex items-center justify-center">
-                      <div class="spinner mr-2"></div>
+                    <span
+                      v-else
+                      class="flex items-center justify-center"
+                    >
+                      <div class="spinner mr-2" />
                       {{ isEditing ? 'Updating...' : 'Creating...' }}
                     </span>
                   </button>
                   <button
                     type="button"
-                    @click="closeModal"
                     :disabled="submitting"
                     class="btn-outline"
+                    @click="closeModal"
                   >
                     Cancel
                   </button>

@@ -12,8 +12,8 @@
           </p>
         </div>
         <button
-          @click="openCreateModal"
           class="btn-primary inline-flex items-center"
+          @click="openCreateModal"
         >
           <PlusIcon class="h-5 w-5 mr-2" />
           Add Extinguisher
@@ -26,8 +26,12 @@
           <div class="p-4">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-600">Total</p>
-                <p class="text-2xl font-bold text-gray-900">{{ extinguisherStore.extinguisherCount }}</p>
+                <p class="text-sm text-gray-600">
+                  Total
+                </p>
+                <p class="text-2xl font-bold text-gray-900">
+                  {{ extinguisherStore.extinguisherCount }}
+                </p>
               </div>
               <ShieldCheckIcon class="h-8 w-8 text-gray-400" />
             </div>
@@ -38,8 +42,12 @@
           <div class="p-4">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-600">Active</p>
-                <p class="text-2xl font-bold text-secondary-600">{{ extinguisherStore.activeExtinguishers.length }}</p>
+                <p class="text-sm text-gray-600">
+                  Active
+                </p>
+                <p class="text-2xl font-bold text-secondary-600">
+                  {{ extinguisherStore.activeExtinguishers.length }}
+                </p>
               </div>
               <CheckCircleIcon class="h-8 w-8 text-secondary-400" />
             </div>
@@ -50,8 +58,12 @@
           <div class="p-4">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-600">Out of Service</p>
-                <p class="text-2xl font-bold text-red-600">{{ extinguisherStore.outOfServiceExtinguishers.length }}</p>
+                <p class="text-sm text-gray-600">
+                  Out of Service
+                </p>
+                <p class="text-2xl font-bold text-red-600">
+                  {{ extinguisherStore.outOfServiceExtinguishers.length }}
+                </p>
               </div>
               <ExclamationTriangleIcon class="h-8 w-8 text-red-400" />
             </div>
@@ -62,8 +74,12 @@
           <div class="p-4">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-600">Need Attention</p>
-                <p class="text-2xl font-bold text-accent-600">{{ extinguisherStore.needingAttention.length }}</p>
+                <p class="text-sm text-gray-600">
+                  Need Attention
+                </p>
+                <p class="text-2xl font-bold text-accent-600">
+                  {{ extinguisherStore.needingAttention.length }}
+                </p>
               </div>
               <ClockIcon class="h-8 w-8 text-accent-400" />
             </div>
@@ -72,10 +88,15 @@
       </div>
 
       <!-- Error Alert -->
-      <div v-if="extinguisherStore.error" class="alert-danger mb-6">
+      <div
+        v-if="extinguisherStore.error"
+        class="alert-danger mb-6"
+      >
         <XCircleIcon class="h-5 w-5" />
         <div class="flex-1">
-          <p class="text-sm font-medium">{{ extinguisherStore.error }}</p>
+          <p class="text-sm font-medium">
+            {{ extinguisherStore.error }}
+          </p>
         </div>
         <button
           type="button"
@@ -87,15 +108,23 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="extinguisherStore.loading && extinguisherStore.extinguishers.length === 0" class="card">
+      <div
+        v-if="extinguisherStore.loading && extinguisherStore.extinguishers.length === 0"
+        class="card"
+      >
         <div class="p-12 text-center">
-          <div class="spinner-lg mx-auto mb-4"></div>
-          <p class="text-gray-600">Loading extinguishers...</p>
+          <div class="spinner-lg mx-auto mb-4" />
+          <p class="text-gray-600">
+            Loading extinguishers...
+          </p>
         </div>
       </div>
 
       <!-- Extinguishers Grid -->
-      <div v-else-if="extinguisherStore.extinguishers.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        v-else-if="extinguisherStore.extinguishers.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
         <div
           v-for="extinguisher in extinguisherStore.extinguishers"
           :key="extinguisher.extinguisherId"
@@ -151,23 +180,35 @@
                 <span>{{ extinguisher.locationName || 'No Location' }}</span>
               </div>
 
-              <div v-if="extinguisher.serialNumber" class="flex items-center">
+              <div
+                v-if="extinguisher.serialNumber"
+                class="flex items-center"
+              >
                 <IdentificationIcon class="h-4 w-4 mr-2 text-gray-400" />
                 <span>SN: {{ extinguisher.serialNumber }}</span>
               </div>
 
-              <div v-if="extinguisher.manufacturer" class="flex items-center">
+              <div
+                v-if="extinguisher.manufacturer"
+                class="flex items-center"
+              >
                 <BuildingOfficeIcon class="h-4 w-4 mr-2 text-gray-400" />
                 <span>{{ extinguisher.manufacturer }}</span>
               </div>
 
-              <div v-if="extinguisher.locationDescription" class="flex items-center">
+              <div
+                v-if="extinguisher.locationDescription"
+                class="flex items-center"
+              >
                 <InformationCircleIcon class="h-4 w-4 mr-2 text-gray-400" />
                 <span class="truncate">{{ extinguisher.locationDescription }}</span>
               </div>
 
               <!-- Service Dates -->
-              <div v-if="extinguisher.nextServiceDueDate" class="flex items-center">
+              <div
+                v-if="extinguisher.nextServiceDueDate"
+                class="flex items-center"
+              >
                 <CalendarIcon class="h-4 w-4 mr-2 text-gray-400" />
                 <span class="text-xs">
                   Next Service: {{ formatDate(extinguisher.nextServiceDueDate) }}
@@ -178,31 +219,31 @@
             <!-- Actions -->
             <div class="flex space-x-2 pt-4 border-t border-gray-100">
               <button
-                @click="openEditModal(extinguisher)"
                 class="flex-1 inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                @click="openEditModal(extinguisher)"
               >
                 <PencilIcon class="h-4 w-4 mr-1.5" />
                 Edit
               </button>
               <button
                 v-if="extinguisher.qrCodeData"
-                @click="showQRCode(extinguisher)"
                 class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
                 title="View QR Code"
+                @click="showQRCode(extinguisher)"
               >
                 <QrCodeIcon class="h-4 w-4" />
               </button>
               <button
                 v-else
-                @click="generateQRCode(extinguisher)"
                 class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
                 title="Generate QR Code"
+                @click="generateQRCode(extinguisher)"
               >
                 <SparklesIcon class="h-4 w-4" />
               </button>
               <button
-                @click="confirmDelete(extinguisher)"
                 class="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                @click="confirmDelete(extinguisher)"
               >
                 <TrashIcon class="h-4 w-4" />
               </button>
@@ -212,7 +253,10 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="card">
+      <div
+        v-else
+        class="card"
+      >
         <div class="p-12 text-center">
           <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 mb-4">
             <ShieldCheckIcon class="h-8 w-8 text-primary-600" />
@@ -224,8 +268,8 @@
             Get started by adding your first fire extinguisher
           </p>
           <button
-            @click="openCreateModal"
             class="btn-primary inline-flex items-center"
+            @click="openCreateModal"
           >
             <PlusIcon class="h-5 w-5 mr-2" />
             Add First Extinguisher
@@ -273,12 +317,18 @@
               </div>
 
               <!-- Form -->
-              <form @submit.prevent="handleSubmit" class="space-y-5">
+              <form
+                class="space-y-5"
+                @submit.prevent="handleSubmit"
+              >
                 <!-- Basic Information -->
                 <div class="grid grid-cols-2 gap-4">
                   <!-- Extinguisher Code -->
                   <div>
-                    <label for="extinguisherCode" class="form-label">
+                    <label
+                      for="extinguisherCode"
+                      class="form-label"
+                    >
                       Extinguisher Code *
                     </label>
                     <input
@@ -290,7 +340,7 @@
                       class="form-input"
                       :class="{ 'bg-gray-50': isEditing }"
                       placeholder="EXT-001"
-                    />
+                    >
                     <p class="form-helper">
                       Unique identifier (cannot be changed)
                     </p>
@@ -298,7 +348,10 @@
 
                   <!-- Serial Number -->
                   <div>
-                    <label for="serialNumber" class="form-label">
+                    <label
+                      for="serialNumber"
+                      class="form-label"
+                    >
                       Serial Number *
                     </label>
                     <input
@@ -308,7 +361,7 @@
                       required
                       class="form-input"
                       placeholder="SN123456"
-                    />
+                    >
                   </div>
                 </div>
 
@@ -316,7 +369,10 @@
                 <div class="grid grid-cols-2 gap-4">
                   <!-- Location -->
                   <div>
-                    <label for="locationId" class="form-label">
+                    <label
+                      for="locationId"
+                      class="form-label"
+                    >
                       Location *
                     </label>
                     <select
@@ -325,7 +381,9 @@
                       required
                       class="form-input"
                     >
-                      <option value="">Select location...</option>
+                      <option value="">
+                        Select location...
+                      </option>
                       <option
                         v-for="location in locationStore.locations"
                         :key="location.locationId"
@@ -338,7 +396,10 @@
 
                   <!-- Extinguisher Type -->
                   <div>
-                    <label for="extinguisherTypeId" class="form-label">
+                    <label
+                      for="extinguisherTypeId"
+                      class="form-label"
+                    >
                       Extinguisher Type *
                     </label>
                     <select
@@ -347,7 +408,9 @@
                       required
                       class="form-input"
                     >
-                      <option value="">Select type...</option>
+                      <option value="">
+                        Select type...
+                      </option>
                       <option
                         v-for="type in typeStore.activeTypes"
                         :key="type.extinguisherTypeId"
@@ -362,7 +425,10 @@
                 <!-- Manufacturer and Asset Tag -->
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label for="manufacturer" class="form-label">
+                    <label
+                      for="manufacturer"
+                      class="form-label"
+                    >
                       Manufacturer
                     </label>
                     <input
@@ -371,11 +437,14 @@
                       type="text"
                       class="form-input"
                       placeholder="Ansul, Amerex, etc."
-                    />
+                    >
                   </div>
 
                   <div>
-                    <label for="assetTag" class="form-label">
+                    <label
+                      for="assetTag"
+                      class="form-label"
+                    >
                       Asset Tag
                     </label>
                     <input
@@ -384,14 +453,17 @@
                       type="text"
                       class="form-input"
                       placeholder="ASSET-001"
-                    />
+                    >
                   </div>
                 </div>
 
                 <!-- Dates -->
                 <div class="grid grid-cols-3 gap-4">
                   <div>
-                    <label for="manufactureDate" class="form-label">
+                    <label
+                      for="manufactureDate"
+                      class="form-label"
+                    >
                       Manufacture Date
                     </label>
                     <input
@@ -399,11 +471,14 @@
                       v-model="formData.manufactureDate"
                       type="date"
                       class="form-input"
-                    />
+                    >
                   </div>
 
                   <div>
-                    <label for="installDate" class="form-label">
+                    <label
+                      for="installDate"
+                      class="form-label"
+                    >
                       Install Date
                     </label>
                     <input
@@ -411,11 +486,14 @@
                       v-model="formData.installDate"
                       type="date"
                       class="form-input"
-                    />
+                    >
                   </div>
 
                   <div v-if="isEditing">
-                    <label for="lastServiceDate" class="form-label">
+                    <label
+                      for="lastServiceDate"
+                      class="form-label"
+                    >
                       Last Service Date
                     </label>
                     <input
@@ -423,13 +501,16 @@
                       v-model="formData.lastServiceDate"
                       type="date"
                       class="form-input"
-                    />
+                    >
                   </div>
                 </div>
 
                 <!-- Location Description -->
                 <div>
-                  <label for="locationDescription" class="form-label">
+                  <label
+                    for="locationDescription"
+                    class="form-label"
+                  >
                     Location Description
                   </label>
                   <input
@@ -438,12 +519,15 @@
                     type="text"
                     class="form-input"
                     placeholder="Near main entrance, by stairwell A, etc."
-                  />
+                  >
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label for="floorLevel" class="form-label">
+                    <label
+                      for="floorLevel"
+                      class="form-label"
+                    >
                       Floor Level
                     </label>
                     <input
@@ -452,13 +536,16 @@
                       type="text"
                       class="form-input"
                       placeholder="1st Floor, Basement, etc."
-                    />
+                    >
                   </div>
                 </div>
 
                 <!-- Notes -->
                 <div>
-                  <label for="notes" class="form-label">
+                  <label
+                    for="notes"
+                    class="form-label"
+                  >
                     Notes
                   </label>
                   <textarea
@@ -467,19 +554,25 @@
                     rows="3"
                     class="form-input"
                     placeholder="Additional notes..."
-                  ></textarea>
+                  />
                 </div>
 
                 <!-- Status Checkboxes (Edit only) -->
-                <div v-if="isEditing" class="space-y-3 p-4 bg-gray-50 rounded-lg">
+                <div
+                  v-if="isEditing"
+                  class="space-y-3 p-4 bg-gray-50 rounded-lg"
+                >
                   <div class="flex items-center">
                     <input
                       id="isActive"
                       v-model="formData.isActive"
                       type="checkbox"
                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    />
-                    <label for="isActive" class="ml-2 block text-sm text-gray-700">
+                    >
+                    <label
+                      for="isActive"
+                      class="ml-2 block text-sm text-gray-700"
+                    >
                       Active extinguisher
                     </label>
                   </div>
@@ -490,14 +583,20 @@
                       v-model="formData.isOutOfService"
                       type="checkbox"
                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    />
-                    <label for="isOutOfService" class="ml-2 block text-sm text-gray-700">
+                    >
+                    <label
+                      for="isOutOfService"
+                      class="ml-2 block text-sm text-gray-700"
+                    >
                       Out of service
                     </label>
                   </div>
 
                   <div v-if="formData.isOutOfService">
-                    <label for="outOfServiceReason" class="form-label">
+                    <label
+                      for="outOfServiceReason"
+                      class="form-label"
+                    >
                       Out of Service Reason
                     </label>
                     <textarea
@@ -506,7 +605,7 @@
                       rows="2"
                       class="form-input"
                       placeholder="Reason for being out of service..."
-                    ></textarea>
+                    />
                   </div>
                 </div>
 
@@ -518,16 +617,19 @@
                     class="btn-primary flex-1"
                   >
                     <span v-if="!submitting">{{ isEditing ? 'Update Extinguisher' : 'Create Extinguisher' }}</span>
-                    <span v-else class="flex items-center justify-center">
-                      <div class="spinner mr-2"></div>
+                    <span
+                      v-else
+                      class="flex items-center justify-center"
+                    >
+                      <div class="spinner mr-2" />
                       {{ isEditing ? 'Updating...' : 'Creating...' }}
                     </span>
                   </button>
                   <button
                     type="button"
-                    @click="closeModal"
                     :disabled="submitting"
                     class="btn-outline"
+                    @click="closeModal"
                   >
                     Cancel
                   </button>
@@ -563,14 +665,14 @@
                 :src="selectedExtinguisher?.qrCodeData"
                 alt="QR Code"
                 class="w-64 h-64"
-              />
+              >
             </div>
             <p class="text-sm text-gray-600 mb-4">
               Scan this code to quickly access extinguisher information
             </p>
             <button
-              @click="closeQRModal"
               class="btn-primary"
+              @click="closeQRModal"
             >
               Close
             </button>

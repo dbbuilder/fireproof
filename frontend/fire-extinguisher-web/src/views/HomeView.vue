@@ -31,21 +31,39 @@
 
       <div class="grid md:grid-cols-3 gap-6 mt-16">
         <div class="bg-white p-6 rounded-lg shadow-md">
-          <div class="text-3xl mb-4">📱</div>
-          <h3 class="text-lg font-semibold mb-2">Multi-Platform</h3>
-          <p class="text-gray-600">Web and mobile apps with offline capability</p>
+          <div class="text-3xl mb-4">
+            📱
+          </div>
+          <h3 class="text-lg font-semibold mb-2">
+            Multi-Platform
+          </h3>
+          <p class="text-gray-600">
+            Web and mobile apps with offline capability
+          </p>
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-md">
-          <div class="text-3xl mb-4">🔒</div>
-          <h3 class="text-lg font-semibold mb-2">Tamper-Proof</h3>
-          <p class="text-gray-600">Cryptographic verification of all inspections</p>
+          <div class="text-3xl mb-4">
+            🔒
+          </div>
+          <h3 class="text-lg font-semibold mb-2">
+            Tamper-Proof
+          </h3>
+          <p class="text-gray-600">
+            Cryptographic verification of all inspections
+          </p>
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-md">
-          <div class="text-3xl mb-4">📊</div>
-          <h3 class="text-lg font-semibold mb-2">Compliance Reports</h3>
-          <p class="text-gray-600">Automated NFPA 10 compliant reporting</p>
+          <div class="text-3xl mb-4">
+            📊
+          </div>
+          <h3 class="text-lg font-semibold mb-2">
+            Compliance Reports
+          </h3>
+          <p class="text-gray-600">
+            Automated NFPA 10 compliant reporting
+          </p>
         </div>
       </div>
     </div>
