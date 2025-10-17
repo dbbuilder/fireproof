@@ -1,0 +1,40 @@
+# Dependency directories
+node_modules/
+
+# Build output (only dist/ should be deployed)
+dev-dist/
+
+# Test directories
+test-results/
+playwright-report/
+playwright/.cache/
+.nyc_output/
+coverage/
+
+# Development files
+*.log
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+.DS_Store
+.env.local
+.env.development
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# CI/CD
+.github/
+
+# Documentation
+*.md
+!README.md
