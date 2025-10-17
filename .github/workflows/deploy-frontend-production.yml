@@ -33,6 +33,10 @@ jobs:
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: npm ci
 
+    - name: Install Playwright browsers
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: npx playwright install --with-deps chromium
+
     - name: Run linter
       working-directory: ${{ env.WORKING_DIRECTORY }}
       run: npm run lint || echo "Linter warnings found, continuing"
