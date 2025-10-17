@@ -153,30 +153,6 @@
       </div>
     </div>
 
-    <!-- Success Banner (auto-dismisses) -->
-    <div
-      v-else-if="showSuccess"
-      class="bg-green-600 text-white px-4 py-3 shadow-lg"
-    >
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <div class="flex items-center">
-          <svg
-            class="h-5 w-5 text-white mr-2"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <p class="text-sm font-medium">
-            All items synced successfully
-          </p>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -195,8 +171,6 @@ const status = ref<SyncStatus>({
 })
 
 const dismissed = ref(false)
-const showSuccess = ref(false)
-const successTimeout = ref<number | null>(null)
 
 // Computed
 const hasPending = computed(() => {
@@ -213,8 +187,7 @@ const shouldShow = computed(() => {
   return (
     !status.value.online ||
     status.value.syncing ||
-    hasFailures.value ||
-    showSuccess.value
+    hasFailures.value
   )
 })
 
@@ -239,19 +212,6 @@ const retry = async () => {
 const handleSyncEvent = (event: SyncEvent) => {
   // Update status on any sync event
   updateStatus()
-
-  // Show success message briefly after successful sync
-  if (event.type === 'sync-complete') {
-    showSuccess.value = true
-
-    if (successTimeout.value) {
-      clearTimeout(successTimeout.value)
-    }
-
-    successTimeout.value = window.setTimeout(() => {
-      showSuccess.value = false
-    }, 3000)
-  }
 }
 
 // Lifecycle
@@ -269,9 +229,6 @@ onMounted(() => {
   onUnmounted(() => {
     clearInterval(interval)
     offlineSync.off(handleSyncEvent)
-    if (successTimeout.value) {
-      clearTimeout(successTimeout.value)
-    }
   })
 })
 </script>
