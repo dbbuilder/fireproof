@@ -3,10 +3,14 @@ import {
   navigateTo,
   waitForLoading,
   setupConsoleErrorListener,
+  loginAndSelectTenant,
 } from './helpers'
 
 test.describe('Inspections View', () => {
-  // Note: These tests use stored authentication from auth.setup.ts
+  // Fresh login before each test (no relying on saved auth state)
+  test.beforeEach(async ({ page }) => {
+    await loginAndSelectTenant(page)
+  })
 
   test('should display inspections page without errors', async ({ page }) => {
     // Set up console error listener

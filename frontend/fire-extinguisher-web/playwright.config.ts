@@ -45,20 +45,20 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // Setup project - runs once to authenticate
+    // Setup project - runs once to authenticate (kept for compatibility)
     {
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
     },
 
-    // Authenticated tests - use stored auth state
+    // Authenticated tests - use fresh login via beforeEach (no saved state)
     {
       name: 'chromium-authenticated',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/user.json',
+        // Removed storageState - using fresh login in beforeEach instead
       },
-      dependencies: ['setup'],
+      dependencies: ['setup'], // Keep dependency for test ordering
       testIgnore: ['**/auth.spec.ts', '**/smoke.spec.ts'], // Exclude auth and smoke tests
     },
 
