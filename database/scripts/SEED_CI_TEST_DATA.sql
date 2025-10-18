@@ -7,6 +7,12 @@
 USE FireProofDB_Test;
 GO
 
+-- Set required options
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
+SET NOCOUNT ON;
+GO
+
 PRINT 'Starting CI test data seeding...';
 GO
 
@@ -34,10 +40,47 @@ GO
 -- =============================================
 PRINT 'Creating test tenants...';
 
-INSERT INTO dbo.Tenants (TenantId, CompanyName, SubscriptionLevel, IsActive, CreatedDate, ModifiedDate)
+-- Note: Must include all required columns from schema
+INSERT INTO dbo.Tenants (
+    TenantId,
+    TenantCode,
+    CompanyName,
+    SubscriptionTier,
+    IsActive,
+    MaxLocations,
+    MaxUsers,
+    MaxExtinguishers,
+    DatabaseSchema,
+    CreatedDate,
+    ModifiedDate
+)
 VALUES
-    ('11111111-1111-1111-1111-111111111111', 'CI Test Tenant A', 'Professional', 1, GETUTCDATE(), GETUTCDATE()),
-    ('22222222-2222-2222-2222-222222222222', 'CI Test Tenant B', 'Professional', 1, GETUTCDATE(), GETUTCDATE());
+    (
+        '11111111-1111-1111-1111-111111111111',
+        'CI-TEST-A',
+        'CI Test Tenant A',
+        'Standard',
+        1,
+        100,
+        50,
+        500,
+        'tenant_11111111-1111-1111-1111-111111111111',
+        GETUTCDATE(),
+        GETUTCDATE()
+    ),
+    (
+        '22222222-2222-2222-2222-222222222222',
+        'CI-TEST-B',
+        'CI Test Tenant B',
+        'Standard',
+        1,
+        100,
+        50,
+        500,
+        'tenant_22222222-2222-2222-2222-222222222222',
+        GETUTCDATE(),
+        GETUTCDATE()
+    );
 
 PRINT 'Test tenants created: CI Test Tenant A, CI Test Tenant B';
 GO
@@ -47,11 +90,11 @@ GO
 -- =============================================
 PRINT 'Creating test users...';
 
--- Note: Password hash is for 'TestPassword123!' - DO NOT use in production
-INSERT INTO dbo.Users (UserId, Email, PasswordHash, FirstName, LastName, IsActive, CreatedDate, ModifiedDate)
+-- Note: Users authenticate via Azure AD B2C, no password stored in database
+INSERT INTO dbo.Users (UserId, Email, FirstName, LastName, IsActive, CreatedDate, ModifiedDate)
 VALUES
-    ('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'test-a@ci.fireproof.test', 'AQAAAAEAACcQAAAAEDummyHashForTestingOnly', 'CI Test', 'User A', 1, GETUTCDATE(), GETUTCDATE()),
-    ('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'test-b@ci.fireproof.test', 'AQAAAAEAACcQAAAAEDummyHashForTestingOnly', 'CI Test', 'User B', 1, GETUTCDATE(), GETUTCDATE());
+    ('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'test-a@ci.fireproof.test', 'CI Test', 'User A', 1, GETUTCDATE(), GETUTCDATE()),
+    ('BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'test-b@ci.fireproof.test', 'CI Test', 'User B', 1, GETUTCDATE(), GETUTCDATE());
 
 PRINT 'Test users created: test-a@ci.fireproof.test, test-b@ci.fireproof.test';
 GO
@@ -61,10 +104,11 @@ GO
 -- =============================================
 PRINT 'Assigning users to tenants...';
 
-INSERT INTO dbo.UserTenantRoles (UserTenantRoleId, UserId, TenantId, RoleName, CreatedDate)
+-- Note: Valid RoleNames are: TenantAdmin, LocationManager, Inspector, Viewer
+INSERT INTO dbo.UserTenantRoles (UserTenantRoleId, UserId, TenantId, RoleName, IsActive, CreatedDate)
 VALUES
-    (NEWID(), 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', '11111111-1111-1111-1111-111111111111', 'Admin', GETUTCDATE()),
-    (NEWID(), 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', '22222222-2222-2222-2222-222222222222', 'Admin', GETUTCDATE());
+    (NEWID(), 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', '11111111-1111-1111-1111-111111111111', 'TenantAdmin', 1, GETUTCDATE()),
+    (NEWID(), 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', '22222222-2222-2222-2222-222222222222', 'TenantAdmin', 1, GETUTCDATE());
 
 PRINT 'User-tenant assignments complete.';
 GO
@@ -74,38 +118,70 @@ GO
 -- =============================================
 PRINT 'Creating test locations...';
 
+-- Generate LocationIds upfront (stored procedure requires them as INPUT)
 DECLARE @LocationA_Id UNIQUEIDENTIFIER = 'AAA00000-0000-0000-0000-000000000001';
 DECLARE @LocationB_Id UNIQUEIDENTIFIER = 'BBB00000-0000-0000-0000-000000000001';
 
--- Locations for Tenant A
+-- Location for Tenant A
 EXEC dbo.usp_Location_Create
+    @LocationId = @LocationA_Id,
     @TenantId = '11111111-1111-1111-1111-111111111111',
     @LocationCode = 'CI-LOC-A-001',
     @LocationName = 'CI Test Location A-1',
-    @Address = '123 Test Street A',
+    @AddressLine1 = '123 Test Street A',
     @City = 'Test City A',
     @StateProvince = 'TS',
     @PostalCode = '12345',
-    @Country = 'USA',
-    @Latitude = 40.7128,
-    @Longitude = -74.0060,
-    @IsActive = 1;
+    @Country = 'USA';
 
--- Locations for Tenant B
+-- Location for Tenant B
 EXEC dbo.usp_Location_Create
+    @LocationId = @LocationB_Id,
     @TenantId = '22222222-2222-2222-2222-222222222222',
     @LocationCode = 'CI-LOC-B-001',
     @LocationName = 'CI Test Location B-1',
-    @Address = '456 Test Avenue B',
+    @AddressLine1 = '456 Test Avenue B',
     @City = 'Test City B',
     @StateProvince = 'TS',
     @PostalCode = '67890',
-    @Country = 'USA',
-    @Latitude = 34.0522,
-    @Longitude = -118.2437,
-    @IsActive = 1;
+    @Country = 'USA';
 
 PRINT 'Test locations created.';
+GO
+
+-- =============================================
+-- Create Test Extinguisher Type (if needed)
+-- =============================================
+PRINT 'Checking for extinguisher types...';
+
+DECLARE @ExtinguisherTypeId UNIQUEIDENTIFIER;
+
+-- Try to get existing extinguisher type
+SELECT TOP 1 @ExtinguisherTypeId = ExtinguisherTypeId
+FROM dbo.ExtinguisherTypes
+WHERE IsActive = 1;
+
+-- If no extinguisher type exists, create one
+IF @ExtinguisherTypeId IS NULL
+BEGIN
+    SET @ExtinguisherTypeId = NEWID();
+
+    EXEC dbo.usp_ExtinguisherType_Create
+        @ExtinguisherTypeId = @ExtinguisherTypeId,
+        @TypeCode = 'ABC',
+        @TypeName = 'ABC Dry Chemical',
+        @Description = 'Standard ABC dry chemical fire extinguisher',
+        @MonthlyInspectionRequired = 1,
+        @AnnualInspectionRequired = 1,
+        @HydrostaticTestYears = 12;
+
+    PRINT 'Created default extinguisher type: ABC Dry Chemical';
+END
+ELSE
+BEGIN
+    PRINT 'Using existing extinguisher type';
+END
+
 GO
 
 -- =============================================
@@ -113,59 +189,63 @@ GO
 -- =============================================
 PRINT 'Creating test extinguishers...';
 
--- Get location IDs (created by stored procedures)
-DECLARE @TenantA_LocationId UNIQUEIDENTIFIER;
-DECLARE @TenantB_LocationId UNIQUEIDENTIFIER;
+-- Get the extinguisher type
+DECLARE @ExtTypeId UNIQUEIDENTIFIER;
+SELECT TOP 1 @ExtTypeId = ExtinguisherTypeId
+FROM dbo.ExtinguisherTypes
+WHERE IsActive = 1;
 
-SELECT TOP 1 @TenantA_LocationId = LocationId
-FROM dbo.Locations
-WHERE TenantId = '11111111-1111-1111-1111-111111111111'
-  AND LocationCode = 'CI-LOC-A-001';
-
-SELECT TOP 1 @TenantB_LocationId = LocationId
-FROM dbo.Locations
-WHERE TenantId = '22222222-2222-2222-2222-222222222222'
-  AND LocationCode = 'CI-LOC-B-001';
+-- Generate ExtinguisherIds upfront (stored procedure requires them as INPUT)
+DECLARE @ExtA1_Id UNIQUEIDENTIFIER = 'AAA10000-0000-0000-0000-000000000001';
+DECLARE @ExtA2_Id UNIQUEIDENTIFIER = 'AAA20000-0000-0000-0000-000000000002';
+DECLARE @ExtB1_Id UNIQUEIDENTIFIER = 'BBB10000-0000-0000-0000-000000000001';
+DECLARE @ExtB2_Id UNIQUEIDENTIFIER = 'BBB20000-0000-0000-0000-000000000002';
 
 -- Extinguishers for Tenant A
-IF @TenantA_LocationId IS NOT NULL
-BEGIN
-    EXEC dbo.usp_Extinguisher_Create
-        @TenantId = '11111111-1111-1111-1111-111111111111',
-        @LocationId = @TenantA_LocationId,
-        @AssetTag = 'CI-EXT-A-001',
-        @SerialNumber = 'SN-A-001',
-        @IsActive = 1;
+EXEC dbo.usp_Extinguisher_Create
+    @ExtinguisherId = @ExtA1_Id,
+    @TenantId = '11111111-1111-1111-1111-111111111111',
+    @LocationId = 'AAA00000-0000-0000-0000-000000000001',
+    @ExtinguisherTypeId = @ExtTypeId,
+    @AssetTag = 'CI-EXT-A-001',
+    @SerialNumber = 'SN-A-001',
+    @Manufacturer = 'Test Manufacturer',
+    @Model = 'Test Model ABC';
 
-    EXEC dbo.usp_Extinguisher_Create
-        @TenantId = '11111111-1111-1111-1111-111111111111',
-        @LocationId = @TenantA_LocationId,
-        @AssetTag = 'CI-EXT-A-002',
-        @SerialNumber = 'SN-A-002',
-        @IsActive = 1;
+EXEC dbo.usp_Extinguisher_Create
+    @ExtinguisherId = @ExtA2_Id,
+    @TenantId = '11111111-1111-1111-1111-111111111111',
+    @LocationId = 'AAA00000-0000-0000-0000-000000000001',
+    @ExtinguisherTypeId = @ExtTypeId,
+    @AssetTag = 'CI-EXT-A-002',
+    @SerialNumber = 'SN-A-002',
+    @Manufacturer = 'Test Manufacturer',
+    @Model = 'Test Model ABC';
 
-    PRINT 'Created 2 extinguishers for Tenant A';
-END
+PRINT 'Created 2 extinguishers for Tenant A';
 
 -- Extinguishers for Tenant B
-IF @TenantB_LocationId IS NOT NULL
-BEGIN
-    EXEC dbo.usp_Extinguisher_Create
-        @TenantId = '22222222-2222-2222-2222-222222222222',
-        @LocationId = @TenantB_LocationId,
-        @AssetTag = 'CI-EXT-B-001',
-        @SerialNumber = 'SN-B-001',
-        @IsActive = 1;
+EXEC dbo.usp_Extinguisher_Create
+    @ExtinguisherId = @ExtB1_Id,
+    @TenantId = '22222222-2222-2222-2222-222222222222',
+    @LocationId = 'BBB00000-0000-0000-0000-000000000001',
+    @ExtinguisherTypeId = @ExtTypeId,
+    @AssetTag = 'CI-EXT-B-001',
+    @SerialNumber = 'SN-B-001',
+    @Manufacturer = 'Test Manufacturer',
+    @Model = 'Test Model ABC';
 
-    EXEC dbo.usp_Extinguisher_Create
-        @TenantId = '22222222-2222-2222-2222-222222222222',
-        @LocationId = @TenantB_LocationId,
-        @AssetTag = 'CI-EXT-B-002',
-        @SerialNumber = 'SN-B-002',
-        @IsActive = 1;
+EXEC dbo.usp_Extinguisher_Create
+    @ExtinguisherId = @ExtB2_Id,
+    @TenantId = '22222222-2222-2222-2222-222222222222',
+    @LocationId = 'BBB00000-0000-0000-0000-000000000001',
+    @ExtinguisherTypeId = @ExtTypeId,
+    @AssetTag = 'CI-EXT-B-002',
+    @SerialNumber = 'SN-B-002',
+    @Manufacturer = 'Test Manufacturer',
+    @Model = 'Test Model ABC';
 
-    PRINT 'Created 2 extinguishers for Tenant B';
-END
+PRINT 'Created 2 extinguishers for Tenant B';
 
 GO
 
