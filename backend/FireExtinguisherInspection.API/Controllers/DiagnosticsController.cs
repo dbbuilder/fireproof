@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FireExtinguisherInspection.API.Controllers;
 
@@ -405,6 +408,151 @@ public class DiagnosticsController : ControllerBase
                 success = false,
                 error = ex.Message,
                 stackTrace = ex.StackTrace
+            });
+        }
+    }
+
+    /// <summary>
+    /// Get JWT configuration values (secrets masked for security)
+    /// </summary>
+    [HttpGet("jwt-config")]
+    public ActionResult<object> GetJwtConfig()
+    {
+        var jwtSecretKey = _configuration["JwtSecretKey"];
+        var jwtColonSecretKey = _configuration["Jwt:SecretKey"];
+        var jwtIssuer = _configuration["Jwt:Issuer"];
+        var jwtAudience = _configuration["Jwt:Audience"];
+
+        return Ok(new
+        {
+            ConfigurationSources = new
+            {
+                JwtSecretKey = new
+                {
+                    Exists = !string.IsNullOrEmpty(jwtSecretKey),
+                    Length = jwtSecretKey?.Length ?? 0,
+                    First10Chars = jwtSecretKey?.Substring(0, Math.Min(10, jwtSecretKey.Length)) ?? "NULL",
+                    Last10Chars = jwtSecretKey != null && jwtSecretKey.Length > 10
+                        ? jwtSecretKey.Substring(jwtSecretKey.Length - 10)
+                        : "NULL",
+                    SHA256Hash = jwtSecretKey != null
+                        ? Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(jwtSecretKey)))
+                        : "NULL"
+                },
+                JwtColonSecretKey = new
+                {
+                    Exists = !string.IsNullOrEmpty(jwtColonSecretKey),
+                    Length = jwtColonSecretKey?.Length ?? 0,
+                    First10Chars = jwtColonSecretKey?.Substring(0, Math.Min(10, jwtColonSecretKey.Length)) ?? "NULL",
+                    Last10Chars = jwtColonSecretKey != null && jwtColonSecretKey.Length > 10
+                        ? jwtColonSecretKey.Substring(jwtColonSecretKey.Length - 10)
+                        : "NULL",
+                    SHA256Hash = jwtColonSecretKey != null
+                        ? Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(jwtColonSecretKey)))
+                        : "NULL"
+                },
+                SecretsMatch = jwtSecretKey == jwtColonSecretKey
+            },
+            IssuerAndAudience = new
+            {
+                Issuer = jwtIssuer ?? "FireProofAPI (default)",
+                Audience = jwtAudience ?? "FireProofApp (default)"
+            },
+            KeyVaultConfig = new
+            {
+                VaultUri = _configuration["KeyVault:VaultUri"] ?? "NOT SET",
+                VaultUriUnderscore = _configuration["KeyVault__VaultUri"] ?? "NOT SET"
+            },
+            EnvironmentInfo = new
+            {
+                AspNetCoreEnvironment = _configuration["ASPNETCORE_ENVIRONMENT"],
+                DevModeEnabled = _configuration.GetValue<bool>("Authentication:DevModeEnabled", false)
+            }
+        });
+    }
+
+    /// <summary>
+    /// Test JWT token generation and validation with current configuration
+    /// </summary>
+    [HttpPost("test-jwt")]
+    public ActionResult<object> TestJwt()
+    {
+        try
+        {
+            var jwtSecretKey = _configuration["JwtSecretKey"]
+                ?? _configuration["Jwt:SecretKey"]
+                ?? throw new InvalidOperationException("JWT SecretKey not configured");
+
+            var jwtIssuer = _configuration["Jwt:Issuer"] ?? "FireProofAPI";
+            var jwtAudience = _configuration["Jwt:Audience"] ?? "FireProofApp";
+
+            _logger.LogInformation("Testing JWT with: Issuer={Issuer}, Audience={Audience}, SecretLength={Length}",
+                jwtIssuer, jwtAudience, jwtSecretKey.Length);
+
+            // Generate test token
+            var claims = new[]
+            {
+                new System.Security.Claims.Claim("test", "diagnostic_value"),
+                new System.Security.Claims.Claim("timestamp", DateTime.UtcNow.ToString("o"))
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: jwtIssuer,
+                audience: jwtAudience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(5),
+                signingCredentials: credentials
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            // Now try to validate it
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = key,
+                ValidateIssuer = true,
+                ValidIssuer = jwtIssuer,
+                ValidateAudience = true,
+                ValidAudience = jwtAudience,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            var principal = tokenHandler.ValidateToken(tokenString, validationParameters, out var validatedToken);
+
+            return Ok(new
+            {
+                Success = true,
+                Message = "JWT generation and validation successful",
+                Configuration = new
+                {
+                    Issuer = jwtIssuer,
+                    Audience = jwtAudience,
+                    SecretKeyLength = jwtSecretKey.Length,
+                    SecretKeySource = _configuration["JwtSecretKey"] != null ? "JwtSecretKey" : "Jwt:SecretKey"
+                },
+                TokenInfo = new
+                {
+                    TokenPreview = tokenString.Substring(0, Math.Min(50, tokenString.Length)) + "...",
+                    Claims = principal.Claims.Select(c => new { c.Type, c.Value }),
+                    ExpiresAt = token.ValidTo
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "JWT test failed");
+            return StatusCode(500, new
+            {
+                Success = false,
+                Error = ex.Message,
+                InnerError = ex.InnerException?.Message,
+                StackTrace = ex.StackTrace
             });
         }
     }
