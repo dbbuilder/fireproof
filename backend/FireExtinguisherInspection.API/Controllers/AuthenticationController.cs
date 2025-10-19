@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using FireExtinguisherInspection.API.Models.DTOs;
+using FireExtinguisherInspection.API.Models.Auth;
 using FireExtinguisherInspection.API.Services;
+using FireExtinguisherInspection.API.Services.Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,15 +15,18 @@ namespace FireExtinguisherInspection.API.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly IPasswordResetService _passwordResetService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthenticationController> _logger;
 
         public AuthenticationController(
             IAuthenticationService authenticationService,
+            IPasswordResetService passwordResetService,
             IConfiguration configuration,
             ILogger<AuthenticationController> logger)
         {
             _authenticationService = authenticationService;
+            _passwordResetService = passwordResetService;
             _configuration = configuration;
             _logger = logger;
         }
@@ -282,6 +287,64 @@ namespace FireExtinguisherInspection.API.Controllers
                 _logger.LogError(ex, "Error assigning user {UserId} to tenant {TenantId}",
                     request.UserId, request.TenantId);
                 return StatusCode(500, new { message = "An error occurred during tenant assignment" });
+            }
+        }
+
+        /// <summary>
+        /// Request password reset email
+        /// </summary>
+        /// <param name="request">Email address for password reset</param>
+        /// <returns>Success status</returns>
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            try
+            {
+                await _passwordResetService.SendPasswordResetEmailAsync(request.Email);
+                // Always return success to prevent email enumeration
+                return Ok(new { message = "If your email exists in our system, you will receive a password reset link shortly." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing forgot password request for {Email}", request.Email);
+                // Don't reveal internal errors to prevent information disclosure
+                return Ok(new { message = "If your email exists in our system, you will receive a password reset link shortly." });
+            }
+        }
+
+        /// <summary>
+        /// Reset password using token from email
+        /// </summary>
+        /// <param name="request">Reset password request with token</param>
+        /// <returns>Success status</returns>
+        [HttpPost("reset-password-with-token")]
+        [AllowAnonymous]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult> ResetPasswordWithToken([FromBody] ResetPasswordWithTokenRequest request)
+        {
+            try
+            {
+                var success = await _passwordResetService.ResetPasswordAsync(request.Token, request.NewPassword);
+                if (success)
+                {
+                    return Ok(new { message = "Password reset successfully. You can now login with your new password." });
+                }
+
+                return BadRequest(new { message = "Failed to reset password. Please try again or request a new reset link." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning("Password reset failed with token: {Message}", ex.Message);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error resetting password with token");
+                return StatusCode(500, new { message = "An error occurred during password reset. Please try again." });
             }
         }
 

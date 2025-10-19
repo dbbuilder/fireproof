@@ -109,6 +109,12 @@ builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
+// Register email and password reset services
+builder.Services.Configure<FireExtinguisherInspection.API.Services.Email.EmailSettings>(builder.Configuration.GetSection("Email"));
+builder.Services.Configure<FireExtinguisherInspection.API.Services.Email.PasswordResetSettings>(builder.Configuration.GetSection("PasswordReset"));
+builder.Services.AddScoped<FireExtinguisherInspection.API.Services.Email.IEmailService, FireExtinguisherInspection.API.Services.Email.SendGridEmailService>();
+builder.Services.AddScoped<FireExtinguisherInspection.API.Services.Email.IPasswordResetService, FireExtinguisherInspection.API.Services.Email.PasswordResetService>();
+
 // Add CORS
 builder.Services.AddCors(options =>
 {
