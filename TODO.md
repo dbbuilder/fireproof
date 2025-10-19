@@ -1,8 +1,147 @@
 # FireProof - Comprehensive Development Roadmap
 
-**Last Updated:** October 14, 2025
+**Last Updated:** October 18, 2025
 **Version:** 2.0 - Competitive Feature Parity + AI Differentiation
-**Status:** Phase 1 Foundation Complete, Moving to MVP
+**Status:** Phase 1 Foundation Complete + Production Fixes Applied, Ready for Inspection Workflow Implementation
+
+## Recent Updates (October 18, 2025)
+
+### Password Reset Functionality Implemented ✅
+
+**SendGrid Email Integration:**
+- Installed SendGrid NuGet package (9.29.3)
+- Created `IEmailService` and `SendGridEmailService` with professional HTML templates
+- Created `IPasswordResetService` and `PasswordResetService`
+- Environment variable: `SENDGRID_API_KEY` configured
+- From email: info@servicevision.net (configurable)
+
+**Database Schema:**
+- Created `dbo.PasswordResetTokens` table with indexes
+- Created 4 stored procedures:
+  - `usp_PasswordResetToken_Create` - Creates token and emails user
+  - `usp_PasswordResetToken_Validate` - Validates token status
+  - `usp_PasswordResetToken_ResetPassword` - Resets password with token
+  - `usp_PasswordResetToken_CleanupExpired` - Background cleanup job
+- Token expiry: 60 minutes (configurable)
+- BCrypt password hashing with WorkFactor 12
+
+**API Endpoints:**
+- `POST /api/authentication/forgot-password` - Request password reset email
+- `POST /api/authentication/reset-password-with-token` - Reset password with token
+- Email enumeration prevention for security
+- Both endpoints are AllowAnonymous
+
+**Demo Users Created:**
+- demo@fireproofapp.net (SystemAdmin + TenantAdmin)
+- cpayne4@kumc.edu (SystemAdmin + TenantAdmin)
+- jdunn@2amarketing.com (SystemAdmin + TenantAdmin)
+- All passwords: "FireProofIt!" (BCrypt WorkFactor 12)
+
+**Documentation:**
+- Comprehensive deployment guide: `/docs/PASSWORD_RESET_DEPLOYMENT.md`
+- Azure Key Vault and direct App Service configuration instructions
+- Testing and troubleshooting steps included
+
+### Critical Production Fixes Completed ✅
+
+**NULL Value Exception Resolution:**
+- Fixed SqlNullValueException errors in Inspections endpoint (HTTP 500)
+- Root cause: NULL values in boolean and string columns causing ADO.NET reader failures
+- Solution: Both data fixes AND schema constraints implemented
+- **Updated 4 inspection records** with NULL values
+- **Added NOT NULL constraints to 16 boolean columns** with DEFAULT values
+- Result: ✅ Production API stable, no more NULL exceptions
+
+**Super Admin User Creation:**
+- Created Charlotte Payne (cpayne4@kumc.edu) - SystemAdmin + TenantAdmin
+- Created Jon Dunn (jdunn@2amarketing.com) - SystemAdmin + TenantAdmin
+- Created demo@fireproofapp.net - SystemAdmin + TenantAdmin
+- Created `usp_CreateSuperAdmin` stored procedure for future admin creation
+- Password: "FireProofIt!" (BCrypt WorkFactor 12)
+- All users can now login successfully ✅
+
+**Schema Archival & Documentation:**
+- Extracted production schema using SQL Extract tool
+- 18 tables, 69 stored procedures, 35 foreign keys documented
+- Schema archived to `/database/schema-archive/2025-10-18/`
+- Historical scripts archived to `/database/scripts-archive/2025-10-18-pre-schema-extract/`
+- Production-ready deployment files available
+
+### Lessons Learned
+
+**NULL Value Prevention:**
+- Defensive code alone is insufficient - schema constraints required
+- Boolean columns MUST have NOT NULL constraints with DEFAULT values
+- String columns should have defaults or proper NULL handling
+- Always use `reader.IsDBNull()` before calling typed Get* methods OR enforce schema constraints
+
+**RLS Migration Benefits:**
+- Single `dbo` schema simplifies maintenance vs. per-tenant schemas
+- TenantId column + RLS policies provide automatic isolation
+- Better query performance and simpler stored procedures
+- All CRUD operations now tenant-aware by default
+
+**Password Management:**
+- Use BCrypt with WorkFactor 12 minimum for production
+- Generate hashes using C# utility (BCrypt.Net-Next) to ensure compatibility
+- Store both hash and salt in database
+- Default passwords should be documented securely
+
+### Database Statistics (Current)
+
+**Schemas:** 4 total
+- `dbo` (core + all tables with RLS)
+- `DEMO001` (demo tenant)
+- Additional tenant schemas (legacy, to be migrated)
+
+**Tables:** 19 total
+1. Users (with authentication fields)
+2. Tenants
+3. SystemRoles
+4. UserSystemRoles
+5. UserTenantRoles
+6. AuditLog
+7. ExtinguisherTypes
+8. ChecklistTemplates
+9. ChecklistItems
+10. Locations
+11. Extinguishers (with all NFPA fields)
+12. Inspections (with 16 NOT NULL boolean fields ✅)
+13. InspectionPhotos
+14. InspectionChecklistResponses
+15. InspectionDeficiencies
+16. MaintenanceRecords
+17. Reports
+18. InspectionTypes
+19. PasswordResetTokens (new - password reset via email) ✅
+
+**Stored Procedures:** 73 operational
+- Authentication: 4 procedures
+- Password Reset: 4 procedures (new) ✅
+- Tenants: 4 procedures
+- Users: 7 procedures (including super admin creation)
+- Locations: 5 procedures
+- Extinguishers: 7 procedures
+- ExtinguisherTypes: 5 procedures
+- Inspections: 12 procedures
+- Checklists: 8 procedures
+- Deficiencies: 6 procedures
+- Reports: 4 procedures
+- System: 7 procedures
+
+**Constraints:**
+- Primary Keys: 18 (all tables)
+- Foreign Keys: 35 (referential integrity enforced)
+- Unique Constraints: 6
+- Check Constraints: 2
+- Indexes: 32 (optimized for common queries)
+
+**Active Users:** 5 super admins (chris@servicevision.net, demo@fireproofapp.net, cpayne4@kumc.edu, jdunn@2amarketing.com, sysadmin@fireproof.local)
+- chris@servicevision.net (original)
+- cpayne4@kumc.edu (Charlotte Payne)
+- jdunn@2amarketing.com (Jon Dunn)
+
+---
 
 ---
 
@@ -78,34 +217,129 @@ FireProof is a multi-tenant fire extinguisher inspection SaaS platform designed 
 
 ### Database & Infrastructure ✅
 
-**Core Schema (dbo):**
-- [x] Tenants table
-- [x] Users table
-- [x] UserTenantRoles table (multi-tenant support)
-- [x] AuditLog table
+**Core Schema (dbo) - Production Ready:**
+- [x] **18 Tables** in dbo schema with RLS (Row Level Security)
+- [x] **69 Stored Procedures** operational and tested
+- [x] **35 Foreign Keys** enforcing referential integrity
+- [x] **32 Indexes** for query optimization
+- [x] **Schema Archived** to `/database/schema-archive/2025-10-18/`
 
-**Tenant Schema (DEMO001):**
-- [x] Locations table (3 seed locations)
-- [x] ExtinguisherTypes table (10 seed types)
-- [x] Extinguishers table with all required columns:
+**Core Tables:**
+- [x] Users table (with authentication fields: PasswordHash, PasswordSalt, RefreshToken)
+- [x] Tenants table (multi-tenant foundation)
+- [x] SystemRoles table (RBAC)
+- [x] UserSystemRoles table (user-role assignments)
+- [x] UserTenantRoles table (tenant-specific roles)
+- [x] AuditLog table (compliance tracking)
+
+**Equipment Management Tables:**
+- [x] Locations table (facility locations)
+- [x] ExtinguisherTypes table (NFPA classifications)
+- [x] Extinguishers table with all NFPA-required fields:
   - [x] LastServiceDate, NextServiceDueDate, NextHydroTestDueDate
   - [x] FloorLevel, Notes, QrCodeData
-  - [x] IsOutOfService, OutOfServiceReason
+  - [x] IsOutOfService, OutOfServiceReason (with RLS support)
+  - [x] Manufacturer, Model, Capacity, SerialNumber
+  - [x] InstallDate, PurchaseDate, WarrantyExpiration
 
-**Stored Procedures (16 total for DEMO001):**
-- [x] usp_Tenant_GetAll, GetById, GetAvailableForUser
-- [x] usp_Location_Create, GetAll, GetById
+**Inspection Tables (Production Ready):**
+- [x] Inspections table (with **16 NOT NULL boolean fields** ✅)
+  - [x] All columns hardened against NULL exceptions
+  - [x] GPS coordinates (Latitude, Longitude, LocationAccuracy)
+  - [x] Tamper-proofing (DataHash, PreviousHash, IsVerified)
+  - [x] Inspector signature and timestamps
+- [x] InspectionPhotos table (Azure Blob Storage integration ready)
+- [x] InspectionChecklistResponses table (NFPA checklist support)
+- [x] InspectionDeficiencies table (deficiency tracking)
+- [x] MaintenanceRecords table (service history)
+
+**NFPA Compliance Tables:**
+- [x] ChecklistTemplates table (NFPA 10 templates)
+- [x] ChecklistItems table (template items)
+- [x] InspectionTypes table (Monthly, Annual, 6-Year, 12-Year, Hydrostatic)
+- [x] Reports table (compliance reporting)
+
+**Stored Procedures (69 total):**
+
+*Authentication & Users (10 procedures):*
+- [x] usp_User_GetByEmail, Create, Update
+- [x] usp_User_ValidatePassword
+- [x] usp_User_UpdateRefreshToken, ClearRefreshToken
+- [x] usp_User_UpdateLastLogin
+- [x] usp_CreateSuperAdmin (role copying, default password support) ✅
+
+*Tenants (4 procedures):*
+- [x] usp_Tenant_GetAll, GetById, GetAvailableForUser, Create
+
+*Locations (5 procedures):*
+- [x] usp_Location_Create, GetAll, GetById, Update, Delete
+
+*Extinguishers (7 procedures):*
 - [x] usp_Extinguisher_Create, GetAll, GetById, GetByBarcode
-- [x] usp_ExtinguisherType_Create, GetAll, GetById
-- [x] usp_Inspection_Create, GetById, GetByExtinguisher, Complete
-- [x] usp_InspectionResponse_CreateBatch
+- [x] usp_Extinguisher_Update, Delete, MarkOutOfService
+
+*ExtinguisherTypes (5 procedures):*
+- [x] usp_ExtinguisherType_Create, GetAll, GetById, Update, Delete
+
+*Inspections (12 procedures):*
+- [x] usp_Inspection_GetAll (with filters: InspectionType, Passed, DateRange) ✅
+- [x] usp_Inspection_GetById, GetByExtinguisher, GetDue, GetScheduled
+- [x] usp_Inspection_Create, Update, Complete
+- [x] usp_Inspection_VerifyHash (tamper-proof verification)
+- [x] usp_Inspection_GetByDate, GetOverdue
+
+*Checklists (8 procedures):*
+- [x] usp_ChecklistTemplate_GetAll, GetById, GetByType, Create
+- [x] usp_ChecklistItem_GetByTemplate, CreateBatch
+- [x] usp_InspectionChecklistResponse_CreateBatch, GetByInspection
+
+*Deficiencies (6 procedures):*
+- [x] usp_InspectionDeficiency_Create, Update, Resolve
+- [x] usp_InspectionDeficiency_GetByInspection, GetOpen, GetBySeverity
+
+*Reports (4 procedures):*
 - [x] usp_Report_ComplianceDashboard
+- [x] usp_Report_InspectionHistory
+- [x] usp_Report_DeficiencySummary
+- [x] usp_Report_EquipmentRegister
+
+**RLS Migration Completed (October 17, 2025):**
+- [x] Migrated from per-tenant schemas to single dbo schema
+- [x] TenantId column added to all tenant-specific tables
+- [x] RLS policies enforce automatic tenant isolation
+- [x] All stored procedures updated for TenantId filtering
+- [x] Better performance and simplified maintenance
+
+**Production Hardening (October 17-18, 2025):**
+- [x] Fixed NULL value exceptions in Inspections table
+- [x] Added NOT NULL constraints to all 16 boolean inspection fields
+- [x] Updated 4 inspection records with NULL values
+- [x] Schema constraints prevent future NULL exceptions
+- [x] Production API stable (no HTTP 500 errors) ✅
 
 **Seed Data:**
 - [x] 3 Locations (HQ Seattle, Warehouse Tacoma, Factory Everett)
-- [x] 10 Extinguisher Types (ABC, BC, K, CO2, H2O)
-- [x] 15 Extinguishers (5 per location)
-- [x] 2 Test users (chris@servicevision.net SystemAdmin, multi@servicevision.net TenantAdmin)
+- [x] 10 Extinguisher Types (ABC, BC, K, CO2, H2O, Wet Chemical, Dry Powder, Halon)
+- [x] 15 Extinguishers (5 per location) with complete NFPA data
+- [x] 2 NFPA Checklist Templates (Monthly, Annual)
+- [x] 45+ Checklist Items (NFPA 10 compliance items)
+- [x] Sample Inspections with all required fields
+- [x] 3 Super Admin Users:
+  - [x] chris@servicevision.net (original SystemAdmin)
+  - [x] cpayne4@kumc.edu (Charlotte Payne - SystemAdmin + TenantAdmin) ✅
+  - [x] jdunn@2amarketing.com (Jon Dunn - SystemAdmin + TenantAdmin) ✅
+
+**Schema Documentation & Archival:**
+- [x] Production schema extracted using SQL Extract tool
+- [x] Deployment-ready SQL scripts generated:
+  - [x] 01_CREATE_SCHEMAS.sql
+  - [x] 02_CREATE_TABLES.sql
+  - [x] 03_CREATE_CONSTRAINTS.sql
+  - [x] 04_CREATE_INDEXES.sql
+  - [x] 06_CREATE_PROCEDURES.sql
+- [x] Historical scripts archived with documentation
+- [x] Schema evolution documented in archive README
+- [x] Disaster recovery scripts ready
 
 ### Backend API ✅
 
