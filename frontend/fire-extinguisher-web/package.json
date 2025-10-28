@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:inspector": "vite --config vite.config.inspector.js",
     "build": "vite build",
+    "build:inspector": "vite build --config vite.config.inspector.js",
     "preview": "vite preview",
+    "preview:inspector": "vite preview --outDir dist-inspector",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
     "format": "prettier --write src/",
     "test:e2e": "playwright test",

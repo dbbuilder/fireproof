@@ -135,16 +135,20 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(
                 // Development
-                "http://localhost:5173",  // Vite dev server
+                "http://localhost:5173",  // Vite dev server (admin)
+                "http://localhost:5600",  // Vite dev server (inspector)
                 "http://localhost:4173",  // Vite preview server (for e2e tests)
-                "http://localhost:3000",   // Alternative frontend port
+                "http://localhost:3000",  // Alternative frontend port
                 // Staging
                 "https://staging.fireproofapp.net",  // Staging custom domain
                 "https://witty-island-0daa2e910.2.azurestaticapps.net",  // Staging Azure hostname
-                // Production
+                // Production - Admin
                 "https://fireproofapp.net",  // Production custom domain
                 "https://www.fireproofapp.net",  // Production www subdomain
-                "https://nice-smoke-08dbc500f.2.azurestaticapps.net"  // Production Azure hostname
+                "https://nice-smoke-08dbc500f.2.azurestaticapps.net",  // Production Azure hostname
+                // Production - Inspector
+                "https://inspect.fireproofapp.net",  // Inspector subdomain (Vercel)
+                "https://fireproof-inspector.vercel.app"  // Inspector Vercel default domain
             )
             .AllowAnyMethod()
             .AllowAnyHeader()
