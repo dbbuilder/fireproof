@@ -149,9 +149,43 @@
 
 **Status:** IN PROGRESS
 **Last Updated:** October 23, 2025
+**Deployment URL:** https://scan.fireproofapp.net (dedicated subdomain)
 **Goal:** Enable inspectors to perform inspections via mobile barcode scanning with secure login
 **Timeline:** 2-3 weeks
 **Priority:** 🔴 CRITICAL - Core revenue-generating workflow
+
+**📋 Comprehensive Planning Document:** [`INSPECTOR_BARCODE_SCANNER_PLAN.md`](./INSPECTOR_BARCODE_SCANNER_PLAN.md)
+
+### Subdomain Strategy: scan.fireproofapp.net
+
+**Why a dedicated subdomain:**
+- ✅ **Purpose-specific URL** - Easy to communicate to inspectors ("Go to scan.fireproofapp.net")
+- ✅ **Separate PWA manifest** - Installable as standalone mobile app
+- ✅ **Isolated routing** - No admin features, only inspector workflow
+- ✅ **Simplified UI** - Mobile-first, single-purpose interface
+- ✅ **Smaller bundle** - No admin code, faster load times
+- ✅ **Independent scaling** - Can deploy/scale separately from main app
+
+**Deployment Architecture:**
+- **Main App (fireproofapp.net):** Admin + Customer portal, desktop-optimized
+- **Inspector App (scan.fireproofapp.net):** Inspector-only, mobile-optimized, offline-first
+
+### Barcode Format Support (13+ Formats)
+
+**Fully supported via html5-qrcode auto-detection:**
+- ✅ **Code 39** (3 of 9) - Legacy equipment, auto-strips `*` characters
+- ✅ **Code 128** - Modern high-density barcodes
+- ✅ **QR Code** - Recommended for new equipment (JSON support)
+- ✅ **EAN-13/EAN-8** - Retail barcodes
+- ✅ **UPC-A/UPC-E** - North American retail
+- ✅ **Codabar** - Medical/library
+- ✅ **ITF** - Warehouse
+- ✅ **Data Matrix** - Small industrial codes
+- ✅ **PDF417** - 2D barcodes
+- ✅ **Aztec** - Tickets/transport
+
+**Auto-detection:** Scanner tries all formats simultaneously, no configuration needed!
+**Manual fallback:** Type barcode manually if camera fails or barcode is damaged
 
 ### Strategic Decision: Web-First, Native Later
 
