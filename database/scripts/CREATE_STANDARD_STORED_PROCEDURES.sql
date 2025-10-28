@@ -294,24 +294,45 @@ GO
 -- ============================================================================
 
 CREATE OR ALTER PROCEDURE dbo.usp_Extinguisher_GetAll
-    @TenantId UNIQUEIDENTIFIER
+    @TenantId UNIQUEIDENTIFIER,
+    @LocationId UNIQUEIDENTIFIER = NULL,
+    @ExtinguisherTypeId UNIQUEIDENTIFIER = NULL,
+    @IsActive BIT = NULL,
+    @IsOutOfService BIT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT e.ExtinguisherId, e.TenantId, e.LocationId, e.ExtinguisherTypeId,
-           e.AssetTag, e.BarcodeData, e.Manufacturer, e.Model, e.SerialNumber,
-           e.ManufactureDate, e.InstallDate, e.LastHydrostaticTestDate,
-           e.Capacity, e.LocationDescription, e.IsActive, e.CreatedDate, e.ModifiedDate,
+    SELECT e.ExtinguisherId,
+           e.TenantId,
+           e.LocationId,
+           e.ExtinguisherTypeId,
+           e.AssetTag,
+           e.BarcodeData,
+           e.Manufacturer,
+           e.Model,
+           e.SerialNumber,
+           e.ManufactureDate,
+           e.InstallDate,
+           e.LastHydrostaticTestDate,
+           e.Capacity,
+           e.LocationDescription,
+           e.IsActive,
+           e.IsOutOfService,
+           e.CreatedDate,
+           e.ModifiedDate,
            l.LocationName,
            et.TypeName,
            et.TypeCode
     FROM dbo.Extinguishers e
-    LEFT JOIN dbo.Locations l ON e.LocationId = l.LocationId
+    LEFT JOIN dbo.Locations l ON e.LocationId = l.LocationId AND l.TenantId = @TenantId
     LEFT JOIN dbo.ExtinguisherTypes et ON e.ExtinguisherTypeId = et.ExtinguisherTypeId
     WHERE e.TenantId = @TenantId
-      AND e.IsActive = 1
-    ORDER BY e.AssetTag;
+      AND (@LocationId IS NULL OR e.LocationId = @LocationId)
+      AND (@ExtinguisherTypeId IS NULL OR e.ExtinguisherTypeId = @ExtinguisherTypeId)
+      AND (@IsActive IS NULL OR e.IsActive = @IsActive)
+      AND (@IsOutOfService IS NULL OR e.IsOutOfService = @IsOutOfService)
+    ORDER BY l.LocationName, e.AssetTag;
 END;
 GO
 

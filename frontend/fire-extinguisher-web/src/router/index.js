@@ -43,6 +43,12 @@ const router = createRouter({
     {
       path: '/extinguishers',
       name: 'extinguishers',
+      component: () => import('../views/ExtinguishersViewGrid.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/extinguishers-cards',
+      name: 'extinguishers-cards',
       component: () => import('../views/ExtinguishersView.vue'),
       meta: { requiresAuth: true }
     },

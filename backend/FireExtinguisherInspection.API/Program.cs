@@ -100,7 +100,19 @@ builder.Services.AddScoped<IInspectionService, InspectionService>(); // Legacy (
 builder.Services.AddScoped<IInspectionPhase1Service, InspectionPhase1Service>(); // Phase 1 checklist-based
 builder.Services.AddScoped<IChecklistTemplateService, ChecklistTemplateService>();
 builder.Services.AddScoped<IDeficiencyService, DeficiencyService>();
-builder.Services.AddScoped<IPhotoService, AzureBlobPhotoService>(); // Photo management with Azure Blob
+
+// Use mock photo service in dev mode, Azure Blob in production
+var devModeEnabled = builder.Configuration.GetValue<bool>("Authentication:DevModeEnabled");
+if (devModeEnabled)
+{
+    builder.Services.AddScoped<IPhotoService, MockPhotoService>(); // Mock for development
+    Log.Information("Using MockPhotoService (DevMode enabled)");
+}
+else
+{
+    builder.Services.AddScoped<IPhotoService, AzureBlobPhotoService>(); // Photo management with Azure Blob
+}
+
 builder.Services.AddSingleton<IBarcodeGeneratorService, BarcodeGeneratorService>();
 builder.Services.AddSingleton<ITamperProofingService, TamperProofingService>();
 
@@ -214,9 +226,17 @@ builder.Services.AddAuthorization(options =>
 // Register authorization handlers
 builder.Services.AddSingleton<IAuthorizationHandler, RoleAuthorizationHandler>();
 
-// Add health checks
-builder.Services.AddHealthChecks()
-    .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!);
+// Add health checks (disabled in dev mode to avoid SQL connection issues)
+if (!devModeEnabled)
+{
+    builder.Services.AddHealthChecks()
+        .AddSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!);
+    Log.Information("Health checks enabled");
+}
+else
+{
+    Log.Information("Health checks disabled (DevMode enabled)");
+}
 
 var app = builder.Build();
 
@@ -247,7 +267,10 @@ app.UseTenantResolution();
 
 // Map controllers and health checks
 app.MapControllers();
-app.MapHealthChecks("/health");
+if (!devModeEnabled)
+{
+    app.MapHealthChecks("/health");
+}
 
 // Log startup
 Log.Information("FireProof API starting up...");
