@@ -1,9 +1,52 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useInspectorStore } from '@/stores/useInspectorStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // ============================================
+    // Inspector Routes (Subdomain: inspect.fireproofapp.net)
+    // ============================================
+    {
+      path: '/inspector/login',
+      name: 'inspector-login',
+      component: () => import('../views/inspector/InspectorLoginView.vue'),
+      meta: { requiresInspectorGuest: true }
+    },
+    {
+      path: '/inspector',
+      component: () => import('../views/inspector/InspectorLayoutView.vue'),
+      meta: { requiresInspector: true },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'inspector-dashboard',
+          component: () => import('../views/inspector/InspectorDashboardView.vue'),
+          meta: { requiresInspector: true }
+        },
+        {
+          path: 'scan-location',
+          name: 'inspector-scan-location',
+          component: () => import('../views/inspector/ScanLocationView.vue'),
+          meta: { requiresInspector: true }
+        },
+        {
+          path: 'scan-extinguisher',
+          name: 'inspector-scan-extinguisher',
+          component: () => import('../views/inspector/ScanExtinguisherView.vue'),
+          meta: { requiresInspector: true }
+        }
+        // Additional inspector routes to be added:
+        // - inspection-checklist
+        // - inspection-photos
+        // - inspection-signature
+      ]
+    },
+
+    // ============================================
+    // Admin Routes (Main App)
+    // ============================================
     {
       path: '/',
       name: 'home',
@@ -119,6 +162,36 @@ let authInitStarted = false
 
 // Navigation guard for authentication
 router.beforeEach(async (to, from, next) => {
+  // ============================================
+  // Inspector Routes Guard
+  // ============================================
+  const isInspectorRoute = to.path.startsWith('/inspector')
+
+  if (isInspectorRoute) {
+    const inspectorStore = useInspectorStore()
+
+    // Protect inspector routes that require authentication
+    if (to.meta.requiresInspector && !inspectorStore.isAuthenticated) {
+      next({
+        name: 'inspector-login',
+        query: { redirect: to.fullPath }
+      })
+      return
+    }
+
+    // Redirect authenticated inspectors away from login page
+    if (to.meta.requiresInspectorGuest && inspectorStore.isAuthenticated) {
+      next({ name: 'inspector-dashboard' })
+      return
+    }
+
+    next()
+    return
+  }
+
+  // ============================================
+  // Admin Routes Guard
+  // ============================================
   const authStore = useAuthStore()
 
   // Initialize auth on first navigation if needed, but don't block

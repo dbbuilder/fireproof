@@ -2056,6 +2056,180 @@ Based on competitive analysis and market positioning:
 
 ---
 
+## Future Compliance Modules Expansion (Phase 5+)
+
+**Strategic Goal:** Extend FireProof platform to become comprehensive NFPA/CMS compliance solution
+
+**Planning Document:** See `/FUTURE_COMPLIANCE_MODULES.md` for detailed implementation plans
+
+### Phase 3.0: Exit Lighting & Emergency Lighting (10 weeks)
+**Priority:** 🔥 High - Immediate market opportunity
+**Standards:** NFPA 101 Section 7.9, CMS Healthcare Requirements, OSHA, UL 924
+
+**Core Requirements:**
+- Monthly testing (30-day intervals) with visual inspection
+- Annual testing (90-minute battery test for battery-powered systems)
+- Automated inspection reminders
+- Photo documentation of testing
+- GPS location verification
+- Lumen level measurement (1 foot-candle minimum)
+
+**Market Opportunity:**
+- **Target:** Healthcare facilities, schools, commercial buildings
+- **Competitor:** Hexmodal (30+ health systems, 100+ buildings)
+- **Differentiation:** Integrated with fire extinguisher inspections, unified compliance platform
+- **Pricing:** $2-5/light/year, 50-200 lights per facility average
+- **Revenue Potential:** $100-1,000/facility/year
+
+**Technical Implementation:**
+- QR code labels on each exit light/emergency sign
+- Barcode scanning via inspector mobile app (same app as fire extinguishers)
+- Battery tracking and replacement alerts
+- Same tamper-proof architecture (HMAC-SHA256 hashing)
+- Offline-first data capture with background sync
+
+**Database Extensions:**
+- `ExitLights` table (similar to Extinguishers)
+- `ExitLightInspections` table (similar to Inspections)
+- Battery life tracking and replacement scheduling
+
+### Phase 3.5: Fire Door Inspections (10 weeks)
+**Priority:** 🔥 High - CMS mandatory compliance (since Jan 1, 2018)
+**Standards:** NFPA 80, CMS Fire Door Annual Testing Requirements, Joint Commission
+
+**Core Requirements:**
+- Annual testing of all fire-rated doors
+- 9-point inspection checklist (door closes fully, latch engages, no gaps, gaskets intact, etc.)
+- Clearance measurement (≤ 3/4" under door)
+- Fire rating label verification
+- Photo documentation required
+
+**Market Opportunity:**
+- Healthcare facilities MUST comply (CMS requirement)
+- Commercial buildings, schools, industrial facilities
+- Average 50-500 fire doors per facility
+- Pricing: $5-10/door/year
+
+### Phase 4.0: Fire Alarm System Inspections (12 weeks)
+**Priority:** 🟡 Medium
+**Standards:** NFPA 72, CMS Healthcare Requirements
+
+**Inspection Frequency:**
+- Weekly: Visual panel inspection
+- Monthly: Functional test of alarm devices, battery backup test
+- Quarterly: Full system functional test
+- Annual: Comprehensive inspection by certified technician
+
+**Components:**
+- Control panels, pull stations, smoke detectors, heat detectors
+- Audible alarms (horns, bells), visual alarms (strobes)
+- Notification appliances
+
+### Phase 4.5: Sprinkler System Inspections (12 weeks)
+**Priority:** 🟡 Medium
+**Standards:** NFPA 25, CMS Requirements
+
+**Inspection Frequency:**
+- Weekly: Valve and gauge inspections
+- Monthly: Visual inspection of sprinkler heads, control valve inspection
+- Quarterly: Main drain test, alarm device test
+- Annual: Trip test, flow test, full system inspection
+
+**Components:**
+- Sprinkler heads (location, condition)
+- Control valves (position, accessibility)
+- Gauges (pressure readings)
+- Main drains (flow test results)
+
+### Phase 5.0: Emergency Generator Testing (10 weeks)
+**Priority:** 🟢 Low
+**Standards:** NFPA 110, NFPA 111, CMS Requirements
+
+**Testing Frequency:**
+- Weekly: Visual inspection, engine run test (30 minutes under load)
+- Monthly: Transfer switch test, battery and charger inspection
+- Annual: Load bank test (full load for 2 hours), battery load test
+
+**Data Capture:**
+- Run time and load measurements
+- Voltage and frequency readings
+- Oil pressure and temperature
+- Fuel level and consumption
+- Transfer switch operation time
+
+### Phase 6.0+: Additional CMS/NFPA Compliance Modules
+**Priority:** 🟢 Low - Opportunistic expansion
+
+**Additional Inspection Types:**
+- Smoke detector testing (monthly sensitivity testing, annual cleaning)
+- Fire pump testing (weekly visual, annual flow test)
+- Fire hose and standpipe testing (annual inspection, 5-year hydrostatic)
+- Kitchen hood suppression systems (semi-annual inspection, annual functional test)
+- Portable fire extinguisher recharge (6-year internal, 12-year hydrostatic)
+- Evacuation drills (quarterly fire drills in healthcare, participation documentation)
+
+### Unified Platform Benefits
+
+**Single Inspector App:**
+- One mobile app for all compliance inspections
+- Consistent UX across all modules (barcode scan → GPS → checklist → photo → sign)
+- Shared offline-first architecture
+
+**Consolidated Reporting:**
+- Comprehensive compliance dashboard (all systems in one view)
+- Facility-wide compliance score
+- Unified audit trail across all systems
+
+**Cost Savings:**
+- Single platform subscription (vs. multiple vendors)
+- Shared infrastructure costs
+- Integrated training for all modules
+
+**Regulatory Efficiency:**
+- One-stop compliance solution
+- Simplified audit preparation
+- Automated reminder scheduling across all systems
+
+### Market Positioning
+
+**Target Customers:**
+1. **Healthcare Facilities** (Primary): Hospitals, nursing homes, assisted living, ambulatory surgical centers
+2. **Education**: K-12 schools, universities, daycare facilities
+3. **Commercial**: Office buildings, hotels, shopping centers, multi-family housing
+4. **Industrial**: Manufacturing facilities, warehouses, distribution centers
+
+**Competitive Advantage:**
+- **vs. Hexmodal:** Broader platform (10+ compliance types vs. 1), lower total cost
+- **vs. Paper-Based Systems:** Real-time compliance visibility, tamper-proof digital records, automated scheduling
+- **vs. Generic Inspection Software:** Purpose-built for fire safety compliance, NFPA/CMS standards built into checklists
+
+### Implementation Timeline Summary
+
+| Phase | Module | Timeline | Priority |
+|-------|--------|----------|----------|
+| 1.0-2.0 | Fire Extinguisher Inspections | Complete | ✅ Done |
+| 3.0 | Exit & Emergency Lighting | 10 weeks | 🔥 High |
+| 3.5 | Fire Door Inspections | 10 weeks | 🔥 High |
+| 4.0 | Fire Alarm Systems | 12 weeks | 🟡 Medium |
+| 4.5 | Sprinkler Systems | 12 weeks | 🟡 Medium |
+| 5.0 | Emergency Generators | 10 weeks | 🟢 Low |
+| 6.0+ | Additional Modules | TBD | 🟢 Low |
+
+**Next Steps for Phase 3.0 (Exit Lighting):**
+1. Market validation - survey existing customers (Weeks 1-2)
+2. Identify 3-5 beta customers
+3. Technical planning - finalize database schema (Weeks 3-4)
+4. Development - backend API + frontend inspector screens (Weeks 5-14)
+5. Beta testing (Weeks 15-16)
+6. General availability (Week 17+)
+
+**References:**
+- NFPA Standards: NFPA 10, 25, 72, 80, 101, 110
+- [CMS Life Safety Code Requirements](https://www.cms.gov/medicare/health-safety-standards/certification-compliance/life-safety-code-health-care-facilities-code-requirements)
+- [Hexmodal Smart Emergency Lighting](https://www.hexmodal.com/emergency-lighting-and-testing/)
+
+---
+
 ## Priority Legend
 
 - 🔴 **P0 (Critical):** Blocker - must complete before proceeding
