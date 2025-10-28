@@ -149,17 +149,17 @@
 
 **Status:** IN PROGRESS
 **Last Updated:** October 23, 2025
-**Deployment URL:** https://scan.fireproofapp.net (dedicated subdomain)
+**Deployment URL:** https://inspect.fireproofapp.net (dedicated subdomain)
 **Goal:** Enable inspectors to perform inspections via mobile barcode scanning with secure login
 **Timeline:** 2-3 weeks
 **Priority:** 🔴 CRITICAL - Core revenue-generating workflow
 
 **📋 Comprehensive Planning Document:** [`INSPECTOR_BARCODE_SCANNER_PLAN.md`](./INSPECTOR_BARCODE_SCANNER_PLAN.md)
 
-### Subdomain Strategy: scan.fireproofapp.net
+### Subdomain Strategy: inspect.fireproofapp.net
 
 **Why a dedicated subdomain:**
-- ✅ **Purpose-specific URL** - Easy to communicate to inspectors ("Go to scan.fireproofapp.net")
+- ✅ **Purpose-specific URL** - Easy to communicate to inspectors ("Go to inspect.fireproofapp.net")
 - ✅ **Separate PWA manifest** - Installable as standalone mobile app
 - ✅ **Isolated routing** - No admin features, only inspector workflow
 - ✅ **Simplified UI** - Mobile-first, single-purpose interface
@@ -168,7 +168,7 @@
 
 **Deployment Architecture:**
 - **Main App (fireproofapp.net):** Admin + Customer portal, desktop-optimized
-- **Inspector App (scan.fireproofapp.net):** Inspector-only, mobile-optimized, offline-first
+- **Inspector App (inspect.fireproofapp.net):** Inspector-only, mobile-optimized, offline-first
 
 ### Barcode Format Support (13+ Formats)
 

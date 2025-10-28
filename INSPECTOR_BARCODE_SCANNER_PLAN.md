@@ -3,7 +3,7 @@
 **Last Updated:** October 23, 2025
 **Version:** 1.0
 **Status:** Ready for Implementation
-**Deployment URL:** https://scan.fireproofapp.net
+**Deployment URL:** https://inspect.fireproofapp.net
 
 ---
 
@@ -45,7 +45,7 @@ The FireProof Inspector Barcode Scanner is a mobile-first web application design
 
 ## Deployment Architecture
 
-### Subdomain Strategy: scan.fireproofapp.net
+### Subdomain Strategy: inspect.fireproofapp.net
 
 **Why a dedicated subdomain:**
 - ✅ **Purpose-specific URL** - Easy to remember and communicate to inspectors
@@ -63,7 +63,7 @@ The FireProof Inspector Barcode Scanner is a mobile-first web application design
 - Desktop-optimized
 - Full feature set
 
-**Inspector App (scan.fireproofapp.net):**
+**Inspector App (inspect.fireproofapp.net):**
 - Inspector-only features
 - Mobile-optimized
 - Minimal UI
@@ -73,7 +73,7 @@ The FireProof Inspector Barcode Scanner is a mobile-first web application design
 
 ```dns
 # Azure Static Web Apps (or Azure App Service)
-scan.fireproofapp.net  →  CNAME  →  nice-smoke-08dbc500f.2.azurestaticapps.net
+inspect.fireproofapp.net  →  CNAME  →  nice-smoke-08dbc500f.2.azurestaticapps.net
 ```
 
 ### Build Configuration
@@ -99,7 +99,7 @@ export default defineConfig({
 ### Azure Static Web Apps Configuration
 
 ```json
-// staticwebapp.config.json (for scan.fireproofapp.net)
+// staticwebapp.config.json (for inspect.fireproofapp.net)
 {
   "navigationFallback": {
     "rewrite": "/index.html",
@@ -373,7 +373,7 @@ const qrCodeDataURL = await QRCode.toDataURL(JSON.stringify(qrData), {
 - [ ] Create inspector-specific build configuration (`vite.config.inspector.js`)
 - [ ] Create inspector entry point (`inspector.html`)
 - [ ] Set up routing with `/inspector` prefix
-- [ ] Configure Azure Static Web Apps for `scan.fireproofapp.net`
+- [ ] Configure Azure Static Web Apps for `inspect.fireproofapp.net`
 - [ ] Create inspector-specific CSS theme (mobile-first)
 
 **Days 3-4: Authentication**
@@ -576,7 +576,7 @@ const qrCodeDataURL = await QRCode.toDataURL(JSON.stringify(qrData), {
 ### Routing Structure
 
 ```
-scan.fireproofapp.net/
+inspect.fireproofapp.net/
 ├── /inspector/login           → InspectorLoginView
 ├── /inspector/dashboard       → InspectorDashboardView
 ├── /inspector/scan-location   → ScanLocationView
@@ -995,7 +995,7 @@ describe('BarcodeScannerComponent', () => {
 // inspector-workflow.spec.js
 test('complete inspection workflow', async ({ page }) => {
   // Login
-  await page.goto('https://scan.fireproofapp.net/inspector/login')
+  await page.goto('https://inspect.fireproofapp.net/inspector/login')
   await page.fill('[data-testid="email-input"]', 'inspector@test.com')
   await page.fill('[data-testid="password-input"]', 'password')
   await page.click('[data-testid="login-button"]')
@@ -1120,14 +1120,14 @@ test('complete inspection workflow', async ({ page }) => {
 
 ### DNS & SSL
 
-- [ ] Configure DNS for scan.fireproofapp.net
+- [ ] Configure DNS for inspect.fireproofapp.net
 - [ ] SSL certificate provisioned (Azure manages)
 - [ ] Verify HTTPS redirect
 
 ### Azure Configuration
 
 - [ ] Create Azure Static Web App (or App Service)
-- [ ] Configure custom domain (scan.fireproofapp.net)
+- [ ] Configure custom domain (inspect.fireproofapp.net)
 - [ ] Set environment variables (VITE_API_BASE_URL, etc.)
 - [ ] Configure staticwebapp.config.json
 - [ ] Enable Application Insights
