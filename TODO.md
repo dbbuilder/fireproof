@@ -145,6 +145,262 @@
 
 ---
 
+## 🔴 CURRENT PRIORITY: Phase 1A - Inspector Barcode Scanning App
+
+**Status:** IN PROGRESS
+**Last Updated:** October 23, 2025
+**Goal:** Enable inspectors to perform inspections via mobile barcode scanning with secure login
+**Timeline:** 2-3 weeks
+**Priority:** 🔴 CRITICAL - Core revenue-generating workflow
+
+### Strategic Decision: Web-First, Native Later
+
+**Phase 1A (Next 2-3 weeks):** Build inspector app in existing Vue 3 app
+- ✅ Leverage existing codebase (Vue 3, Pinia, Tailwind)
+- ✅ Use **html5-qrcode** library (already installed, MIT license)
+- ✅ Works on iOS Safari AND Android Chrome
+- ✅ PWA installable on mobile devices
+- ✅ Fastest time to market (2-3 weeks vs 8+ weeks for native)
+- ✅ User validation before investing in native apps
+
+**Phase 3 (8-12 weeks out):** React Native native apps
+- After workflow validation with real users
+- Better camera performance
+- App Store presence
+- Can reuse API integration logic
+
+### Barcode Library Selection: html5-qrcode ✅
+
+**Why html5-qrcode:**
+- ✅ Already installed in package.json (v2.3.8)
+- ✅ MIT License (completely free for commercial use)
+- ✅ Cross-platform (iOS Safari + Android Chrome)
+- ✅ Active development (4.8k+ GitHub stars)
+- ✅ Multiple barcode formats (QR, Code 128, Code 39, EAN, UPC)
+- ✅ Optimized for mobile cameras
+- ✅ Simple API
+
+**Alternatives considered:**
+- ZXing (Apache 2.0) - Good but html5-qrcode already installed
+- Dynamsoft - Not free for commercial use ❌
+- QuaggaJS - Less actively maintained ❌
+
+### Inspector App Workflow (5 Steps)
+
+```
+1. 🔐 Inspector Login
+   └─> Role-gated authentication (Inspector role only)
+   └─> JWT token with 8-hour expiry
+   └─> Simplified UI (no admin features)
+
+2. 📍 Scan Location QR Code
+   └─> Validates location exists in system
+   └─> Captures GPS coordinates
+   └─> Verifies GPS matches expected location (50m tolerance)
+   └─> Override option with reason if mismatch
+
+3. 🧯 Scan Extinguisher QR Code
+   └─> Retrieves extinguisher details from database
+   └─> Shows last inspection date
+   └─> Loads appropriate NFPA checklist (monthly/annual)
+   └─> Displays extinguisher specifications
+
+4. ✅ Perform Inspection
+   └─> Guided NFPA checklist (one item at a time)
+   └─> Large Pass/Fail/NA buttons (44x44px touch targets)
+   └─> Required photo capture for failed items
+   └─> Optional notes per checklist item
+   └─> Progress indicator (e.g., "5 of 12 complete")
+   └─> Save draft capability (offline support)
+
+5. ✍️ Sign & Submit
+   └─> Digital signature capture (canvas)
+   └─> Auto-timestamp and GPS embed
+   └─> Generate tamper-proof hash (HMAC-SHA256)
+   └─> Sync to server (or queue if offline)
+   └─> Show confirmation & next due date
+```
+
+### Implementation Tasks
+
+#### Week 1: Authentication & Barcode Scanning
+- [ ] 🔴 Create `/inspector` route prefix
+- [ ] 🔴 Create `InspectorLoginView.vue` (role-gated, Inspector only)
+- [ ] 🔴 Create `InspectorLayoutView.vue` (simplified layout without admin nav)
+- [ ] 🔴 Create `InspectorDashboardView.vue` (today's assigned inspections)
+- [ ] 🔴 Create `useInspectorStore.js` (Pinia store for inspector state)
+- [ ] 🔴 Create `BarcodeScannerComponent.vue` (html5-qrcode wrapper)
+  - [ ] Camera permission handling
+  - [ ] Rear camera selection
+  - [ ] Scan success feedback (haptic + sound)
+  - [ ] Manual barcode entry fallback
+  - [ ] Error handling (invalid codes)
+- [ ] 🔴 Create `ScanLocationView.vue`
+  - [ ] Location barcode scanner
+  - [ ] Validate location exists (API call)
+  - [ ] Capture GPS coordinates
+  - [ ] Show location details
+  - [ ] GPS mismatch warning with override
+- [ ] 🔴 Create `ScanExtinguisherView.vue`
+  - [ ] Extinguisher barcode scanner
+  - [ ] Retrieve extinguisher details (API call)
+  - [ ] Display last inspection date
+  - [ ] Show next due date
+  - [ ] Load NFPA checklist template
+
+#### Week 2: Inspection Workflow & Photos
+- [ ] 🔴 Create `InspectionChecklistView.vue` (guided workflow)
+  - [ ] Single checklist item per screen (swipeable)
+  - [ ] Large Pass/Fail/NA buttons (Apple HIG 44x44px)
+  - [ ] Progress indicator (X of Y items complete)
+  - [ ] Item help text with visual aids
+  - [ ] Notes field (optional, expands on tap)
+  - [ ] "Next" button navigation
+  - [ ] Save draft button (persists to IndexedDB)
+- [ ] 🔴 Create `PhotoCaptureComponent.vue`
+  - [ ] Native camera integration (navigator.mediaDevices.getUserMedia)
+  - [ ] Photo preview before adding
+  - [ ] Compress photo for upload (max 2MB)
+  - [ ] Auto-attach GPS coordinates to photo
+  - [ ] Auto-attach timestamp
+  - [ ] Required photo indicator for failed items
+- [ ] 🔴 Create `InspectionProgressBar.vue`
+  - [ ] Completed items count
+  - [ ] Total items count
+  - [ ] Visual progress bar
+  - [ ] Estimated time remaining
+- [ ] 🔴 GPS location service (`services/gpsService.js`)
+  - [ ] Request geolocation permission
+  - [ ] Capture coordinates
+  - [ ] Accuracy measurement
+  - [ ] Location validation against expected coords
+  - [ ] Distance calculation (haversine formula)
+
+#### Week 3: Signature, Backend Integration & Offline
+- [ ] 🔴 Create `SignaturePadComponent.vue`
+  - [ ] Canvas-based signature capture
+  - [ ] Clear button
+  - [ ] Redo button
+  - [ ] Inspector name display
+  - [ ] Auto-timestamp
+  - [ ] Convert to base64 image
+- [ ] 🔴 Create `InspectionSummaryView.vue`
+  - [ ] Review all checklist responses
+  - [ ] Photo thumbnails gallery
+  - [ ] GPS coordinates display
+  - [ ] Overall Pass/Fail status
+  - [ ] Deficiency count (if any)
+  - [ ] Edit button (go back to specific item)
+  - [ ] Submit button (proceed to signature)
+- [ ] 🔴 Backend API integration (`services/inspectorService.js`)
+  - [ ] `POST /api/inspections` - Create inspection
+  - [ ] `PUT /api/inspections/{id}` - Update inspection progress
+  - [ ] `POST /api/inspections/{id}/photos` - Upload photo
+  - [ ] `POST /api/inspections/{id}/complete` - Finalize with signature
+  - [ ] `GET /api/locations/{id}` - Get location details
+  - [ ] `GET /api/extinguishers/barcode/{code}` - Get extinguisher by barcode
+  - [ ] `GET /api/checklist-templates/{inspectionType}` - Get checklist
+- [ ] 🔴 Offline support (IndexedDB)
+  - [ ] Create IndexedDB schema for drafts
+  - [ ] `draftInspections` table (inspection state)
+  - [ ] `offlinePhotos` table (base64 photos)
+  - [ ] `syncQueue` table (pending API calls)
+  - [ ] Background sync when online (Service Worker)
+  - [ ] Offline indicator UI (banner)
+  - [ ] Sync progress indicator
+  - [ ] Conflict resolution (server wins)
+- [ ] 🔴 Tamper-proofing service (`services/tamperProofingService.js`)
+  - [ ] Generate HMAC-SHA256 hash of inspection data
+  - [ ] Chain hash with previous inspection (blockchain-style)
+  - [ ] Include GPS coordinates in hash
+  - [ ] Include timestamp in hash
+  - [ ] Include photo hashes in inspection hash
+
+#### Testing & Polish
+- [ ] 🔴 Test on iOS devices
+  - [ ] iPhone 12 (iOS 16+)
+  - [ ] iPhone 13 (iOS 17+)
+  - [ ] iPhone 14 (iOS 17+)
+  - [ ] iPhone 15 (iOS 18+)
+  - [ ] Safari browser
+  - [ ] PWA installed mode
+- [ ] 🔴 Test on Android devices
+  - [ ] Samsung Galaxy S21/S22/S23
+  - [ ] Google Pixel 6/7/8
+  - [ ] OnePlus 9/10/11
+  - [ ] Chrome browser
+  - [ ] PWA installed mode
+- [ ] 🔴 Test offline mode
+  - [ ] Airplane mode
+  - [ ] Poor connection (slow 3G)
+  - [ ] Connection loss during inspection
+  - [ ] Queue persistence across browser restarts
+  - [ ] Successful sync when back online
+- [ ] 🔴 Test barcode scanning
+  - [ ] Bright outdoor lighting
+  - [ ] Dim indoor lighting
+  - [ ] Damaged/dirty QR codes
+  - [ ] Various barcode formats (QR, Code 128, Code 39)
+  - [ ] Manual entry fallback
+- [ ] 🔴 Performance optimization
+  - [ ] Lazy load routes (Vue Router)
+  - [ ] Code splitting (Vite)
+  - [ ] Image compression
+  - [ ] Service Worker caching
+  - [ ] Reduce bundle size (<500KB gzipped)
+- [ ] 🔴 Beta testing
+  - [ ] 3 inspectors
+  - [ ] 10 inspections each (30 total)
+  - [ ] Gather feedback
+  - [ ] Measure completion time (target: <2 minutes)
+  - [ ] Track errors/issues
+
+### Success Criteria (Phase 1A)
+- [ ] 🔴 Inspector can login with Inspector role
+- [ ] 🔴 Inspector can scan location QR code
+- [ ] 🔴 Inspector can scan extinguisher QR code
+- [ ] 🔴 Inspector can complete NFPA checklist
+- [ ] 🔴 Inspector can capture photos for deficiencies
+- [ ] 🔴 Inspector can capture digital signature
+- [ ] 🔴 Inspection syncs to server successfully
+- [ ] 🔴 Offline mode works (drafts persist, sync on reconnect)
+- [ ] 🔴 30 inspections completed by 3 beta inspectors
+- [ ] 🔴 Average completion time <2 minutes
+- [ ] 🔴 Zero critical bugs in barcode scanning
+- [ ] 🔴 GPS location captured accurately
+- [ ] 🔴 Tamper-proof hash generated and verified
+
+### React Native for Future Native Apps
+
+**Decision: YES to React Native, but Phase 3 (8-12 weeks out)**
+
+**Why React Native:**
+- ✅ Shared codebase (iOS + Android, 70-80% code reuse)
+- ✅ Large ecosystem and community
+- ✅ Near-native performance (new architecture)
+- ✅ Excellent camera/barcode libraries (react-native-vision-camera)
+- ✅ Good offline support (Redux Persist, WatermelonDB)
+- ✅ Native modules for GPS, signature, etc.
+- ✅ Coming from Vue, React is familiar enough
+
+**Why not now:**
+- ⏰ Slower time to market (8+ weeks vs 2-3 weeks for web)
+- 🧪 Need to validate workflow with users first
+- 💰 Higher development cost (need Xcode + Android Studio)
+- 🔧 More complex build process
+
+**Alternative considered:**
+- Flutter: Excellent performance, beautiful UI, Dart language
+- Decision: React Native has larger community and more familiar to JavaScript/TypeScript developers
+
+**Timeline:**
+1. **Weeks 1-3 (NOW):** Vue 3 PWA inspector app (html5-qrcode)
+2. **Weeks 4-6:** User testing, feedback, iteration
+3. **Weeks 7-8:** Refinement based on real-world usage
+4. **Weeks 9-16:** React Native native apps (Phase 3)
+
+---
+
 ## Table of Contents
 
 1. [Executive Summary](#executive-summary)
