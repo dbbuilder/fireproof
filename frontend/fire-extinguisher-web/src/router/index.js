@@ -36,11 +36,31 @@ const router = createRouter({
           name: 'inspector-scan-extinguisher',
           component: () => import('../views/inspector/ScanExtinguisherView.vue'),
           meta: { requiresInspector: true }
+        },
+        {
+          path: 'inspection-checklist',
+          name: 'inspector-inspection-checklist',
+          component: () => import('../views/inspector/InspectionChecklistView.vue'),
+          meta: { requiresInspector: true }
+        },
+        {
+          path: 'inspection-photos',
+          name: 'inspector-inspection-photos',
+          component: () => import('../views/inspector/InspectionPhotosView.vue'),
+          meta: { requiresInspector: true }
+        },
+        {
+          path: 'inspection-signature',
+          name: 'inspector-inspection-signature',
+          component: () => import('../views/inspector/InspectionSignatureView.vue'),
+          meta: { requiresInspector: true }
+        },
+        {
+          path: 'inspection-success',
+          name: 'inspector-inspection-success',
+          component: () => import('../views/inspector/InspectionSuccessView.vue'),
+          meta: { requiresInspector: true }
         }
-        // Additional inspector routes to be added:
-        // - inspection-checklist
-        // - inspection-photos
-        // - inspection-signature
       ]
     },
 
