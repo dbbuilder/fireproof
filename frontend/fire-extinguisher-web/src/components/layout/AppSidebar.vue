@@ -171,7 +171,8 @@ import {
   XMarkIcon,
   RectangleStackIcon,
   UserCircleIcon,
-  ClipboardDocumentListIcon
+  ClipboardDocumentListIcon,
+  ArrowUpTrayIcon
 } from '@heroicons/vue/24/outline'
 
 defineProps({
@@ -228,6 +229,12 @@ const navigationItems = computed(() => {
       name: 'Templates',
       to: '/checklist-templates',
       icon: ClipboardDocumentListIcon,
+      badge: 0
+    },
+    {
+      name: 'Import Data',
+      to: '/import-data',
+      icon: ArrowUpTrayIcon,
       badge: 0
     },
     {

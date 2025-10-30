@@ -197,6 +197,18 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/import-data',
+      name: 'import-data',
+      component: () => import('../views/ImportDataView.vue'),
+      meta: { requiresAuth: true, requiresTenantAdmin: true }
+    },
+    {
+      path: '/import-history',
+      name: 'import-history',
+      component: () => import('../views/ImportHistoryView.vue'),
+      meta: { requiresAuth: true, requiresTenantAdmin: true }
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('../views/NotFoundView.vue')
