@@ -6,6 +6,9 @@
       @toggle-sidebar="toggleSidebar"
     />
 
+    <!-- Tenant Selector Banner (SystemAdmin only) -->
+    <TenantSelector />
+
     <!-- Main Container -->
     <div class="flex h-[calc(100vh-60px)]">
       <!-- Sidebar -->
@@ -109,6 +112,7 @@ import { useToastStore } from '@/stores/toast'
 import { storeToRefs } from 'pinia'
 import AppHeader from './AppHeader.vue'
 import AppSidebar from './AppSidebar.vue'
+import TenantSelector from '@/components/admin/TenantSelector.vue'
 import {
   XMarkIcon,
   CheckCircleIcon,
