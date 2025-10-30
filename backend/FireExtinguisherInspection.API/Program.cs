@@ -101,6 +101,7 @@ builder.Services.AddScoped<IInspectionService, InspectionService>(); // Legacy (
 builder.Services.AddScoped<IInspectionPhase1Service, InspectionPhase1Service>(); // Phase 1 checklist-based
 builder.Services.AddScoped<IChecklistTemplateService, ChecklistTemplateService>();
 builder.Services.AddScoped<IDeficiencyService, DeficiencyService>();
+builder.Services.AddScoped<IImportService, ImportService>(); // Phase 2.1 - Data import/export
 
 // Use mock photo service in dev mode, Azure Blob in production
 var devModeEnabled = builder.Configuration.GetValue<bool>("Authentication:DevModeEnabled");
