@@ -866,7 +866,6 @@
         </div>
       </div>
     </transition>
-    </div>
   </AppLayout>
 </template>
 

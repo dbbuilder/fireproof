@@ -31,32 +31,44 @@ export const useInspectorStore = defineStore('inspector', () => {
     error.value = null
 
     try {
+      console.log('[Inspector Login] Attempting login for:', email)
+      console.log('[Inspector Login] API Base URL:', api.defaults.baseURL)
+
       const response = await api.post('/api/authentication/login', {
         email,
         password
       })
 
-      const { token: authToken, user: userData } = response.data
+      console.log('[Inspector Login] Response status:', response.status)
+      console.log('[Inspector Login] Response data keys:', Object.keys(response.data))
+
+      const { accessToken, user: userData, roles } = response.data
 
       // Verify user has Inspector role
-      if (!userData.roles || !userData.roles.includes('Inspector')) {
+      // Roles come as array of objects with roleName property
+      const hasInspectorRole = roles && roles.some(r => r.roleName === 'Inspector')
+      if (!hasInspectorRole) {
         throw new Error('Access denied. Inspector role required.')
       }
 
-      // Store token and user
-      token.value = authToken
-      user.value = userData
+      // Store token and user (with roles)
+      token.value = accessToken
+      user.value = { ...userData, roles } // Include roles in user object
       isAuthenticated.value = true
 
       // Persist token
-      localStorage.setItem('inspector_token', authToken)
-      localStorage.setItem('inspector_user', JSON.stringify(userData))
+      localStorage.setItem('inspector_token', accessToken)
+      localStorage.setItem('inspector_user', JSON.stringify({ ...userData, roles }))
 
       // Set default auth header
-      api.defaults.headers.common['Authorization'] = `Bearer ${authToken}`
+      api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
 
       return userData
     } catch (err) {
+      console.error('[Inspector Login] Error:', err.message)
+      console.error('[Inspector Login] Response status:', err.response?.status)
+      console.error('[Inspector Login] Response data:', err.response?.data)
+
       error.value = err.response?.data?.message || err.message || 'Login failed'
       throw err
     } finally {

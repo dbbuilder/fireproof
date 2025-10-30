@@ -109,7 +109,7 @@
       </teleport>
 
       <!-- Empty State -->
-      <div v-else class="empty-state" data-testid="grid-empty-state">
+      <div v-if="paginatedData.length === 0" class="empty-state" data-testid="grid-empty-state">
         <slot name="empty">
           <p class="text-gray-500 text-center py-8">{{ emptyMessage }}</p>
         </slot>

@@ -14,9 +14,27 @@
       </div>
     </transition>
 
+    <!-- Manual Capture Button (when auto-scan isn't working) -->
+    <div v-if="isScanning && !lastScanSuccess" class="manual-capture">
+      <button
+        @click="manualCapture"
+        class="btn-capture"
+        :disabled="isCapturing"
+        data-testid="manual-capture-button"
+      >
+        <svg v-if="!isCapturing" class="capture-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <div v-else class="scanning-animation-small"></div>
+        <span>{{ isCapturing ? 'Scanning...' : 'Capture Now' }}</span>
+      </button>
+      <p class="capture-hint">Press if auto-scan isn't working</p>
+    </div>
+
     <!-- Scanning Status -->
     <div class="scanning-status">
-      <div v-if="isScanning && !lastScanSuccess" class="status-scanning">
+      <div v-if="isScanning && !lastScanSuccess && !isCapturing" class="status-scanning">
         <div class="scanning-animation"></div>
         <p>{{ scanType === 'location' ? 'Scan Location QR Code' : 'Scan Extinguisher Barcode' }}</p>
       </div>
@@ -106,6 +124,7 @@ const isScanning = ref(false)
 const lastFormat = ref('')
 const lastScanSuccess = ref(false)
 const scanError = ref('')
+const isCapturing = ref(false)
 
 // Manual entry state
 const manualCode = ref('')
@@ -268,6 +287,82 @@ const stopScanner = async () => {
 }
 
 /**
+ * Manual capture - force a scan attempt of current camera frame
+ */
+const manualCapture = async () => {
+  if (!scanner.value || !isScanning.value || isCapturing.value) return
+
+  try {
+    isCapturing.value = true
+    scanError.value = ''
+
+    // Get the video element from the scanner
+    const videoElement = document.querySelector('#reader video')
+
+    if (!videoElement) {
+      throw new Error('Camera video not found')
+    }
+
+    // Create a canvas to capture the current frame
+    const canvas = document.createElement('canvas')
+    canvas.width = videoElement.videoWidth
+    canvas.height = videoElement.videoHeight
+    const ctx = canvas.getContext('2d')
+
+    // Draw current video frame to canvas
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height)
+
+    // Convert canvas to blob
+    const blob = await new Promise((resolve) => {
+      canvas.toBlob(resolve, 'image/jpeg', 0.95)
+    })
+
+    // Create a file from the blob
+    const file = new File([blob], 'capture.jpg', { type: 'image/jpeg' })
+
+    // Use Html5Qrcode to scan the captured image
+    const decodedText = await scanner.value.scanFileV2(file, true)
+
+    // If we get here, scan was successful
+    // Create a mock result object (since scanFileV2 doesn't return full result)
+    const mockResult = {
+      result: {
+        format: 'UNKNOWN', // We don't know the format from scanFileV2
+        text: decodedText
+      }
+    }
+
+    // Try to detect format from the decoded text
+    let detectedFormat = 'UNKNOWN'
+    if (decodedText.length === 13 && /^\d+$/.test(decodedText)) {
+      detectedFormat = 'EAN_13'
+    } else if (decodedText.length === 12 && /^\d+$/.test(decodedText)) {
+      detectedFormat = 'UPC_A'
+    } else if (decodedText.startsWith('{') || decodedText.startsWith('[')) {
+      detectedFormat = 'QR_CODE'
+    } else if (/^\*.*\*$/.test(decodedText)) {
+      detectedFormat = 'CODE_39'
+    }
+
+    mockResult.result.format = detectedFormat
+
+    // Handle as successful scan
+    handleScanSuccess(decodedText, mockResult)
+
+  } catch (error) {
+    console.error('Manual capture error:', error)
+    scanError.value = 'Could not read barcode. Try positioning it more clearly in the frame.'
+
+    // Clear error after 3 seconds
+    setTimeout(() => {
+      scanError.value = ''
+    }, 3000)
+  } finally {
+    isCapturing.value = false
+  }
+}
+
+/**
  * Submit manual barcode entry
  */
 const submitManualCode = () => {
@@ -399,6 +494,62 @@ defineExpose({
   width: 24px;
   height: 24px;
   stroke-width: 3;
+}
+
+.manual-capture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.btn-capture {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-width: 160px;
+  justify-content: center;
+}
+
+.btn-capture:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.btn-capture:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.capture-icon {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2;
+}
+
+.capture-hint {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  text-align: center;
+}
+
+.scanning-animation-small {
+  width: 20px;
+  height: 20px;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 .manual-entry {

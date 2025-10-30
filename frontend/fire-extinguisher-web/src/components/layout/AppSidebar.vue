@@ -160,6 +160,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import {
   HomeIcon,
   MapPinIcon,
@@ -168,7 +169,9 @@ import {
   DocumentTextIcon,
   Cog6ToothIcon,
   XMarkIcon,
-  RectangleStackIcon
+  RectangleStackIcon,
+  UserCircleIcon,
+  ClipboardDocumentListIcon
 } from '@heroicons/vue/24/outline'
 
 defineProps({
@@ -181,46 +184,72 @@ defineProps({
 defineEmits(['close'])
 
 const route = useRoute()
+const authStore = useAuthStore()
+
+// Check if user has SystemAdmin role
+const isSystemAdmin = computed(() => {
+  return authStore.hasSystemRole('SystemAdmin')
+})
 
 // Navigation items configuration
-const navigationItems = computed(() => [
-  {
-    name: 'Dashboard',
-    to: '/dashboard',
-    icon: HomeIcon,
-    badge: 0
-  },
-  {
-    name: 'Locations',
-    to: '/locations',
-    icon: MapPinIcon,
-    badge: 0
-  },
-  {
-    name: 'Extinguishers',
-    to: '/extinguishers',
-    icon: ShieldCheckIcon,
-    badge: 0 // TODO: Get count of extinguishers due for inspection
-  },
-  {
-    name: 'Types',
-    to: '/extinguisher-types',
-    icon: RectangleStackIcon,
-    badge: 0
-  },
-  {
-    name: 'Inspections',
-    to: '/inspections',
-    icon: ClipboardDocumentCheckIcon,
-    badge: 0 // TODO: Get count of overdue inspections
-  },
-  {
-    name: 'Reports',
-    to: '/reports',
-    icon: DocumentTextIcon,
-    badge: 0
+const navigationItems = computed(() => {
+  const items = [
+    {
+      name: 'Dashboard',
+      to: '/dashboard',
+      icon: HomeIcon,
+      badge: 0
+    },
+    {
+      name: 'Locations',
+      to: '/locations',
+      icon: MapPinIcon,
+      badge: 0
+    },
+    {
+      name: 'Extinguishers',
+      to: '/extinguishers',
+      icon: ShieldCheckIcon,
+      badge: 0 // TODO: Get count of extinguishers due for inspection
+    },
+    {
+      name: 'Types',
+      to: '/extinguisher-types',
+      icon: RectangleStackIcon,
+      badge: 0
+    },
+    {
+      name: 'Inspections',
+      to: '/inspections',
+      icon: ClipboardDocumentCheckIcon,
+      badge: 0 // TODO: Get count of overdue inspections
+    },
+    {
+      name: 'Templates',
+      to: '/checklist-templates',
+      icon: ClipboardDocumentListIcon,
+      badge: 0
+    },
+    {
+      name: 'Reports',
+      to: '/reports',
+      icon: DocumentTextIcon,
+      badge: 0
+    }
+  ]
+
+  // Add Users menu item only for SystemAdmin
+  if (isSystemAdmin.value) {
+    items.splice(6, 0, {
+      name: 'Users',
+      to: '/users',
+      icon: UserCircleIcon,
+      badge: 0
+    })
   }
-])
+
+  return items
+})
 
 // Check if route is active
 const isActive = (path) => {

@@ -6,6 +6,21 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     // ============================================
+    // Root Redirect - Inspector Mode
+    // ============================================
+    {
+      path: '/',
+      redirect: () => {
+        // If in inspector mode, redirect to inspector login
+        if (import.meta.env.VITE_APP_MODE === 'inspector') {
+          return '/inspector/login'
+        }
+        // Otherwise stay at home (admin app)
+        return { name: 'home' }
+      }
+    },
+
+    // ============================================
     // Inspector Routes (Subdomain: inspect.fireproofapp.net)
     // ============================================
     {
@@ -68,7 +83,7 @@ const router = createRouter({
     // Admin Routes (Main App)
     // ============================================
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
       meta: { requiresGuest: true }
@@ -167,6 +182,18 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: () => import('../views/ProfileView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: () => import('../views/UsersView.vue'),
+      meta: { requiresAuth: true, requiresSystemAdmin: true }
+    },
+    {
+      path: '/checklist-templates',
+      name: 'checklist-templates',
+      component: () => import('../views/ChecklistTemplatesView.vue'),
       meta: { requiresAuth: true }
     },
     {
