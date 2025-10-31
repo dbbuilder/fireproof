@@ -45,28 +45,35 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // Setup project - runs once to authenticate (kept for compatibility)
+    // Setup project - runs once to authenticate with real credentials
     {
-      name: 'setup',
-      testMatch: /.*\.setup\.ts/,
+      name: 'setup-real-auth',
+      testMatch: /auth-setup-real\.ts/,
     },
 
-    // Unauthenticated tests (auth flows, smoke tests)
+    // Unauthenticated tests (login flow, smoke tests)
     {
       name: 'chromium-unauthenticated',
       use: { ...devices['Desktop Chrome'] },
-      testMatch: ['**/smoke.spec.ts', '**/auth/**/*.spec.ts', '**/tenant/**/*.spec.ts', '**/dashboard/**/*.spec.ts'],
+      testMatch: ['**/smoke.spec.ts', '**/auth/login.spec.ts'],
     },
 
-    // Authenticated tests - use saved auth state from setup (legacy tests)
+    // Authenticated tests - tenant selector and navigation (handle own login)
+    {
+      name: 'chromium-auth-flow',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: ['**/tenant/**/*.spec.ts', '**/dashboard/**/*.spec.ts'],
+    },
+
+    // Authenticated tests - use saved auth state from setup (for other tests)
     {
       name: 'chromium-authenticated',
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
       },
-      dependencies: ['setup'],
-      testIgnore: ['**/auth/**', '**/smoke.spec.ts', '**/tenant/**', '**/dashboard/**'], // Exclude new test structure
+      dependencies: ['setup-real-auth'],
+      testIgnore: ['**/auth/**', '**/smoke.spec.ts', '**/tenant/**', '**/dashboard/**', '**/*setup*.ts'],
     },
 
     // {
