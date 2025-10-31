@@ -253,7 +253,7 @@ router.beforeEach(async (to, from, next) => {
   // ============================================
   const authStore = useAuthStore()
 
-  // Initialize auth on first navigation if needed, but don't block
+  // Initialize auth on first navigation if needed
   if (!authInitStarted && !authStore.isAuthenticated && authStore.accessToken) {
     authInitStarted = true
     // Initialize in background - don't block navigation

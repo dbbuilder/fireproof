@@ -1,6 +1,15 @@
 <template>
   <AppLayout>
     <div class="templates-view">
+      <!-- Success Message -->
+      <div
+        v-if="successMessage"
+        class="success-banner"
+        data-testid="success-message"
+      >
+        {{ successMessage }}
+      </div>
+
       <!-- Header -->
       <div
         class="page-header"
@@ -98,8 +107,25 @@
             <h3 class="card-title">
               {{ template.templateName }}
             </h3>
-            <span :class="['badge', getBadgeClass(template.templateType)]">
+            <span
+              :class="['badge', getBadgeClass(template.templateType)]"
+              data-testid="template-type-badge"
+            >
               {{ template.templateType }}
+            </span>
+            <span
+              v-if="template.isSystemTemplate"
+              class="badge badge-info"
+              data-testid="template-badge-system"
+            >
+              System
+            </span>
+            <span
+              v-else
+              class="badge badge-custom"
+              data-testid="template-badge-custom"
+            >
+              Custom
             </span>
           </div>
 
@@ -108,7 +134,10 @@
           </p>
 
           <div class="card-meta">
-            <span class="meta-item">
+            <span
+              class="meta-item"
+              data-testid="template-item-count"
+            >
               📋 {{ template.checklistItems?.length || 0 }} items
             </span>
             <span :class="['badge', template.isActive ? 'badge-success' : 'badge-inactive']">
@@ -119,7 +148,7 @@
           <div class="card-actions">
             <button
               class="btn-card btn-primary"
-              data-testid="view-template-button"
+              data-testid="template-view-button"
               @click="viewTemplate(template)"
             >
               View
@@ -127,14 +156,14 @@
             <button
               v-if="!template.isSystemTemplate"
               class="btn-card btn-secondary"
-              data-testid="edit-template-button"
+              data-testid="template-edit-button"
               @click="editTemplate(template)"
             >
               Edit
             </button>
             <button
               class="btn-card btn-secondary"
-              data-testid="duplicate-template-button"
+              data-testid="template-duplicate-button"
               @click="duplicateTemplate(template)"
             >
               Duplicate
@@ -142,7 +171,7 @@
             <button
               v-if="!template.isSystemTemplate"
               class="btn-card btn-danger"
-              data-testid="delete-template-button"
+              data-testid="template-delete-button"
               @click="confirmDelete(template)"
             >
               Delete
@@ -155,7 +184,7 @@
       <div
         v-else
         class="empty-state"
-        data-testid="empty-state"
+        data-testid="templates-empty-state"
       >
         <div class="empty-icon">
           📋
@@ -176,7 +205,7 @@
         <div
           v-if="showViewModal"
           class="modal-overlay"
-          data-testid="view-template-modal"
+          data-testid="template-view-modal"
           @click="closeViewModal"
         >
           <div
@@ -185,7 +214,10 @@
           >
             <div class="modal-header">
               <div>
-                <h2 class="modal-title">
+                <h2
+                  class="modal-title"
+                  data-testid="template-detail-name"
+                >
                   {{ currentTemplate?.templateName }}
                 </h2>
                 <span :class="['badge', getBadgeClass(currentTemplate?.templateType)]">
@@ -194,6 +226,7 @@
               </div>
               <button
                 class="btn-close"
+                data-testid="modal-close-button"
                 @click="closeViewModal"
               >
                 ✕
@@ -205,7 +238,11 @@
               class="modal-body"
             >
               <div class="template-info">
-                <p><strong>Description:</strong> {{ currentTemplate.description || 'No description' }}</p>
+                <p
+                  data-testid="template-detail-description"
+                >
+                  <strong>Description:</strong> {{ currentTemplate.description || 'No description' }}
+                </p>
                 <p>
                   <strong>Status:</strong>
                   <span :class="['badge', currentTemplate.isActive ? 'badge-success' : 'badge-inactive']">
@@ -221,11 +258,13 @@
               <div
                 v-if="currentTemplate.checklistItems?.length"
                 class="checklist-items"
+                data-testid="template-items-list"
               >
                 <div
                   v-for="(item, index) in currentTemplate.checklistItems"
                   :key="item.checklistItemId"
                   class="checklist-item"
+                  data-testid="template-item"
                 >
                   <div class="item-number">
                     {{ index + 1 }}
@@ -234,7 +273,10 @@
                     <p class="item-text">
                       {{ item.itemText }}
                     </p>
-                    <span :class="['badge', item.isRequired ? 'badge-error' : 'badge-info']">
+                    <span
+                      :class="['badge', item.isRequired ? 'badge-error' : 'badge-info']"
+                      data-testid="item-required-badge"
+                    >
                       {{ item.isRequired ? 'Required' : 'Optional' }}
                     </span>
                   </div>
@@ -256,7 +298,7 @@
         <div
           v-if="showCreateModal || showEditModal"
           class="modal-overlay"
-          data-testid="edit-template-modal"
+          :data-testid="showCreateModal ? 'template-create-modal' : 'template-edit-modal'"
           @click="closeEditModal"
         >
           <div
@@ -269,6 +311,7 @@
               </h2>
               <button
                 class="btn-close"
+                data-testid="modal-close-button"
                 @click="closeEditModal"
               >
                 ✕
@@ -292,6 +335,13 @@
                   class="form-input"
                   data-testid="template-name-input"
                 >
+                <p
+                  v-if="showNameError"
+                  class="text-red-600 text-sm mt-1"
+                  data-testid="name-error"
+                >
+                  Template name is required
+                </p>
               </div>
 
               <div class="form-group">
@@ -347,6 +397,59 @@
                 </label>
               </div>
 
+              <div class="form-group">
+                <label class="form-label">Checklist Items</label>
+                <button
+                  type="button"
+                  class="btn-secondary mb-2"
+                  data-testid="add-item-button"
+                  @click="addChecklistItem"
+                >
+                  + Add Item
+                </button>
+                <div
+                  v-if="templateForm.checklistItems && templateForm.checklistItems.length > 0"
+                  class="space-y-2"
+                >
+                  <div
+                    v-for="(item, index) in templateForm.checklistItems"
+                    :key="index"
+                    class="flex gap-2 items-start"
+                  >
+                    <input
+                      v-model="item.itemText"
+                      type="text"
+                      class="form-input flex-1"
+                      :data-testid="`item-text-${index}`"
+                      placeholder="Item text"
+                    >
+                    <label class="checkbox-label">
+                      <input
+                        v-model="item.isRequired"
+                        type="checkbox"
+                        class="checkbox-input"
+                        :data-testid="`item-required-${index}`"
+                      >
+                      <span class="text-sm">Required</span>
+                    </label>
+                    <button
+                      type="button"
+                      class="btn-danger"
+                      @click="removeChecklistItem(index)"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+                <p
+                  v-if="showItemsError"
+                  class="text-red-600 text-sm mt-1"
+                  data-testid="items-error"
+                >
+                  At least one checklist item is required
+                </p>
+              </div>
+
               <div class="modal-footer">
                 <button
                   type="button"
@@ -358,6 +461,7 @@
                 <button
                   type="submit"
                   class="btn-primary"
+                  data-testid="template-save-button"
                   :disabled="templatesStore.loading"
                 >
                   {{ templatesStore.loading ? 'Saving...' : 'Save Template' }}
@@ -386,6 +490,7 @@
               </h2>
               <button
                 class="btn-close"
+                data-testid="modal-close-button"
                 @click="closeDeleteModal"
               >
                 ✕
@@ -411,6 +516,7 @@
               </button>
               <button
                 class="btn-danger"
+                data-testid="confirm-delete-button"
                 :disabled="templatesStore.loading"
                 @click="deleteTemplate"
               >
@@ -426,6 +532,7 @@
         <div
           v-if="showDuplicateModal"
           class="modal-overlay"
+          data-testid="template-duplicate-modal"
           @click="showDuplicateModal = false"
         >
           <div
@@ -438,6 +545,7 @@
               </h2>
               <button
                 class="btn-close"
+                data-testid="modal-close-button"
                 @click="showDuplicateModal = false"
               >
                 ✕
@@ -463,6 +571,7 @@
                   type="text"
                   required
                   class="form-input"
+                  data-testid="duplicate-name-input"
                   placeholder="Enter new template name"
                 >
               </div>
@@ -478,6 +587,7 @@
                 <button
                   type="submit"
                   class="btn-primary"
+                  data-testid="duplicate-confirm-button"
                   :disabled="!newTemplateName || templatesStore.loading"
                 >
                   Create Copy
@@ -505,6 +615,9 @@ const showCreateModal = ref(false)
 const showEditModal = ref(false)
 const showDeleteModal = ref(false)
 const showDuplicateModal = ref(false)
+const showNameError = ref(false)
+const showItemsError = ref(false)
+const successMessage = ref('')
 
 const currentTemplate = ref(null)
 const templateToDelete = ref(null)
@@ -517,7 +630,8 @@ const templateForm = ref({
   description: '',
   templateType: 'CUSTOM',
   isActive: true,
-  isSystemTemplate: false
+  isSystemTemplate: false,
+  checklistItems: []
 })
 
 // Computed
@@ -576,17 +690,50 @@ function editTemplate(template) {
   showEditModal.value = true
 }
 
+function addChecklistItem() {
+  if (!templateForm.value.checklistItems) {
+    templateForm.value.checklistItems = []
+  }
+  templateForm.value.checklistItems.push({
+    itemText: '',
+    isRequired: false
+  })
+}
+
+function removeChecklistItem(index) {
+  templateForm.value.checklistItems.splice(index, 1)
+}
+
 async function saveTemplate() {
   try {
+    // Validation
+    showNameError.value = false
+    showItemsError.value = false
+
+    if (!templateForm.value.templateName || templateForm.value.templateName.trim() === '') {
+      showNameError.value = true
+      return
+    }
+
+    if (!templateForm.value.checklistItems || templateForm.value.checklistItems.length === 0) {
+      showItemsError.value = true
+      return
+    }
+
     if (showEditModal.value && templateForm.value.templateId) {
       await templatesStore.updateTemplate(templateForm.value.templateId, templateForm.value)
-      alert('Template updated successfully')
+      successMessage.value = 'Template updated successfully'
     } else {
       await templatesStore.createTemplate(templateForm.value)
-      alert('Template created successfully')
+      successMessage.value = 'Template created successfully'
     }
     closeEditModal()
     await loadTemplates()
+
+    // Show success message for 3 seconds
+    setTimeout(() => {
+      successMessage.value = ''
+    }, 3000)
   } catch (error) {
     console.error('Error saving template:', error)
     alert('Failed to save template')
@@ -601,9 +748,14 @@ function confirmDelete(template) {
 async function deleteTemplate() {
   try {
     await templatesStore.deleteTemplate(templateToDelete.value.templateId)
-    alert('Template deleted successfully')
+    successMessage.value = 'Template deleted successfully'
     closeDeleteModal()
     await loadTemplates()
+
+    // Show success message for 3 seconds
+    setTimeout(() => {
+      successMessage.value = ''
+    }, 3000)
   } catch (error) {
     console.error('Error deleting template:', error)
     alert('Failed to delete template')
@@ -622,11 +774,16 @@ async function saveDuplicate() {
       templateToDuplicate.value.templateId,
       newTemplateName.value
     )
-    alert('Template duplicated successfully')
+    successMessage.value = 'Template duplicated successfully'
     showDuplicateModal.value = false
     templateToDuplicate.value = null
     newTemplateName.value = ''
     await loadTemplates()
+
+    // Show success message for 3 seconds
+    setTimeout(() => {
+      successMessage.value = ''
+    }, 3000)
   } catch (error) {
     console.error('Error duplicating template:', error)
     alert('Failed to duplicate template')
@@ -641,12 +798,15 @@ function closeViewModal() {
 function closeEditModal() {
   showCreateModal.value = false
   showEditModal.value = false
+  showNameError.value = false
+  showItemsError.value = false
   templateForm.value = {
     templateName: '',
     description: '',
     templateType: 'CUSTOM',
     isActive: true,
-    isSystemTemplate: false
+    isSystemTemplate: false,
+    checklistItems: []
   }
 }
 
@@ -666,6 +826,16 @@ onMounted(() => {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+.success-banner {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  border: 1px solid #059669;
 }
 
 .page-header {
