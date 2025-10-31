@@ -326,6 +326,15 @@ const handleClickOutside = (event) => {
   }
 }
 
+// Close menu on route change
+const closeMenuOnRouteChange = () => {
+  userMenuOpen.value = false
+}
+
+router.beforeEach(() => {
+  closeMenuOnRouteChange()
+})
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
 })

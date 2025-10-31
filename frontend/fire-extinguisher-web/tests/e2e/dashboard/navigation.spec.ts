@@ -34,30 +34,30 @@ test.describe('Navigation and Dashboard', () => {
 
   test('should navigate between pages using sidebar', async ({ page }) => {
     // Navigate to Locations
-    await page.getByTestId('sidebar-nav-locations').click()
+    await page.getByTestId('sidebar-nav-locations').first().click()
     await expect(page).toHaveURL(/\/locations/)
 
     // Navigate to Extinguishers
-    await page.getByTestId('sidebar-nav-extinguishers').click()
+    await page.getByTestId('sidebar-nav-extinguishers').first().click()
     await expect(page).toHaveURL(/\/extinguishers/)
 
     // Navigate to Inspections
-    await page.getByTestId('sidebar-nav-inspections').click()
+    await page.getByTestId('sidebar-nav-inspections').first().click()
     await expect(page).toHaveURL(/\/inspections/)
 
     // Navigate to Reports
-    await page.getByTestId('sidebar-nav-reports').click()
+    await page.getByTestId('sidebar-nav-reports').first().click()
     await expect(page).toHaveURL(/\/reports/)
 
     // Navigate back to Dashboard
-    await page.getByTestId('sidebar-nav-dashboard').click()
+    await page.getByTestId('sidebar-nav-dashboard').first().click()
     await expect(page).toHaveURL(/\/dashboard/)
     await expect(page.getByTestId('dashboard-heading')).toBeVisible()
   })
 
   test('should navigate using header logo', async ({ page }) => {
     // Navigate away from dashboard
-    await page.getByTestId('sidebar-nav-locations').click()
+    await page.getByTestId('sidebar-nav-locations').first().click()
     await expect(page).toHaveURL(/\/locations/)
 
     // Click logo to return to dashboard
@@ -129,21 +129,21 @@ test.describe('Navigation and Dashboard', () => {
     await expect(page).toHaveURL(/\/locations/)
 
     // Navigate back to dashboard
-    await page.getByTestId('sidebar-nav-dashboard').click()
+    await page.getByTestId('sidebar-nav-dashboard').first().click()
 
     // Click "Add Extinguisher" quick action
     await page.getByTestId('dashboard-action-add-extinguisher').click()
     await expect(page).toHaveURL(/\/extinguishers/)
 
     // Navigate back to dashboard
-    await page.getByTestId('sidebar-nav-dashboard').click()
+    await page.getByTestId('sidebar-nav-dashboard').first().click()
 
     // Click "Start Inspection" quick action
     await page.getByTestId('dashboard-action-start-inspection').click()
     await expect(page).toHaveURL(/\/inspections/)
 
     // Navigate back to dashboard
-    await page.getByTestId('sidebar-nav-dashboard').click()
+    await page.getByTestId('sidebar-nav-dashboard').first().click()
 
     // Click "Generate Report" quick action
     await page.getByTestId('dashboard-action-generate-report').click()
@@ -178,14 +178,14 @@ test.describe('Navigation and Dashboard', () => {
     const menuToggle = page.getByTestId('header-menu-toggle')
     await expect(menuToggle).toBeVisible()
 
-    // Click to open sidebar
-    await menuToggle.click()
+    // Click to open sidebar (force click because desktop sidebar may be in DOM)
+    await menuToggle.click({ force: true })
 
     // Sidebar should open (navigation items should be visible)
-    await expect(page.getByTestId('sidebar-nav-dashboard')).toBeVisible()
+    await expect(page.getByTestId('sidebar-nav-dashboard').first()).toBeVisible()
 
     // Click close button
-    await page.getByTestId('sidebar-close-button').click()
+    await page.getByTestId('sidebar-close-button').click({ force: true })
 
     // Sidebar should close (wait for animation)
     await page.waitForTimeout(500)

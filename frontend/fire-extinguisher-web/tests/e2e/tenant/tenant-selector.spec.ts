@@ -88,14 +88,14 @@ test.describe('Tenant Selector (SystemAdmin)', () => {
     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
 
     // Navigate to different pages
-    await page.getByTestId('sidebar-nav-locations').click()
+    await page.getByTestId('sidebar-nav-locations').first().click()
     await page.waitForURL(/\/locations/)
 
     // Banner should NOT reappear
     expect(await page.getByTestId('tenant-selector-banner').count()).toBe(0)
 
     // Navigate to extinguishers
-    await page.getByTestId('sidebar-nav-extinguishers').click()
+    await page.getByTestId('sidebar-nav-extinguishers').first().click()
     await page.waitForURL(/\/extinguishers/)
 
     // Banner should still not appear

@@ -42,9 +42,7 @@
             <div
               class="text-3xl font-bold text-gray-900 mb-1"
               data-testid="dashboard-locations-count"
-            >
-              {{ locationStore.locations.length }}
-            </div>
+            >{{ locationStore.locations.length }}</div>
             <router-link
               to="/locations"
               class="text-sm text-primary-600 hover:text-primary-700 font-medium"
@@ -69,9 +67,7 @@
             <div
               class="text-3xl font-bold text-gray-900 mb-1"
               data-testid="dashboard-extinguishers-count"
-            >
-              {{ extinguisherStore.extinguisherCount }}
-            </div>
+            >{{ extinguisherStore.extinguisherCount }}</div>
             <router-link
               to="/extinguishers"
               class="text-sm text-primary-600 hover:text-primary-700 font-medium"
@@ -96,9 +92,7 @@
             <div
               class="text-3xl font-bold text-gray-900 mb-1"
               data-testid="dashboard-inspections-count"
-            >
-              0
-            </div>
+            >0</div>
             <router-link
               to="/inspections"
               class="text-sm text-primary-600 hover:text-primary-700 font-medium"
