@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 test.describe('Tenant Selector (SystemAdmin)', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to login
-    await page.goto('/login')
+    await page.goto('/login', { waitUntil: 'networkidle' })
   })
 
   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
@@ -164,7 +164,7 @@ test.describe('Tenant Selector (SystemAdmin)', () => {
 test.describe('Tenant Context Data Isolation', () => {
   test('should load correct data for selected tenant', async ({ page }) => {
     // Login as SystemAdmin
-    await page.goto('/login')
+    await page.goto('/login', { waitUntil: 'networkidle' })
     await page.getByTestId('email-input').fill('admin@fireproof.local')
     await page.getByTestId('password-input').fill('Admin123!')
     await page.getByTestId('login-submit-button').click()

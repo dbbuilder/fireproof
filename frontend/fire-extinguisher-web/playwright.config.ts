@@ -30,7 +30,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5600',
     /* Increase action timeout for production */
     actionTimeout: 15000, // 15 seconds for actions like click, fill
     /* Increase navigation timeout for production */
@@ -102,7 +102,7 @@ export default defineConfig({
   // Uncomment for CI/CD or if running on Linux/Mac
   // webServer: {
   //   command: 'npx vite',
-  //   url: 'http://localhost:5173',
+  //   url: 'http://localhost:5600',
   //   reuseExistingServer: !process.env.CI,
   //   timeout: 120 * 1000,
   // },

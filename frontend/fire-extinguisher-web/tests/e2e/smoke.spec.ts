@@ -7,7 +7,7 @@ test.describe('Smoke Tests - No JavaScript Errors', () => {
     const consoleErrors = setupConsoleErrorListener(page)
 
     // Navigate directly to login page
-    await page.goto('/login')
+    await page.goto('/login', { waitUntil: 'networkidle' })
 
     // Wait for page to load
     await page.waitForLoadState('networkidle')
@@ -35,7 +35,7 @@ test.describe('Smoke Tests - No JavaScript Errors', () => {
     const consoleErrors = setupConsoleErrorListener(page)
 
     // Navigate to homepage
-    await page.goto('/')
+    await page.goto('/', { waitUntil: 'networkidle' })
 
     // Wait for page to load
     await page.waitForLoadState('networkidle')
@@ -56,7 +56,7 @@ test.describe('Smoke Tests - No JavaScript Errors', () => {
     const consoleErrors = setupConsoleErrorListener(page)
 
     // Navigate to register page
-    await page.goto('/register')
+    await page.goto('/register', { waitUntil: 'networkidle' })
 
     // Wait for page to load
     await page.waitForLoadState('networkidle')
@@ -86,7 +86,7 @@ test.describe('Smoke Tests - No JavaScript Errors', () => {
     const consoleErrors = setupConsoleErrorListener(page)
 
     // Navigate to non-existent page
-    await page.goto('/this-page-does-not-exist')
+    await page.goto('/this-page-does-not-exist', { waitUntil: 'networkidle' })
 
     // Wait for page to load
     await page.waitForLoadState('networkidle')
@@ -105,7 +105,7 @@ test.describe('Smoke Tests - No JavaScript Errors', () => {
 
 test.describe('Visual Regression - Basic Page Structure', () => {
   test('login page has expected structure', async ({ page }) => {
-    await page.goto('/login')
+    await page.goto('/login', { waitUntil: 'networkidle' })
     await page.waitForLoadState('networkidle')
 
     // Check for key elements

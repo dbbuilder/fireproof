@@ -12,7 +12,7 @@ setup('authenticate with real credentials', async ({ page }) => {
   console.log('Starting authentication setup...')
 
   // Navigate to login page
-  await page.goto('/login')
+  await page.goto('/login', { waitUntil: 'networkidle' })
 
   // Fill in credentials
   await page.getByTestId('email-input').fill(testUser.email)

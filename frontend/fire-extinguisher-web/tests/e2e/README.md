@@ -4,7 +4,7 @@
 
 ### Prerequisites
 1. Backend API running at `http://localhost:7001`
-2. Frontend dev server running at `http://localhost:5173`
+2. Frontend dev server running at `http://localhost:5600`
 3. Test user credentials configured (see Configuration below)
 
 ### Running Tests

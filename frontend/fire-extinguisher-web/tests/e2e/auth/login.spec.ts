@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Login Flow', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/login')
+    await page.goto('/login', { waitUntil: 'networkidle' })
   })
 
   test('should display login page with correct elements', async ({ page }) => {
