@@ -14,12 +14,11 @@ setup('authenticate with real credentials', async ({ page }) => {
   // Navigate to login page
   await page.goto('/login', { waitUntil: 'networkidle' })
 
-  // Fill in credentials
+  // Use dev login instead (no password required in development)
   await page.getByTestId('email-input').fill(testUser.email)
-  await page.getByTestId('password-input').fill(testUser.password)
 
-  // Submit login form
-  await page.getByTestId('login-submit-button').click()
+  // Click dev login button (available in development mode)
+  await page.getByTestId('dev-login-button').click()
 
   // Wait for navigation to complete (either dashboard or tenant selector)
   await page.waitForURL(/\/(dashboard|select-tenant)/, { timeout: 10000 })

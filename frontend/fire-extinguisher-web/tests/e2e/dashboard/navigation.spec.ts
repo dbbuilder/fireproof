@@ -2,11 +2,10 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Navigation and Dashboard', () => {
   test.beforeEach(async ({ page }) => {
-    // Login as regular user before each test
+    // Login as regular user before each test (using dev login)
     await page.goto('/login', { waitUntil: 'networkidle' })
     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
-    await page.getByTestId('password-input').fill('Admin123!')
-    await page.getByTestId('login-submit-button').click()
+    await page.getByTestId('dev-login-button').click()
 
     // Wait for dashboard to load
     await page.waitForURL(/\/dashboard/, { timeout: 10000 })

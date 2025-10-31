@@ -1,0 +1,1838 @@
+  npm run test:e2e
+
+> fire-extinguisher-web@1.1.2 test:e2e
+> playwright test
+
+
+Running 89 tests using 6 workers
+[setup-real-auth] › tests\e2e\auth-setup-real.ts:11:1 › authenticate with real credentials
+Starting authentication setup...
+Starting authentication setup...
+  1) [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:8:3 › Login Flow › should display login page with correct elements
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-1c57a--page-with-correct-elements-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-1c57a--page-with-correct-elements-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-1c57a--page-with-correct-elements-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-1c57a--page-with-correct-elements-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-1c57a--page-with-correct-elements-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-login-Login-Flow-shou-1c57a--page-with-correct-elements-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:26:3 › Login Flow › should show validation errors for empty fields
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-76524-ion-errors-for-empty-fields-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-76524-ion-errors-for-empty-fields-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-76524-ion-errors-for-empty-fields-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-76524-ion-errors-for-empty-fields-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-76524-ion-errors-for-empty-fields-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-login-Login-Flow-shou-76524-ion-errors-for-empty-fields-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:59:3 › Login Flow › should show error message for invalid credentials
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-e9ff4-age-for-invalid-credentials-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-e9ff4-age-for-invalid-credentials-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-e9ff4-age-for-invalid-credentials-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-e9ff4-age-for-invalid-credentials-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-e9ff4-age-for-invalid-credentials-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-login-Login-Flow-shou-e9ff4-age-for-invalid-credentials-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [setup-real-auth] › tests\e2e\auth-setup-real.ts:11:1 › authenticate with real credentials ────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      13 |
+      14 |   // Navigate to login page
+    > 15 |   await page.goto('/login')
+         |              ^
+      16 |
+      17 |   // Fill in credentials
+      18 |   await page.getByTestId('email-input').fill(testUser.email)
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth-setup-real.ts:15:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      13 |
+      14 |   // Navigate to login page
+    > 15 |   await page.goto('/login')
+         |              ^
+      16 |
+      17 |   // Fill in credentials
+      18 |   await page.getByTestId('email-input').fill(testUser.email)
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth-setup-real.ts:15:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:39:3 › Login Flow › should successfully login with valid credentials (regular user)
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:72:3 › Login Flow › should navigate to register page
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-navigate-to-register-page-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-navigate-to-register-page-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-navigate-to-register-page-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-navigate-to-register-page-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-navigate-to-register-page-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-login-Login-Flow-should-navigate-to-register-page-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:99:3 › Login Flow › should check "Remember me" checkbox
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-check-Remember-me-checkbox-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-check-Remember-me-checkbox-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-check-Remember-me-checkbox-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-check-Remember-me-checkbox-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-check-Remember-me-checkbox-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-login-Login-Flow-should-check-Remember-me-checkbox-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:81:3 › Login Flow › should toggle password visibility
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-toggle-password-visibility-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-toggle-password-visibility-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-toggle-password-visibility-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-toggle-password-visibility-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-should-toggle-password-visibility-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-login-Login-Flow-should-toggle-password-visibility-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:111:3 › Login Flow › should show dev login button in development
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-80ce3-login-button-in-development-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-80ce3-login-button-in-development-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      3 | test.describe('Login Flow', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/login')
+        |                ^
+      6 |   })
+      7 |
+      8 |   test('should display login page with correct elements', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\auth\login.spec.ts:5:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-80ce3-login-button-in-development-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-80ce3-login-button-in-development-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-login-Login-Flow-shou-80ce3-login-button-in-development-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-login-Login-Flow-shou-80ce3-login-button-in-development-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:33:3 › Smoke Tests - No JavaScript Errors › homepage should load without errors
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/
+    Call log:
+      - navigating to "http://localhost:5173/", waiting until "load"
+
+
+      36 |
+      37 |     // Navigate to homepage
+    > 38 |     await page.goto('/')
+         |                ^
+      39 |
+      40 |     // Wait for page to load
+      41 |     await page.waitForLoadState('networkidle')
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:38:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-b88b9--should-load-without-errors-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-b88b9--should-load-without-errors-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/
+    Call log:
+      - navigating to "http://localhost:5173/", waiting until "load"
+
+
+      36 |
+      37 |     // Navigate to homepage
+    > 38 |     await page.goto('/')
+         |                ^
+      39 |
+      40 |     // Wait for page to load
+      41 |     await page.waitForLoadState('networkidle')
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:38:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-b88b9--should-load-without-errors-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-b88b9--should-load-without-errors-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-b88b9--should-load-without-errors-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\smoke-Smoke-Tests---No-Jav-b88b9--should-load-without-errors-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:5:3 › Smoke Tests - No JavaScript Errors › login page should load without errors
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+       8 |
+       9 |     // Navigate directly to login page
+    > 10 |     await page.goto('/login')
+         |                ^
+      11 |
+      12 |     // Wait for page to load
+      13 |     await page.waitForLoadState('networkidle')
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:10:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-190e7--should-load-without-errors-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-190e7--should-load-without-errors-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+       8 |
+       9 |     // Navigate directly to login page
+    > 10 |     await page.goto('/login')
+         |                ^
+      11 |
+      12 |     // Wait for page to load
+      13 |     await page.waitForLoadState('networkidle')
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:10:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-190e7--should-load-without-errors-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-190e7--should-load-without-errors-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-190e7--should-load-without-errors-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\smoke-Smoke-Tests---No-Jav-190e7--should-load-without-errors-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:54:3 › Smoke Tests - No JavaScript Errors › register page should load without errors
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/register
+    Call log:
+      - navigating to "http://localhost:5173/register", waiting until "load"
+
+
+      57 |
+      58 |     // Navigate to register page
+    > 59 |     await page.goto('/register')
+         |                ^
+      60 |
+      61 |     // Wait for page to load
+      62 |     await page.waitForLoadState('networkidle')
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:59:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-97596--should-load-without-errors-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-97596--should-load-without-errors-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/register
+    Call log:
+      - navigating to "http://localhost:5173/register", waiting until "load"
+
+
+      57 |
+      58 |     // Navigate to register page
+    > 59 |     await page.goto('/register')
+         |                ^
+      60 |
+      61 |     // Wait for page to load
+      62 |     await page.waitForLoadState('networkidle')
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:59:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-97596--should-load-without-errors-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-97596--should-load-without-errors-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-97596--should-load-without-errors-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\smoke-Smoke-Tests---No-Jav-97596--should-load-without-errors-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:84:3 › Smoke Tests - No JavaScript Errors › 404 page should load without errors
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/this-page-does-not-exist
+    Call log:
+      - navigating to "http://localhost:5173/this-page-does-not-exist", waiting until "load"
+
+
+      87 |
+      88 |     // Navigate to non-existent page
+    > 89 |     await page.goto('/this-page-does-not-exist')
+         |                ^
+      90 |
+      91 |     // Wait for page to load
+      92 |     await page.waitForLoadState('networkidle')
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:89:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-1e8e3--should-load-without-errors-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-1e8e3--should-load-without-errors-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/this-page-does-not-exist
+    Call log:
+      - navigating to "http://localhost:5173/this-page-does-not-exist", waiting until "load"
+
+
+      87 |
+      88 |     // Navigate to non-existent page
+    > 89 |     await page.goto('/this-page-does-not-exist')
+         |                ^
+      90 |
+      91 |     // Wait for page to load
+      92 |     await page.waitForLoadState('networkidle')
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:89:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-1e8e3--should-load-without-errors-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-1e8e3--should-load-without-errors-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\smoke-Smoke-Tests---No-Jav-1e8e3--should-load-without-errors-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\smoke-Smoke-Tests---No-Jav-1e8e3--should-load-without-errors-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:107:3 › Visual Regression - Basic Page Structure › login page has expected structure
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      106 | test.describe('Visual Regression - Basic Page Structure', () => {
+      107 |   test('login page has expected structure', async ({ page }) => {
+    > 108 |     await page.goto('/login')
+          |                ^
+      109 |     await page.waitForLoadState('networkidle')
+      110 |
+      111 |     // Check for key elements
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:108:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Visual-Regression----51b95-page-has-expected-structure-chromium-unauthenticated\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Visual-Regression----51b95-page-has-expected-structure-chromium-unauthenticated\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      106 | test.describe('Visual Regression - Basic Page Structure', () => {
+      107 |   test('login page has expected structure', async ({ page }) => {
+    > 108 |     await page.goto('/login')
+          |                ^
+      109 |     await page.waitForLoadState('networkidle')
+      110 |
+      111 |     // Check for key elements
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\smoke.spec.ts:108:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\smoke-Visual-Regression----51b95-page-has-expected-structure-chromium-unauthenticated-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\smoke-Visual-Regression----51b95-page-has-expected-structure-chromium-unauthenticated-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\smoke-Visual-Regression----51b95-page-has-expected-structure-chromium-unauthenticated-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\smoke-Visual-Regression----51b95-page-has-expected-structure-chromium-unauthenticated-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:15:3 › Navigation and Dashboard › should display dashboard with correct elements
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:35:3 › Navigation and Dashboard › should navigate between pages using sidebar
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:69:3 › Navigation and Dashboard › should open and close user menu
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:58:3 › Navigation and Dashboard › should navigate using header logo
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:89:3 › Navigation and Dashboard › should navigate to profile from user menu
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:101:3 › Navigation and Dashboard › should navigate to settings from user menu
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:113:3 › Navigation and Dashboard › should logout successfully
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:126:3 › Navigation and Dashboard › should navigate using quick action buttons
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:153:3 › Navigation and Dashboard › should display correct stats on dashboard
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:173:3 › Navigation and Dashboard › should open mobile menu on small screens
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Login as regular user before each test
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+      8 |     await page.getByTestId('password-input').fill('Admin123!')
+      9 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\dashboard\navigation.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:9:3 › Tenant Selector (SystemAdmin) › should show tenant selector banner for SystemAdmin
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:28:3 › Tenant Selector (SystemAdmin) › should not show tenant selector for regular user
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  27) [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:45:3 › Tenant Selector (SystemAdmin) › should allow SystemAdmin to select and apply tenant
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28) [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:76:3 › Tenant Selector (SystemAdmin) › should persist tenant selection across page navigation
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  29) [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:105:3 › Tenant Selector (SystemAdmin) › should display tenant name in header after selection
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  30) [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:125:3 › Tenant Selector (SystemAdmin) › should show error if tenant selection fails
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0b4f0-r-if-tenant-selection-fails-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0b4f0-r-if-tenant-selection-fails-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0b4f0-r-if-tenant-selection-fails-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0b4f0-r-if-tenant-selection-fails-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-0b4f0-r-if-tenant-selection-fails-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\tenant-tenant-selector-Ten-0b4f0-r-if-tenant-selection-fails-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  31) [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:131:3 › Tenant Selector (SystemAdmin) › should allow switching tenant via user menu
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      4 |   test.beforeEach(async ({ page }) => {
+      5 |     // Navigate to login
+    > 6 |     await page.goto('/login')
+        |                ^
+      7 |   })
+      8 |
+      9 |   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  32) [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:165:3 › Tenant Context Data Isolation › should load correct data for selected tenant
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      165 |   test('should load correct data for selected tenant', async ({ page }) => {
+      166 |     // Login as SystemAdmin
+    > 167 |     await page.goto('/login')
+          |                ^
+      168 |     await page.getByTestId('email-input').fill('admin@fireproof.local')
+      169 |     await page.getByTestId('password-input').fill('Admin123!')
+      170 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:167:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
+    Call log:
+      - navigating to "http://localhost:5173/login", waiting until "load"
+
+
+      165 |   test('should load correct data for selected tenant', async ({ page }) => {
+      166 |     // Login as SystemAdmin
+    > 167 |     await page.goto('/login')
+          |                ^
+      168 |     await page.getByTestId('email-input').fill('admin@fireproof.local')
+      169 |     await page.getByTestId('password-input').fill('Admin123!')
+      170 |     await page.getByTestId('login-submit-button').click()
+        at D:\Dev2\fireproof\frontend\fire-extinguisher-web\tests\e2e\tenant\tenant-selector.spec.ts:167:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  32 failed
+    [setup-real-auth] › tests\e2e\auth-setup-real.ts:11:1 › authenticate with real credentials ─────
+    [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:8:3 › Login Flow › should display login page with correct elements
+    [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:26:3 › Login Flow › should show validation errors for empty fields
+    [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:39:3 › Login Flow › should successfully login with valid credentials (regular user)
+    [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:59:3 › Login Flow › should show error message for invalid credentials
+    [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:72:3 › Login Flow › should navigate to register page
+    [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:81:3 › Login Flow › should toggle password visibility
+    [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:99:3 › Login Flow › should check "Remember me" checkbox
+    [chromium-unauthenticated] › tests\e2e\auth\login.spec.ts:111:3 › Login Flow › should show dev login button in development
+    [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:5:3 › Smoke Tests - No JavaScript Errors › login page should load without errors
+    [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:33:3 › Smoke Tests - No JavaScript Errors › homepage should load without errors
+    [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:54:3 › Smoke Tests - No JavaScript Errors › register page should load without errors
+    [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:84:3 › Smoke Tests - No JavaScript Errors › 404 page should load without errors
+    [chromium-unauthenticated] › tests\e2e\smoke.spec.ts:107:3 › Visual Regression - Basic Page Structure › login page has expected structure
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:15:3 › Navigation and Dashboard › should display dashboard with correct elements
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:35:3 › Navigation and Dashboard › should navigate between pages using sidebar
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:58:3 › Navigation and Dashboard › should navigate using header logo
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:69:3 › Navigation and Dashboard › should open and close user menu
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:89:3 › Navigation and Dashboard › should navigate to profile from user menu
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:101:3 › Navigation and Dashboard › should navigate to settings from user menu
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:113:3 › Navigation and Dashboard › should logout successfully
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:126:3 › Navigation and Dashboard › should navigate using quick action buttons
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:153:3 › Navigation and Dashboard › should display correct stats on dashboard
+    [chromium-auth-flow] › tests\e2e\dashboard\navigation.spec.ts:173:3 › Navigation and Dashboard › should open mobile menu on small screens
+    [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:9:3 › Tenant Selector (SystemAdmin) › should show tenant selector banner for SystemAdmin
+    [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:28:3 › Tenant Selector (SystemAdmin) › should not show tenant selector for regular user
+    [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:45:3 › Tenant Selector (SystemAdmin) › should allow SystemAdmin to select and apply tenant
+    [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:76:3 › Tenant Selector (SystemAdmin) › should persist tenant selection across page navigation
+    [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:105:3 › Tenant Selector (SystemAdmin) › should display tenant name in header after selection
+    [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:125:3 › Tenant Selector (SystemAdmin) › should show error if tenant selection fails
+    [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:131:3 › Tenant Selector (SystemAdmin) › should allow switching tenant via user menu
+    [chromium-auth-flow] › tests\e2e\tenant\tenant-selector.spec.ts:165:3 › Tenant Context Data Isolation › should load correct data for selected tenant
+  57 did not run
+
+  Serving HTML report at http://localhost:9323. Press Ctrl+C to quit.

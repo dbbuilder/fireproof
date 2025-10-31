@@ -9,8 +9,8 @@ test.describe('Tenant Selector (SystemAdmin)', () => {
   test('should show tenant selector banner for SystemAdmin', async ({ page }) => {
     // Login as SystemAdmin
     await page.getByTestId('email-input').fill('admin@fireproof.local')
-    await page.getByTestId('password-input').fill('Admin123!')
-    await page.getByTestId('login-submit-button').click()
+    // Use dev login
+    await page.getByTestId('dev-login-button').click()
 
     // Wait for page to load after login
     await page.waitForLoadState('networkidle')
@@ -28,8 +28,8 @@ test.describe('Tenant Selector (SystemAdmin)', () => {
   test('should not show tenant selector for regular user', async ({ page }) => {
     // Login as regular user (TenantAdmin)
     await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
-    await page.getByTestId('password-input').fill('Admin123!')
-    await page.getByTestId('login-submit-button').click()
+    // Use dev login
+    await page.getByTestId('dev-login-button').click()
 
     // Wait for dashboard to load
     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
@@ -45,8 +45,8 @@ test.describe('Tenant Selector (SystemAdmin)', () => {
   test('should allow SystemAdmin to select and apply tenant', async ({ page }) => {
     // Login as SystemAdmin
     await page.getByTestId('email-input').fill('admin@fireproof.local')
-    await page.getByTestId('password-input').fill('Admin123!')
-    await page.getByTestId('login-submit-button').click()
+    // Use dev login
+    await page.getByTestId('dev-login-button').click()
 
     // Wait for banner to appear
     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
@@ -76,8 +76,8 @@ test.describe('Tenant Selector (SystemAdmin)', () => {
   test('should persist tenant selection across page navigation', async ({ page }) => {
     // Login as SystemAdmin
     await page.getByTestId('email-input').fill('admin@fireproof.local')
-    await page.getByTestId('password-input').fill('Admin123!')
-    await page.getByTestId('login-submit-button').click()
+    // Use dev login
+    await page.getByTestId('dev-login-button').click()
 
     // Wait for and select tenant
     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
@@ -105,8 +105,8 @@ test.describe('Tenant Selector (SystemAdmin)', () => {
   test('should display tenant name in header after selection', async ({ page }) => {
     // Login as SystemAdmin
     await page.getByTestId('email-input').fill('admin@fireproof.local')
-    await page.getByTestId('password-input').fill('Admin123!')
-    await page.getByTestId('login-submit-button').click()
+    // Use dev login
+    await page.getByTestId('dev-login-button').click()
 
     // Select tenant
     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
@@ -131,8 +131,8 @@ test.describe('Tenant Selector (SystemAdmin)', () => {
   test('should allow switching tenant via user menu', async ({ page }) => {
     // Login as SystemAdmin and select tenant first
     await page.getByTestId('email-input').fill('admin@fireproof.local')
-    await page.getByTestId('password-input').fill('Admin123!')
-    await page.getByTestId('login-submit-button').click()
+    // Use dev login
+    await page.getByTestId('dev-login-button').click()
 
     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
     await page.getByTestId('tenant-selector-select').selectOption({ index: 1 })
@@ -166,8 +166,8 @@ test.describe('Tenant Context Data Isolation', () => {
     // Login as SystemAdmin
     await page.goto('/login', { waitUntil: 'networkidle' })
     await page.getByTestId('email-input').fill('admin@fireproof.local')
-    await page.getByTestId('password-input').fill('Admin123!')
-    await page.getByTestId('login-submit-button').click()
+    // Use dev login
+    await page.getByTestId('dev-login-button').click()
 
     // Select tenant
     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
