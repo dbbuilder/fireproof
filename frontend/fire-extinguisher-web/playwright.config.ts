@@ -30,7 +30,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'https://www.fireproofapp.net',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173',
     /* Increase action timeout for production */
     actionTimeout: 15000, // 15 seconds for actions like click, fill
     /* Increase navigation timeout for production */
@@ -51,7 +51,14 @@ export default defineConfig({
       testMatch: /.*\.setup\.ts/,
     },
 
-    // Authenticated tests - use saved auth state from setup
+    // Unauthenticated tests (auth flows, smoke tests)
+    {
+      name: 'chromium-unauthenticated',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: ['**/smoke.spec.ts', '**/auth/**/*.spec.ts', '**/tenant/**/*.spec.ts', '**/dashboard/**/*.spec.ts'],
+    },
+
+    // Authenticated tests - use saved auth state from setup (legacy tests)
     {
       name: 'chromium-authenticated',
       use: {
@@ -59,14 +66,7 @@ export default defineConfig({
         storageState: 'playwright/.auth/user.json',
       },
       dependencies: ['setup'],
-      testIgnore: ['**/auth.spec.ts', '**/smoke.spec.ts'], // Exclude auth and smoke tests
-    },
-
-    // Unauthenticated tests (smoke tests)
-    {
-      name: 'chromium-unauthenticated',
-      use: { ...devices['Desktop Chrome'] },
-      testMatch: ['**/smoke.spec.ts'], // Only run smoke tests without auth
+      testIgnore: ['**/auth/**', '**/smoke.spec.ts', '**/tenant/**', '**/dashboard/**'], // Exclude new test structure
     },
 
     // {
@@ -90,11 +90,11 @@ export default defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests (disabled for production testing) */
-  // webServer: {
-  //   command: 'npm run dev',
-  //   url: 'http://localhost:5173',
-  //   reuseExistingServer: !process.env.CI,
-  //   timeout: 120 * 1000,
-  // },
+  /* Run your local dev server before starting the tests */
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:5173',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+  },
 })
