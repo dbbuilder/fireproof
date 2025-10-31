@@ -37,11 +37,12 @@ test.describe('Login Flow', () => {
   })
 
   test('should successfully login with valid credentials (regular user)', async ({ page }) => {
-    // Use dev login for testing (no password required in development)
-    await page.getByTestId('email-input').fill('alice.admin@fireproof.local')
+    // Fill in credentials for test user
+    await page.getByTestId('email-input').fill('chris@servicevision.net')
+    await page.getByTestId('password-input').fill('Gv51076')
 
-    // Click dev login button
-    await page.getByTestId('dev-login-button').click()
+    // Submit form
+    await page.getByTestId('login-submit-button').click()
 
     // Should redirect to dashboard (auto-tenant for regular users)
     await page.waitForURL(/\/dashboard/, { timeout: 10000 })

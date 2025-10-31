@@ -5,7 +5,7 @@ const authFile = 'playwright/.auth/user.json'
 // Test credentials
 const testUser = {
   email: 'chris@servicevision.net',
-  password: 'Gv51076!',
+  password: 'Gv51076',
 }
 
 setup('authenticate with real credentials', async ({ page }) => {
@@ -14,11 +14,12 @@ setup('authenticate with real credentials', async ({ page }) => {
   // Navigate to login page
   await page.goto('/login', { waitUntil: 'networkidle' })
 
-  // Use dev login instead (no password required in development)
+  // Fill in credentials
   await page.getByTestId('email-input').fill(testUser.email)
+  await page.getByTestId('password-input').fill(testUser.password)
 
-  // Click dev login button (available in development mode)
-  await page.getByTestId('dev-login-button').click()
+  // Submit login form
+  await page.getByTestId('login-submit-button').click()
 
   // Wait for navigation to complete (either dashboard or tenant selector)
   await page.waitForURL(/\/(dashboard|select-tenant)/, { timeout: 10000 })

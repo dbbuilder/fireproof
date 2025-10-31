@@ -1,0 +1,1331 @@
+
+> fire-extinguisher-web@1.1.2 test:e2e
+> playwright test
+
+
+Running 89 tests using 6 workers
+
+[1A[2K[1/89] [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:26:3 › Login Flow › should show validation errors for empty fields
+[1A[2K[2/89] [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:39:3 › Login Flow › should successfully login with valid credentials (regular user)
+[1A[2K[3/89] [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:8:3 › Login Flow › should display login page with correct elements
+[1A[2K[4/89] [setup-real-auth] › tests/e2e/auth-setup-real.ts:11:1 › authenticate with real credentials
+[1A[2K[5/89] [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:80:3 › Login Flow › should toggle password visibility
+[1A[2K[setup-real-auth] › tests/e2e/auth-setup-real.ts:11:1 › authenticate with real credentials
+Starting authentication setup...
+
+[1A[2K[6/89] [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:71:3 › Login Flow › should navigate to register page
+[1A[2K[7/89] [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:58:3 › Login Flow › should show error message for invalid credentials
+[1A[2K[8/89] [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:98:3 › Login Flow › should check "Remember me" checkbox
+[1A[2K[9/89] [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:110:3 › Login Flow › should show dev login button in development
+[1A[2K[10/89] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:5:3 › Smoke Tests - No JavaScript Errors › login page should load without errors
+[1A[2K[11/89] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:33:3 › Smoke Tests - No JavaScript Errors › homepage should load without errors
+[1A[2K[12/89] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:54:3 › Smoke Tests - No JavaScript Errors › register page should load without errors
+[1A[2K[13/89] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:84:3 › Smoke Tests - No JavaScript Errors › 404 page should load without errors
+[1A[2K[14/89] [chromium-unauthenticated] › tests/e2e/smoke.spec.ts:107:3 › Visual Regression - Basic Page Structure › login page has expected structure
+[1A[2K[15/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:14:3 › Navigation and Dashboard › should display dashboard with correct elements
+[1A[2K[16/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:34:3 › Navigation and Dashboard › should navigate between pages using sidebar
+[1A[2K[17/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:57:3 › Navigation and Dashboard › should navigate using header logo
+[1A[2K[18/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:68:3 › Navigation and Dashboard › should open and close user menu
+[1A[2K[19/89] [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:39:3 › Login Flow › should successfully login with valid credentials (regular user) (retry #1)
+[1A[2K[20/89] [setup-real-auth] › tests/e2e/auth-setup-real.ts:11:1 › authenticate with real credentials (retry #1)
+[1A[2KStarting authentication setup...
+
+[1A[2K[21/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:34:3 › Navigation and Dashboard › should navigate between pages using sidebar (retry #1)
+[1A[2K[22/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:14:3 › Navigation and Dashboard › should display dashboard with correct elements (retry #1)
+[1A[2K  1) [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:39:3 › Login Flow › should successfully login with valid credentials (regular user) 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      45 |
+      46 |     // Should redirect to dashboard (auto-tenant for regular users)
+    > 47 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      48 |
+      49 |     // Verify dashboard loaded
+      50 |     await expect(page.getByTestId('dashboard-heading')).toBeVisible()
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/auth/login.spec.ts:47:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      45 |
+      46 |     // Should redirect to dashboard (auto-tenant for regular users)
+    > 47 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      48 |
+      49 |     // Verify dashboard loaded
+      50 |     await expect(page.getByTestId('dashboard-heading')).toBeVisible()
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/auth/login.spec.ts:47:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/auth-login-Login-Flow-shou-2d8e5-d-credentials-regular-user--chromium-unauthenticated-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K  2) [setup-real-auth] › tests/e2e/auth-setup-real.ts:11:1 › authenticate with real credentials ────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      22 |
+      23 |   // Wait for navigation to complete (either dashboard or tenant selector)
+    > 24 |   await page.waitForURL(/\/(dashboard|select-tenant)/, { timeout: 10000 })
+         |              ^
+      25 |
+      26 |   // If tenant selector appears, select first tenant
+      27 |   const tenantSelector = page.getByTestId('tenant-selector-banner')
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/auth-setup-real.ts:24:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      22 |
+      23 |   // Wait for navigation to complete (either dashboard or tenant selector)
+    > 24 |   await page.waitForURL(/\/(dashboard|select-tenant)/, { timeout: 10000 })
+         |              ^
+      25 |
+      26 |   // If tenant selector appears, select first tenant
+      27 |   const tenantSelector = page.getByTestId('tenant-selector-banner')
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/auth-setup-real.ts:24:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/auth-setup-real.ts-authenticate-with-real-credentials-setup-real-auth-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[23/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:57:3 › Navigation and Dashboard › should navigate using header logo (retry #1)
+[1A[2K[24/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:68:3 › Navigation and Dashboard › should open and close user menu (retry #1)
+[1A[2K[25/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:88:3 › Navigation and Dashboard › should navigate to profile from user menu
+[1A[2K  3) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:14:3 › Navigation and Dashboard › should display dashboard with correct elements 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-06cf7-board-with-correct-elements-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K  4) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:34:3 › Navigation and Dashboard › should navigate between pages using sidebar 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-b2014-between-pages-using-sidebar-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[26/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:100:3 › Navigation and Dashboard › should navigate to settings from user menu
+[1A[2K  5) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:57:3 › Navigation and Dashboard › should navigate using header logo 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-d297a--navigate-using-header-logo-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[27/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:125:3 › Navigation and Dashboard › should navigate using quick action buttons
+[1A[2K[28/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:112:3 › Navigation and Dashboard › should logout successfully
+[1A[2K  6) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:68:3 › Navigation and Dashboard › should open and close user menu 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-22d34-ld-open-and-close-user-menu-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[29/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:152:3 › Navigation and Dashboard › should display correct stats on dashboard
+[1A[2K[30/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:172:3 › Navigation and Dashboard › should open mobile menu on small screens
+[1A[2K[31/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:88:3 › Navigation and Dashboard › should navigate to profile from user menu (retry #1)
+[1A[2K[32/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:100:3 › Navigation and Dashboard › should navigate to settings from user menu (retry #1)
+[1A[2K[33/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:125:3 › Navigation and Dashboard › should navigate using quick action buttons (retry #1)
+[1A[2K[34/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:112:3 › Navigation and Dashboard › should logout successfully (retry #1)
+[1A[2K  7) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:88:3 › Navigation and Dashboard › should navigate to profile from user menu 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-c550f-e-to-profile-from-user-menu-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[35/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:152:3 › Navigation and Dashboard › should display correct stats on dashboard (retry #1)
+[1A[2K[36/89] [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:172:3 › Navigation and Dashboard › should open mobile menu on small screens (retry #1)
+[1A[2K  8) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:100:3 › Navigation and Dashboard › should navigate to settings from user menu 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-afa77--to-settings-from-user-menu-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K  9) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:112:3 › Navigation and Dashboard › should logout successfully 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-6e066--should-logout-successfully-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K  10) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:125:3 › Navigation and Dashboard › should navigate using quick action buttons 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-ffcbf--using-quick-action-buttons-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[37/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:9:3 › Tenant Selector (SystemAdmin) › should show tenant selector banner for SystemAdmin
+[1A[2K[38/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:45:3 › Tenant Selector (SystemAdmin) › should allow SystemAdmin to select and apply tenant
+[1A[2K[39/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:28:3 › Tenant Selector (SystemAdmin) › should not show tenant selector for regular user
+[1A[2K[40/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:76:3 › Tenant Selector (SystemAdmin) › should persist tenant selection across page navigation
+[1A[2K  11) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:152:3 › Navigation and Dashboard › should display correct stats on dashboard 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-b3879--correct-stats-on-dashboard-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K  12) [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:172:3 › Navigation and Dashboard › should open mobile menu on small screens 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       9 |
+      10 |     // Wait for dashboard to load
+    > 11 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      12 |   })
+      13 |
+      14 |   test('should display dashboard with correct elements', async ({ page }) => {
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/dashboard/navigation.spec.ts:11:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/dashboard-navigation-Navig-9d248-obile-menu-on-small-screens-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[41/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:105:3 › Tenant Selector (SystemAdmin) › should display tenant name in header after selection
+[1A[2K[42/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:125:3 › Tenant Selector (SystemAdmin) › should show error if tenant selection fails
+[1A[2K[43/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:131:3 › Tenant Selector (SystemAdmin) › should allow switching tenant via user menu
+[1A[2K[44/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:9:3 › Tenant Selector (SystemAdmin) › should show tenant selector banner for SystemAdmin (retry #1)
+[1A[2K[45/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:45:3 › Tenant Selector (SystemAdmin) › should allow SystemAdmin to select and apply tenant (retry #1)
+[1A[2K[46/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:28:3 › Tenant Selector (SystemAdmin) › should not show tenant selector for regular user (retry #1)
+[1A[2K[47/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:76:3 › Tenant Selector (SystemAdmin) › should persist tenant selection across page navigation (retry #1)
+[1A[2K  13) [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:9:3 › Tenant Selector (SystemAdmin) › should show tenant selector banner for SystemAdmin 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      18 |     // Tenant selector banner should appear
+      19 |     const banner = page.getByTestId('tenant-selector-banner')
+    > 20 |     await expect(banner).toBeVisible({ timeout: 10000 })
+         |                          ^
+      21 |
+      22 |     // Verify banner content
+      23 |     await expect(page.getByTestId('tenant-selector-title')).toContainText('Select Organization')
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:20:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      18 |     // Tenant selector banner should appear
+      19 |     const banner = page.getByTestId('tenant-selector-banner')
+    > 20 |     await expect(banner).toBeVisible({ timeout: 10000 })
+         |                          ^
+      21 |
+      22 |     // Verify banner content
+      23 |     await expect(page.getByTestId('tenant-selector-title')).toContainText('Select Organization')
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:20:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-tenant-selector-Ten-e1bf1-ctor-banner-for-SystemAdmin-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K  14) [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:45:3 › Tenant Selector (SystemAdmin) › should allow SystemAdmin to select and apply tenant 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      50 |
+      51 |     // Wait for banner to appear
+    > 52 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+         |                                                              ^
+      53 |
+      54 |     // Select tenant from dropdown
+      55 |     const selectElement = page.getByTestId('tenant-selector-select')
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:52:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      50 |
+      51 |     // Wait for banner to appear
+    > 52 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+         |                                                              ^
+      53 |
+      54 |     // Select tenant from dropdown
+      55 |     const selectElement = page.getByTestId('tenant-selector-select')
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:52:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-tenant-selector-Ten-62557--to-select-and-apply-tenant-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[48/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:105:3 › Tenant Selector (SystemAdmin) › should display tenant name in header after selection (retry #1)
+[1A[2K  15) [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:28:3 › Tenant Selector (SystemAdmin) › should not show tenant selector for regular user 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      33 |
+      34 |     // Wait for dashboard to load
+    > 35 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      36 |
+      37 |     // Tenant selector banner should NOT appear
+      38 |     const banner = page.getByTestId('tenant-selector-banner')
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:35:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+      33 |
+      34 |     // Wait for dashboard to load
+    > 35 |     await page.waitForURL(/\/dashboard/, { timeout: 10000 })
+         |                ^
+      36 |
+      37 |     // Tenant selector banner should NOT appear
+      38 |     const banner = page.getByTestId('tenant-selector-banner')
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:35:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-tenant-selector-Ten-07c5b-t-selector-for-regular-user-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K  16) [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:76:3 › Tenant Selector (SystemAdmin) › should persist tenant selection across page navigation 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      81 |
+      82 |     // Wait for and select tenant
+    > 83 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+         |                                                              ^
+      84 |     await page.getByTestId('tenant-selector-select').selectOption({ index: 1 })
+      85 |     await page.getByTestId('tenant-selector-apply-button').click()
+      86 |
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:83:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      81 |
+      82 |     // Wait for and select tenant
+    > 83 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+         |                                                              ^
+      84 |     await page.getByTestId('tenant-selector-select').selectOption({ index: 1 })
+      85 |     await page.getByTestId('tenant-selector-apply-button').click()
+      86 |
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:83:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-tenant-selector-Ten-0ba20-tion-across-page-navigation-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[49/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:131:3 › Tenant Selector (SystemAdmin) › should allow switching tenant via user menu (retry #1)
+[1A[2K[50/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:165:3 › Tenant Context Data Isolation › should load correct data for selected tenant
+[1A[2K  17) [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:105:3 › Tenant Selector (SystemAdmin) › should display tenant name in header after selection 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      110 |
+      111 |     // Select tenant
+    > 112 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+          |                                                              ^
+      113 |     await page.getByTestId('tenant-selector-select').selectOption({ index: 1 })
+      114 |     await page.getByTestId('tenant-selector-apply-button').click()
+      115 |
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:112:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      110 |
+      111 |     // Select tenant
+    > 112 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+          |                                                              ^
+      113 |     await page.getByTestId('tenant-selector-select').selectOption({ index: 1 })
+      114 |     await page.getByTestId('tenant-selector-apply-button').click()
+      115 |
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:112:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-tenant-selector-Ten-7d013-e-in-header-after-selection-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K  18) [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:131:3 › Tenant Selector (SystemAdmin) › should allow switching tenant via user menu 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      135 |     await page.getByTestId('dev-login-button').click()
+      136 |
+    > 137 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+          |                                                              ^
+      138 |     await page.getByTestId('tenant-selector-select').selectOption({ index: 1 })
+      139 |     await page.getByTestId('tenant-selector-apply-button').click()
+      140 |
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:137:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      135 |     await page.getByTestId('dev-login-button').click()
+      136 |
+    > 137 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+          |                                                              ^
+      138 |     await page.getByTestId('tenant-selector-select').selectOption({ index: 1 })
+      139 |     await page.getByTestId('tenant-selector-apply-button').click()
+      140 |
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:137:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-tenant-selector-Ten-5e12e-tching-tenant-via-user-menu-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K[51/89] [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:165:3 › Tenant Context Data Isolation › should load correct data for selected tenant (retry #1)
+[1A[2K  19) [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:165:3 › Tenant Context Data Isolation › should load correct data for selected tenant 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      171 |
+      172 |     // Select tenant
+    > 173 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+          |                                                              ^
+      174 |     await page.getByTestId('tenant-selector-select').selectOption({ index: 1 })
+      175 |     await page.getByTestId('tenant-selector-apply-button').click()
+      176 |
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:173:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByTestId('tenant-selector-banner')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for getByTestId('tenant-selector-banner')[22m
+
+
+      171 |
+      172 |     // Select tenant
+    > 173 |     await expect(page.getByTestId('tenant-selector-banner')).toBeVisible({ timeout: 10000 })
+          |                                                              ^
+      174 |     await page.getByTestId('tenant-selector-select').selectOption({ index: 1 })
+      175 |     await page.getByTestId('tenant-selector-apply-button').click()
+      176 |
+        at /mnt/d/dev2/fireproof/frontend/fire-extinguisher-web/tests/e2e/tenant/tenant-selector.spec.ts:173:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/tenant-tenant-selector-Ten-b179a-ct-data-for-selected-tenant-chromium-auth-flow-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[1A[2K  19 failed
+    [setup-real-auth] › tests/e2e/auth-setup-real.ts:11:1 › authenticate with real credentials ─────
+    [chromium-unauthenticated] › tests/e2e/auth/login.spec.ts:39:3 › Login Flow › should successfully login with valid credentials (regular user) 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:14:3 › Navigation and Dashboard › should display dashboard with correct elements 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:34:3 › Navigation and Dashboard › should navigate between pages using sidebar 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:57:3 › Navigation and Dashboard › should navigate using header logo 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:68:3 › Navigation and Dashboard › should open and close user menu 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:88:3 › Navigation and Dashboard › should navigate to profile from user menu 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:100:3 › Navigation and Dashboard › should navigate to settings from user menu 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:112:3 › Navigation and Dashboard › should logout successfully 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:125:3 › Navigation and Dashboard › should navigate using quick action buttons 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:152:3 › Navigation and Dashboard › should display correct stats on dashboard 
+    [chromium-auth-flow] › tests/e2e/dashboard/navigation.spec.ts:172:3 › Navigation and Dashboard › should open mobile menu on small screens 
+    [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:9:3 › Tenant Selector (SystemAdmin) › should show tenant selector banner for SystemAdmin 
+    [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:28:3 › Tenant Selector (SystemAdmin) › should not show tenant selector for regular user 
+    [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:45:3 › Tenant Selector (SystemAdmin) › should allow SystemAdmin to select and apply tenant 
+    [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:76:3 › Tenant Selector (SystemAdmin) › should persist tenant selection across page navigation 
+    [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:105:3 › Tenant Selector (SystemAdmin) › should display tenant name in header after selection 
+    [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:131:3 › Tenant Selector (SystemAdmin) › should allow switching tenant via user menu 
+    [chromium-auth-flow] › tests/e2e/tenant/tenant-selector.spec.ts:165:3 › Tenant Context Data Isolation › should load correct data for selected tenant 
+  1 skipped
+  57 did not run
+  12 passed (2.8m)
+
+[36m  Serving HTML report at http://localhost:33119. Press Ctrl+C to quit.[39m
