@@ -3,7 +3,10 @@
     <!-- Page Header -->
     <div class="mb-8 flex justify-between items-center">
       <div>
-        <h1 data-testid="import-history-heading" class="text-3xl font-bold text-gray-900">
+        <h1
+          data-testid="import-history-heading"
+          class="text-3xl font-bold text-gray-900"
+        >
           Import History
         </h1>
         <p class="mt-2 text-gray-600">
@@ -11,9 +14,9 @@
         </p>
       </div>
       <button
-        @click="$router.push('/import-data')"
         class="btn btn-primary"
         data-testid="new-import-button"
+        @click="$router.push('/import-data')"
       >
         <ArrowUpTrayIcon class="h-5 w-5 mr-2 inline-block" />
         New Import
@@ -27,14 +30,22 @@
           <label class="block text-sm font-medium text-gray-700">Job Type</label>
           <select
             v-model="filterJobType"
-            @change="loadImportHistory"
             class="mt-1 input w-full"
             data-testid="job-type-filter"
+            @change="loadImportHistory"
           >
-            <option :value="null">All Types</option>
-            <option value="HistoricalInspections">Historical Inspections</option>
-            <option value="Locations">Locations</option>
-            <option value="Extinguishers">Extinguishers</option>
+            <option :value="null">
+              All Types
+            </option>
+            <option value="HistoricalInspections">
+              Historical Inspections
+            </option>
+            <option value="Locations">
+              Locations
+            </option>
+            <option value="Extinguishers">
+              Extinguishers
+            </option>
           </select>
         </div>
 
@@ -42,23 +53,31 @@
           <label class="block text-sm font-medium text-gray-700">Page Size</label>
           <select
             v-model="pageSize"
-            @change="changePageSize"
             class="mt-1 input w-full"
             data-testid="page-size-select"
+            @change="changePageSize"
           >
-            <option :value="10">10 per page</option>
-            <option :value="25">25 per page</option>
-            <option :value="50">50 per page</option>
-            <option :value="100">100 per page</option>
+            <option :value="10">
+              10 per page
+            </option>
+            <option :value="25">
+              25 per page
+            </option>
+            <option :value="50">
+              50 per page
+            </option>
+            <option :value="100">
+              100 per page
+            </option>
           </select>
         </div>
 
         <div class="flex items-end">
           <button
-            @click="loadImportHistory"
             class="btn btn-secondary w-full"
             :disabled="importStore.isLoading"
             data-testid="refresh-button"
+            @click="loadImportHistory"
           >
             <ArrowPathIcon class="h-5 w-5 mr-2 inline-block" />
             Refresh
@@ -74,7 +93,9 @@
       data-testid="loading-state"
     >
       <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-      <p class="mt-2 text-sm text-gray-600">Loading import history...</p>
+      <p class="mt-2 text-sm text-gray-600">
+        Loading import history...
+      </p>
     </div>
 
     <!-- Import Jobs Table -->
@@ -131,11 +152,17 @@
               </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              <div v-if="job.totalRows" class="flex items-center">
+              <div
+                v-if="job.totalRows"
+                class="flex items-center"
+              >
                 <span class="mr-2">
                   {{ job.successRows || 0 }} / {{ job.totalRows }}
                 </span>
-                <div v-if="job.status === 'Processing'" class="w-24 bg-gray-200 rounded-full h-2">
+                <div
+                  v-if="job.status === 'Processing'"
+                  class="w-24 bg-gray-200 rounded-full h-2"
+                >
                   <div
                     class="bg-blue-600 h-2 rounded-full"
                     :style="{ width: getProgressPercent(job) + '%' }"
@@ -149,9 +176,9 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
               <button
-                @click="viewJobDetails(job)"
                 class="text-blue-600 hover:text-blue-900"
                 data-testid="view-job-button"
+                @click="viewJobDetails(job)"
               >
                 View Details
               </button>
@@ -167,25 +194,28 @@
       >
         <div class="flex-1 flex justify-between sm:hidden">
           <button
-            @click="previousPage"
             :disabled="!importStore.hasPrevPage"
             class="btn btn-secondary"
             data-testid="prev-page-mobile"
+            @click="previousPage"
           >
             Previous
           </button>
           <button
-            @click="nextPage"
             :disabled="!importStore.hasNextPage"
             class="btn btn-secondary ml-3"
             data-testid="next-page-mobile"
+            @click="nextPage"
           >
             Next
           </button>
         </div>
         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
           <div>
-            <p class="text-sm text-gray-700" data-testid="pagination-info">
+            <p
+              class="text-sm text-gray-700"
+              data-testid="pagination-info"
+            >
               Showing
               <span class="font-medium">{{ getStartItem() }}</span>
               to
@@ -198,10 +228,10 @@
           <div>
             <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
               <button
-                @click="previousPage"
                 :disabled="!importStore.hasPrevPage"
                 class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 data-testid="prev-page"
+                @click="previousPage"
               >
                 <ChevronLeftIcon class="h-5 w-5" />
               </button>
@@ -209,10 +239,10 @@
                 Page {{ importStore.pageNumber }} of {{ importStore.totalPages }}
               </span>
               <button
-                @click="nextPage"
                 :disabled="!importStore.hasNextPage"
                 class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 data-testid="next-page"
+                @click="nextPage"
               >
                 <ChevronRightIcon class="h-5 w-5" />
               </button>
@@ -229,13 +259,17 @@
       data-testid="empty-state"
     >
       <DocumentTextIcon class="mx-auto h-12 w-12 text-gray-400" />
-      <h3 class="mt-2 text-sm font-medium text-gray-900">No import jobs found</h3>
-      <p class="mt-1 text-sm text-gray-500">Get started by uploading a CSV file.</p>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">
+        No import jobs found
+      </h3>
+      <p class="mt-1 text-sm text-gray-500">
+        Get started by uploading a CSV file.
+      </p>
       <div class="mt-6">
         <button
-          @click="$router.push('/import-data')"
           class="btn btn-primary"
           data-testid="empty-state-new-import-button"
+          @click="$router.push('/import-data')"
         >
           <ArrowUpTrayIcon class="h-5 w-5 mr-2 inline-block" />
           Start Import
@@ -251,32 +285,44 @@
         data-testid="job-details-modal"
       >
         <div class="flex min-h-screen items-center justify-center p-4">
-          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="selectedJob = null" />
+          <div
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            @click="selectedJob = null"
+          />
 
           <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl sm:my-8 sm:w-full sm:max-w-2xl sm:p-6">
             <div class="absolute right-0 top-0 pr-4 pt-4">
               <button
-                @click="selectedJob = null"
                 class="text-gray-400 hover:text-gray-500"
                 data-testid="close-modal-button"
+                @click="selectedJob = null"
               >
                 <XMarkIcon class="h-6 w-6" />
               </button>
             </div>
 
             <div>
-              <h3 class="text-lg font-medium leading-6 text-gray-900">Import Job Details</h3>
+              <h3 class="text-lg font-medium leading-6 text-gray-900">
+                Import Job Details
+              </h3>
 
               <!-- Job Info -->
               <dl class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <dt class="text-sm font-medium text-gray-500">Job ID</dt>
-                  <dd class="mt-1 text-sm text-gray-900 font-mono" data-testid="job-id">
+                  <dt class="text-sm font-medium text-gray-500">
+                    Job ID
+                  </dt>
+                  <dd
+                    class="mt-1 text-sm text-gray-900 font-mono"
+                    data-testid="job-id"
+                  >
                     {{ selectedJob.importJobId.substring(0, 8) }}...
                   </dd>
                 </div>
                 <div>
-                  <dt class="text-sm font-medium text-gray-500">Status</dt>
+                  <dt class="text-sm font-medium text-gray-500">
+                    Status
+                  </dt>
                   <dd class="mt-1">
                     <span
                       class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -287,25 +333,39 @@
                   </dd>
                 </div>
                 <div>
-                  <dt class="text-sm font-medium text-gray-500">File Name</dt>
-                  <dd class="mt-1 text-sm text-gray-900" data-testid="job-filename">
+                  <dt class="text-sm font-medium text-gray-500">
+                    File Name
+                  </dt>
+                  <dd
+                    class="mt-1 text-sm text-gray-900"
+                    data-testid="job-filename"
+                  >
                     {{ selectedJob.fileName }}
                   </dd>
                 </div>
                 <div>
-                  <dt class="text-sm font-medium text-gray-500">File Size</dt>
+                  <dt class="text-sm font-medium text-gray-500">
+                    File Size
+                  </dt>
                   <dd class="mt-1 text-sm text-gray-900">
                     {{ formatFileSize(selectedJob.fileSize) }}
                   </dd>
                 </div>
                 <div>
-                  <dt class="text-sm font-medium text-gray-500">Total Rows</dt>
-                  <dd class="mt-1 text-sm text-gray-900" data-testid="job-total-rows">
+                  <dt class="text-sm font-medium text-gray-500">
+                    Total Rows
+                  </dt>
+                  <dd
+                    class="mt-1 text-sm text-gray-900"
+                    data-testid="job-total-rows"
+                  >
                     {{ selectedJob.totalRows || 'N/A' }}
                   </dd>
                 </div>
                 <div>
-                  <dt class="text-sm font-medium text-gray-500">Success / Failed</dt>
+                  <dt class="text-sm font-medium text-gray-500">
+                    Success / Failed
+                  </dt>
                   <dd class="mt-1 text-sm text-gray-900">
                     <span class="text-green-600">{{ selectedJob.successRows || 0 }}</span>
                     /
@@ -313,13 +373,17 @@
                   </dd>
                 </div>
                 <div>
-                  <dt class="text-sm font-medium text-gray-500">Started</dt>
+                  <dt class="text-sm font-medium text-gray-500">
+                    Started
+                  </dt>
                   <dd class="mt-1 text-sm text-gray-900">
                     {{ selectedJob.startedDate ? formatDateTime(selectedJob.startedDate) : 'N/A' }}
                   </dd>
                 </div>
                 <div>
-                  <dt class="text-sm font-medium text-gray-500">Completed</dt>
+                  <dt class="text-sm font-medium text-gray-500">
+                    Completed
+                  </dt>
                   <dd class="mt-1 text-sm text-gray-900">
                     {{ selectedJob.completedDate ? formatDateTime(selectedJob.completedDate) : 'N/A' }}
                   </dd>
@@ -332,8 +396,12 @@
                 class="mt-4 p-4 bg-red-50 rounded-lg"
                 data-testid="job-error-message"
               >
-                <p class="text-sm font-medium text-red-800">Error:</p>
-                <p class="mt-1 text-sm text-red-700">{{ selectedJob.errorMessage }}</p>
+                <p class="text-sm font-medium text-red-800">
+                  Error:
+                </p>
+                <p class="mt-1 text-sm text-red-700">
+                  {{ selectedJob.errorMessage }}
+                </p>
               </div>
 
               <!-- Error Details -->
@@ -342,16 +410,18 @@
                 class="mt-4"
                 data-testid="job-error-details"
               >
-                <p class="text-sm font-medium text-gray-900">Error Details:</p>
+                <p class="text-sm font-medium text-gray-900">
+                  Error Details:
+                </p>
                 <pre class="mt-2 text-xs text-gray-700 bg-gray-100 p-2 rounded overflow-x-auto">{{ selectedJob.errorDetails }}</pre>
               </div>
             </div>
 
             <div class="mt-5 sm:mt-6">
               <button
-                @click="selectedJob = null"
                 class="btn btn-secondary w-full"
                 data-testid="close-details-button"
+                @click="selectedJob = null"
               >
                 Close
               </button>

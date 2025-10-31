@@ -2,25 +2,47 @@
   <div class="inspector-dashboard">
     <!-- Welcome Section -->
     <div class="welcome-section">
-      <h1 class="welcome-heading" data-testid="dashboard-heading">
+      <h1
+        class="welcome-heading"
+        data-testid="dashboard-heading"
+      >
         Welcome, {{ user?.firstName || 'Inspector' }}
       </h1>
-      <p class="welcome-subtitle">Ready to start your next inspection</p>
+      <p class="welcome-subtitle">
+        Ready to start your next inspection
+      </p>
     </div>
 
     <!-- Stats Cards -->
-    <div class="stats-grid" data-testid="stats-cards">
+    <div
+      class="stats-grid"
+      data-testid="stats-cards"
+    >
       <!-- Completed Today -->
-      <div class="stat-card" data-testid="stat-card-completed">
+      <div
+        class="stat-card"
+        data-testid="stat-card-completed"
+      >
         <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M9 11l3 3L22 4"/>
-            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path d="M9 11l3 3L22 4" />
+            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
           </svg>
         </div>
         <div class="stat-content">
-          <div class="stat-value" data-testid="completed-count">{{ completedToday }}</div>
-          <div class="stat-label">Completed Today</div>
+          <div
+            class="stat-value"
+            data-testid="completed-count"
+          >
+            {{ completedToday }}
+          </div>
+          <div class="stat-label">
+            Completed Today
+          </div>
         </div>
       </div>
 
@@ -31,13 +53,24 @@
         data-testid="stat-card-offline"
       >
         <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
           </svg>
         </div>
         <div class="stat-content">
-          <div class="stat-value" data-testid="offline-queue-count">{{ draftCount }}</div>
-          <div class="stat-label">In Offline Queue</div>
+          <div
+            class="stat-value"
+            data-testid="offline-queue-count"
+          >
+            {{ draftCount }}
+          </div>
+          <div class="stat-label">
+            In Offline Queue
+          </div>
         </div>
       </div>
     </div>
@@ -45,16 +78,26 @@
     <!-- Start Inspection Button -->
     <div class="action-section">
       <button
-        @click="handleStartInspection"
         class="btn-start-inspection"
         data-testid="start-inspection-button"
+        @click="handleStartInspection"
       >
-        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>
+        <svg
+          class="btn-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
         </svg>
         <span class="btn-text">Start Inspection</span>
-        <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
+        <svg
+          class="btn-arrow"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </button>
     </div>
@@ -62,7 +105,9 @@
     <!-- Quick Info -->
     <div class="info-section">
       <div class="info-card">
-        <h2 class="info-heading">Quick Guide</h2>
+        <h2 class="info-heading">
+          Quick Guide
+        </h2>
         <ol class="info-list">
           <li>Scan location QR code</li>
           <li>Scan extinguisher barcode</li>

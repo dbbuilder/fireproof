@@ -5,59 +5,125 @@
       id="reader"
       class="scanner-viewport"
       :class="{ 'scanner-active': isScanning }"
-    ></div>
+    />
 
     <!-- Format Badge (shows detected format) -->
     <transition name="fade">
-      <div v-if="lastFormat" class="format-badge" data-testid="format-badge">
+      <div
+        v-if="lastFormat"
+        class="format-badge"
+        data-testid="format-badge"
+      >
         {{ formatDisplayName(lastFormat) }}
       </div>
     </transition>
 
     <!-- Manual Capture Button (when auto-scan isn't working) -->
-    <div v-if="isScanning && !lastScanSuccess" class="manual-capture">
+    <div
+      v-if="isScanning && !lastScanSuccess"
+      class="manual-capture"
+    >
       <button
-        @click="manualCapture"
         class="btn-capture"
         :disabled="isCapturing"
         data-testid="manual-capture-button"
+        @click="manualCapture"
       >
-        <svg v-if="!isCapturing" class="capture-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle cx="12" cy="12" r="10"></circle>
-          <circle cx="12" cy="12" r="3"></circle>
+        <svg
+          v-if="!isCapturing"
+          class="capture-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <circle
+            cx="12"
+            cy="12"
+            r="3"
+          />
         </svg>
-        <div v-else class="scanning-animation-small"></div>
+        <div
+          v-else
+          class="scanning-animation-small"
+        />
         <span>{{ isCapturing ? 'Scanning...' : 'Capture Now' }}</span>
       </button>
-      <p class="capture-hint">Press if auto-scan isn't working</p>
+      <p class="capture-hint">
+        Press if auto-scan isn't working
+      </p>
     </div>
 
     <!-- Scanning Status -->
     <div class="scanning-status">
-      <div v-if="isScanning && !lastScanSuccess && !isCapturing" class="status-scanning">
-        <div class="scanning-animation"></div>
+      <div
+        v-if="isScanning && !lastScanSuccess && !isCapturing"
+        class="status-scanning"
+      >
+        <div class="scanning-animation" />
         <p>{{ scanType === 'location' ? 'Scan Location QR Code' : 'Scan Extinguisher Barcode' }}</p>
       </div>
-      <div v-if="lastScanSuccess" class="status-success" data-testid="scan-success">
-        <svg class="icon-success" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <polyline points="20 6 9 17 4 12"></polyline>
+      <div
+        v-if="lastScanSuccess"
+        class="status-success"
+        data-testid="scan-success"
+      >
+        <svg
+          class="icon-success"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <polyline points="20 6 9 17 4 12" />
         </svg>
         <p>Scan Successful!</p>
       </div>
-      <div v-if="scanError" class="status-error" data-testid="scan-error">
-        <svg class="icon-error" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="15" y1="9" x2="9" y2="15"></line>
-          <line x1="9" y1="9" x2="15" y2="15"></line>
+      <div
+        v-if="scanError"
+        class="status-error"
+        data-testid="scan-error"
+      >
+        <svg
+          class="icon-error"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            x1="15"
+            y1="9"
+            x2="9"
+            y2="15"
+          />
+          <line
+            x1="9"
+            y1="9"
+            x2="15"
+            y2="15"
+          />
         </svg>
         <p>{{ scanError }}</p>
       </div>
     </div>
 
     <!-- Manual Entry Fallback -->
-    <div class="manual-entry" data-testid="manual-entry">
+    <div
+      class="manual-entry"
+      data-testid="manual-entry"
+    >
       <details>
-        <summary class="manual-entry-toggle">Enter barcode manually</summary>
+        <summary class="manual-entry-toggle">
+          Enter barcode manually
+        </summary>
         <div class="manual-entry-content">
           <input
             v-model="manualCode"
@@ -66,20 +132,36 @@
             class="manual-input"
             data-testid="manual-code-input"
             @keyup.enter="submitManualCode"
-          />
-          <select v-model="manualFormat" class="format-select" data-testid="manual-format-select">
-            <option value="CODE_39">Code 39 (3 of 9)</option>
-            <option value="CODE_128">Code 128</option>
-            <option value="QR_CODE">QR Code</option>
-            <option value="EAN_13">EAN-13</option>
-            <option value="UPC_A">UPC-A</option>
-            <option value="OTHER">Other</option>
+          >
+          <select
+            v-model="manualFormat"
+            class="format-select"
+            data-testid="manual-format-select"
+          >
+            <option value="CODE_39">
+              Code 39 (3 of 9)
+            </option>
+            <option value="CODE_128">
+              Code 128
+            </option>
+            <option value="QR_CODE">
+              QR Code
+            </option>
+            <option value="EAN_13">
+              EAN-13
+            </option>
+            <option value="UPC_A">
+              UPC-A
+            </option>
+            <option value="OTHER">
+              Other
+            </option>
           </select>
           <button
-            @click="submitManualCode"
             class="btn-manual-submit"
             data-testid="manual-submit-button"
             :disabled="!manualCode"
+            @click="submitManualCode"
           >
             Submit
           </button>

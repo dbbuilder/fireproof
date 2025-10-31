@@ -2,33 +2,62 @@
   <div class="inspection-checklist">
     <!-- Header -->
     <div class="checklist-header">
-      <button @click="handleBack" class="btn-back" data-testid="back-button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
+      <button
+        class="btn-back"
+        data-testid="back-button"
+        @click="handleBack"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
       </button>
-      <h1 class="checklist-heading" data-testid="page-heading">Inspection Checklist</h1>
-      <div class="header-spacer"></div>
+      <h1
+        class="checklist-heading"
+        data-testid="page-heading"
+      >
+        Inspection Checklist
+      </h1>
+      <div class="header-spacer" />
     </div>
 
     <!-- Context Summary -->
-    <div class="context-summary" data-testid="context-summary">
+    <div
+      class="context-summary"
+      data-testid="context-summary"
+    >
       <div class="context-row">
         <span class="context-label">Location:</span>
-        <span class="context-value" data-testid="context-location">{{ currentLocation?.name || 'N/A' }}</span>
+        <span
+          class="context-value"
+          data-testid="context-location"
+        >{{ currentLocation?.name || 'N/A' }}</span>
       </div>
       <div class="context-row">
         <span class="context-label">Extinguisher:</span>
-        <span class="context-value" data-testid="context-extinguisher">{{ currentExtinguisher?.serialNumber || 'N/A' }}</span>
+        <span
+          class="context-value"
+          data-testid="context-extinguisher"
+        >{{ currentExtinguisher?.serialNumber || 'N/A' }}</span>
       </div>
     </div>
 
     <!-- Progress Indicator -->
     <div class="progress-section">
       <div class="progress-bar-container">
-        <div class="progress-bar" :style="{ width: `${progressPercentage}%` }" data-testid="progress-bar"></div>
+        <div
+          class="progress-bar"
+          :style="{ width: `${progressPercentage}%` }"
+          data-testid="progress-bar"
+        />
       </div>
-      <div class="progress-text" data-testid="progress-text">
+      <div
+        class="progress-text"
+        data-testid="progress-text"
+      >
         {{ completedItems }} of {{ checklistItems.length }} completed
       </div>
     </div>
@@ -44,8 +73,13 @@
       >
         <!-- Item Number & Description -->
         <div class="item-header">
-          <div class="item-number">{{ index + 1 }}</div>
-          <div class="item-description" :data-testid="`item-description-${index}`">
+          <div class="item-number">
+            {{ index + 1 }}
+          </div>
+          <div
+            class="item-description"
+            :data-testid="`item-description-${index}`"
+          >
             {{ item.description }}
           </div>
         </div>
@@ -53,77 +87,125 @@
         <!-- Response Buttons -->
         <div class="item-responses">
           <button
-            @click="handleResponse(item.id, 'pass')"
             class="btn-response btn-pass"
             :class="{ active: item.response === 'pass' }"
             :data-testid="`btn-pass-${index}`"
+            @click="handleResponse(item.id, 'pass')"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M20 6L9 17l-5-5"/>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path d="M20 6L9 17l-5-5" />
             </svg>
             <span>Pass</span>
           </button>
           <button
-            @click="handleResponse(item.id, 'fail')"
             class="btn-response btn-fail"
             :class="{ active: item.response === 'fail' }"
             :data-testid="`btn-fail-${index}`"
+            @click="handleResponse(item.id, 'fail')"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <line
+                x1="18"
+                y1="6"
+                x2="6"
+                y2="18"
+              />
+              <line
+                x1="6"
+                y1="6"
+                x2="18"
+                y2="18"
+              />
             </svg>
             <span>Fail</span>
           </button>
           <button
-            @click="handleResponse(item.id, 'na')"
             class="btn-response btn-na"
             :class="{ active: item.response === 'na' }"
             :data-testid="`btn-na-${index}`"
+            @click="handleResponse(item.id, 'na')"
           >
             <span>N/A</span>
           </button>
         </div>
 
         <!-- Notes (shown when fail or when notes exist) -->
-        <div v-if="item.response === 'fail' || item.notes" class="item-notes">
+        <div
+          v-if="item.response === 'fail' || item.notes"
+          class="item-notes"
+        >
           <textarea
             v-model="item.notes"
             placeholder="Add notes (required for failures)..."
             class="notes-input"
             :data-testid="`notes-input-${index}`"
             rows="2"
-          ></textarea>
+          />
         </div>
       </div>
     </div>
 
     <!-- Overall Assessment -->
-    <div class="overall-assessment" data-testid="overall-assessment">
-      <h2 class="assessment-heading">Overall Assessment</h2>
+    <div
+      class="overall-assessment"
+      data-testid="overall-assessment"
+    >
+      <h2 class="assessment-heading">
+        Overall Assessment
+      </h2>
       <div class="assessment-buttons">
         <button
-          @click="overallPass = true"
           class="btn-assessment btn-assessment-pass"
           :class="{ active: overallPass === true }"
           data-testid="btn-overall-pass"
+          @click="overallPass = true"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-            <polyline points="22 4 12 14.01 9 11.01"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
           <span>Pass Inspection</span>
         </button>
         <button
-          @click="overallPass = false"
           class="btn-assessment btn-assessment-fail"
           :class="{ active: overallPass === false }"
           data-testid="btn-overall-fail"
+          @click="overallPass = false"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="15" y1="9" x2="9" y2="15"/>
-            <line x1="9" y1="9" x2="15" y2="15"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+            />
+            <line
+              x1="15"
+              y1="9"
+              x2="9"
+              y2="15"
+            />
+            <line
+              x1="9"
+              y1="9"
+              x2="15"
+              y2="15"
+            />
           </svg>
           <span>Fail Inspection</span>
         </button>
@@ -131,24 +213,50 @@
     </div>
 
     <!-- Validation Error -->
-    <div v-if="validationError" class="alert-error" data-testid="validation-error">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="15" y1="9" x2="9" y2="15"/>
-        <line x1="9" y1="9" x2="15" y2="15"/>
+    <div
+      v-if="validationError"
+      class="alert-error"
+      data-testid="validation-error"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="15"
+          y1="9"
+          x2="9"
+          y2="15"
+        />
+        <line
+          x1="9"
+          y1="9"
+          x2="15"
+          y2="15"
+        />
       </svg>
       <span>{{ validationError }}</span>
     </div>
 
     <!-- Continue Button -->
     <button
-      @click="handleContinue"
       class="btn-continue"
       data-testid="continue-button"
+      @click="handleContinue"
     >
       <span>Continue to Photos</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M5 12h14M12 5l7 7-7 7"/>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+      >
+        <path d="M5 12h14M12 5l7 7-7 7" />
       </svg>
     </button>
   </div>

@@ -4,29 +4,72 @@
       <!-- Logo/Branding -->
       <div class="branding">
         <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
           </svg>
         </div>
-        <h1 class="app-title" data-testid="app-title">FireProof Inspector</h1>
-        <p class="app-subtitle">Fire Extinguisher Inspections</p>
+        <h1
+          class="app-title"
+          data-testid="app-title"
+        >
+          FireProof Inspector
+        </h1>
+        <p class="app-subtitle">
+          Fire Extinguisher Inspections
+        </p>
       </div>
 
       <!-- Login Form -->
-      <form @submit.prevent="handleLogin" class="login-form" data-testid="login-form">
+      <form
+        class="login-form"
+        data-testid="login-form"
+        @submit.prevent="handleLogin"
+      >
         <!-- Error Alert -->
-        <div v-if="error" class="alert-error" role="alert" data-testid="error-alert">
-          <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="15" y1="9" x2="9" y2="15"/>
-            <line x1="9" y1="9" x2="15" y2="15"/>
+        <div
+          v-if="error"
+          class="alert-error"
+          role="alert"
+          data-testid="error-alert"
+        >
+          <svg
+            class="alert-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+            />
+            <line
+              x1="15"
+              y1="9"
+              x2="9"
+              y2="15"
+            />
+            <line
+              x1="9"
+              y1="9"
+              x2="15"
+              y2="15"
+            />
           </svg>
           <span>{{ error }}</span>
         </div>
 
         <!-- Email Field -->
         <div class="form-group">
-          <label for="email" class="form-label">Email</label>
+          <label
+            for="email"
+            class="form-label"
+          >Email</label>
           <input
             id="email"
             v-model="email"
@@ -37,12 +80,15 @@
             data-testid="email-input"
             placeholder="inspector@example.com"
             :disabled="isLoading"
-          />
+          >
         </div>
 
         <!-- Password Field -->
         <div class="form-group">
-          <label for="password" class="form-label">Password</label>
+          <label
+            for="password"
+            class="form-label"
+          >Password</label>
           <input
             id="password"
             v-model="password"
@@ -53,7 +99,7 @@
             data-testid="password-input"
             placeholder="Enter your password"
             :disabled="isLoading"
-          />
+          >
         </div>
 
         <!-- Submit Button -->
@@ -64,8 +110,14 @@
           :disabled="isLoading || !email || !password"
         >
           <span v-if="!isLoading">Sign In</span>
-          <span v-else class="loading-text">
-            <svg class="loading-spinner" viewBox="0 0 24 24">
+          <span
+            v-else
+            class="loading-text"
+          >
+            <svg
+              class="loading-spinner"
+              viewBox="0 0 24 24"
+            >
               <circle
                 cx="12"
                 cy="12"
@@ -84,8 +136,12 @@
 
       <!-- Footer Info -->
       <div class="login-footer">
-        <p class="footer-text">Inspector access only</p>
-        <p class="footer-text footer-version">Version 1.0</p>
+        <p class="footer-text">
+          Inspector access only
+        </p>
+        <p class="footer-text footer-version">
+          Version 1.0
+        </p>
       </div>
     </div>
   </div>

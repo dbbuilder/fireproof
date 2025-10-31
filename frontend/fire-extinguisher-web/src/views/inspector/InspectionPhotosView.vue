@@ -2,31 +2,66 @@
   <div class="inspection-photos">
     <!-- Header -->
     <div class="photos-header">
-      <button @click="handleBack" class="btn-back" data-testid="back-button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
+      <button
+        class="btn-back"
+        data-testid="back-button"
+        @click="handleBack"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
       </button>
-      <h1 class="photos-heading" data-testid="page-heading">Add Photos</h1>
-      <div class="header-spacer"></div>
+      <h1
+        class="photos-heading"
+        data-testid="page-heading"
+      >
+        Add Photos
+      </h1>
+      <div class="header-spacer" />
     </div>
 
     <!-- Instructions -->
     <div class="instructions">
       <div class="instruction-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-          <circle cx="8.5" cy="8.5" r="1.5"/>
-          <path d="M21 15l-5-5L5 21"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <rect
+            x="3"
+            y="3"
+            width="18"
+            height="18"
+            rx="2"
+            ry="2"
+          />
+          <circle
+            cx="8.5"
+            cy="8.5"
+            r="1.5"
+          />
+          <path d="M21 15l-5-5L5 21" />
         </svg>
       </div>
-      <p class="instruction-text">Add inspection photos</p>
-      <p class="instruction-subtext">Take photos of the extinguisher and any deficiencies (optional but recommended)</p>
+      <p class="instruction-text">
+        Add inspection photos
+      </p>
+      <p class="instruction-subtext">
+        Take photos of the extinguisher and any deficiencies (optional but recommended)
+      </p>
     </div>
 
     <!-- Photo Grid with Add Photo Button -->
     <div class="photos-content">
-      <div class="photo-grid" data-testid="photo-grid">
+      <div
+        class="photo-grid"
+        data-testid="photo-grid"
+      >
         <!-- Existing Photos -->
         <div
           v-for="(photo, index) in photos"
@@ -34,38 +69,76 @@
           class="photo-item"
           :data-testid="`photo-item-${index}`"
         >
-          <img :src="photo.dataUrl || photo.url" :alt="`Photo ${index + 1}`" class="photo-thumbnail" />
+          <img
+            :src="photo.dataUrl || photo.url"
+            :alt="`Photo ${index + 1}`"
+            class="photo-thumbnail"
+          >
           <button
-            @click="handleDeletePhoto(index)"
             class="btn-delete-photo"
             :data-testid="`btn-delete-${index}`"
+            @click="handleDeletePhoto(index)"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <line
+                x1="18"
+                y1="6"
+                x2="6"
+                y2="18"
+              />
+              <line
+                x1="6"
+                y1="6"
+                x2="18"
+                y2="18"
+              />
             </svg>
           </button>
-          <div class="photo-label">Photo {{ index + 1 }}</div>
+          <div class="photo-label">
+            Photo {{ index + 1 }}
+          </div>
         </div>
 
         <!-- Add Photo Button -->
         <button
           v-if="photos.length < maxPhotos"
-          @click="showCamera = true"
           class="btn-add-photo"
           data-testid="btn-add-photo"
+          @click="showCamera = true"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <path d="M21 15l-5-5L5 21"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="2"
+              ry="2"
+            />
+            <circle
+              cx="8.5"
+              cy="8.5"
+              r="1.5"
+            />
+            <path d="M21 15l-5-5L5 21" />
           </svg>
           <span>Add Photo</span>
         </button>
       </div>
 
       <!-- Photo Count Info -->
-      <div class="photo-info" data-testid="photo-info">
+      <div
+        class="photo-info"
+        data-testid="photo-info"
+      >
         <span>{{ photos.length }} of {{ maxPhotos }} photos added</span>
         <span class="info-optional">(Optional)</span>
       </div>
@@ -74,27 +147,34 @@
     <!-- Skip/Continue Buttons -->
     <div class="action-buttons">
       <button
-        @click="handleSkip"
         class="btn-skip"
         data-testid="btn-skip"
+        @click="handleSkip"
       >
         <span>Skip Photos</span>
       </button>
       <button
-        @click="handleContinue"
         class="btn-continue"
         data-testid="btn-continue"
         :disabled="photos.length === 0"
+        @click="handleContinue"
       >
         <span>Continue</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </button>
     </div>
 
     <!-- Camera Modal -->
-    <div v-if="showCamera" class="camera-modal">
+    <div
+      v-if="showCamera"
+      class="camera-modal"
+    >
       <div class="camera-container">
         <video
           ref="videoElement"
@@ -102,27 +182,57 @@
           playsinline
           class="camera-video"
           data-testid="camera-video"
-        ></video>
+        />
 
         <!-- Camera Controls -->
         <div class="camera-controls">
-          <button @click="handleCancelCamera" class="btn-camera-cancel" data-testid="btn-cancel-camera">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+          <button
+            class="btn-camera-cancel"
+            data-testid="btn-cancel-camera"
+            @click="handleCancelCamera"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <line
+                x1="18"
+                y1="6"
+                x2="6"
+                y2="18"
+              />
+              <line
+                x1="6"
+                y1="6"
+                x2="18"
+                y2="18"
+              />
             </svg>
             <span>Cancel</span>
           </button>
 
-          <button @click="handleCapture" class="btn-camera-capture" data-testid="btn-capture-photo">
+          <button
+            class="btn-camera-capture"
+            data-testid="btn-capture-photo"
+            @click="handleCapture"
+          >
             <div class="capture-ring">
-              <div class="capture-button"></div>
+              <div class="capture-button" />
             </div>
           </button>
 
-          <button @click="handleSwitchCamera" class="btn-camera-switch" data-testid="btn-switch-camera">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+          <button
+            class="btn-camera-switch"
+            data-testid="btn-switch-camera"
+            @click="handleSwitchCamera"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
             </svg>
             <span>Flip</span>
           </button>
@@ -131,11 +241,33 @@
     </div>
 
     <!-- Camera Error -->
-    <div v-if="cameraError" class="alert-error" data-testid="camera-error">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="15" y1="9" x2="9" y2="15"/>
-        <line x1="9" y1="9" x2="15" y2="15"/>
+    <div
+      v-if="cameraError"
+      class="alert-error"
+      data-testid="camera-error"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="15"
+          y1="9"
+          x2="9"
+          y2="15"
+        />
+        <line
+          x1="9"
+          y1="9"
+          x2="15"
+          y2="15"
+        />
       </svg>
       <span>{{ cameraError }}</span>
     </div>

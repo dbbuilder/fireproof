@@ -2,14 +2,36 @@
   <div class="inspector-layout">
     <!-- Offline Banner -->
     <transition name="slide-down">
-      <div v-if="!isOnline" class="offline-banner" data-testid="offline-banner">
-        <svg class="banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-          <line x1="12" y1="9" x2="12" y2="13"/>
-          <line x1="12" y1="17" x2="12.01" y2="17"/>
+      <div
+        v-if="!isOnline"
+        class="offline-banner"
+        data-testid="offline-banner"
+      >
+        <svg
+          class="banner-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+          <line
+            x1="12"
+            y1="9"
+            x2="12"
+            y2="13"
+          />
+          <line
+            x1="12"
+            y1="17"
+            x2="12.01"
+            y2="17"
+          />
         </svg>
         <span>You're offline. Inspections will sync when online.</span>
-        <span v-if="draftCount > 0" class="draft-count">{{ draftCount }} in queue</span>
+        <span
+          v-if="draftCount > 0"
+          class="draft-count"
+        >{{ draftCount }} in queue</span>
       </div>
     </transition>
 
@@ -17,23 +39,40 @@
     <header class="inspector-header">
       <div class="header-content">
         <div class="header-left">
-          <h1 class="header-title" data-testid="header-title">FireProof Inspector</h1>
+          <h1
+            class="header-title"
+            data-testid="header-title"
+          >
+            FireProof Inspector
+          </h1>
         </div>
         <div class="header-right">
           <!-- Inspector Name -->
-          <span class="inspector-name" data-testid="inspector-name">
+          <span
+            class="inspector-name"
+            data-testid="inspector-name"
+          >
             {{ user?.firstName || 'Inspector' }}
           </span>
           <!-- Logout Button -->
           <button
-            @click="handleLogout"
             class="btn-logout"
             data-testid="logout-button"
+            @click="handleLogout"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
-              <polyline points="16 17 21 12 16 7"/>
-              <line x1="21" y1="12" x2="9" y2="12"/>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line
+                x1="21"
+                y1="12"
+                x2="9"
+                y2="12"
+              />
             </svg>
             <span class="btn-text">Logout</span>
           </button>
@@ -44,7 +83,10 @@
     <!-- Main Content -->
     <main class="inspector-main">
       <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
+        <transition
+          name="fade"
+          mode="out-in"
+        >
           <component :is="Component" />
         </transition>
       </router-view>

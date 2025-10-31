@@ -1,5 +1,8 @@
 <template>
-  <div class="banded-grid" data-testid="banded-grid">
+  <div
+    class="banded-grid"
+    data-testid="banded-grid"
+  >
     <!-- Header Row -->
     <div
       class="grid-header"
@@ -10,19 +13,29 @@
         v-for="column in columns"
         :key="column.key"
         :class="['header-cell', column.sortable && 'sortable']"
-        @click="column.sortable && handleSort(column.key)"
         :data-testid="`header-${column.key}`"
+        @click="column.sortable && handleSort(column.key)"
       >
         <span>{{ column.label }}</span>
-        <span v-if="column.sortable && sortBy === column.key" class="sort-indicator">
+        <span
+          v-if="column.sortable && sortBy === column.key"
+          class="sort-indicator"
+        >
           {{ sortDirection === 'asc' ? '↑' : '↓' }}
         </span>
       </div>
-      <div v-if="expandable" class="header-cell" style="width: 50px"></div>
+      <div
+        v-if="expandable"
+        class="header-cell"
+        style="width: 50px"
+      />
     </div>
 
     <!-- Data Rows -->
-    <div class="grid-body" data-testid="grid-body">
+    <div
+      class="grid-body"
+      data-testid="grid-body"
+    >
       <template v-if="paginatedData.length > 0">
         <div
           v-for="(row, index) in paginatedData"
@@ -53,18 +66,26 @@
               :class="['grid-cell', column.align && `text-${column.align}`]"
               :data-testid="`cell-${column.key}-${index}`"
             >
-              <slot :name="`cell-${column.key}`" :row="row" :value="row[column.key]">
+              <slot
+                :name="`cell-${column.key}`"
+                :row="row"
+                :value="row[column.key]"
+              >
                 {{ column.format ? column.format(row[column.key], row) : row[column.key] }}
               </slot>
             </div>
 
             <!-- Expand Button -->
-            <div v-if="expandable" class="grid-cell expand-cell" style="width: 50px">
+            <div
+              v-if="expandable"
+              class="grid-cell expand-cell"
+              style="width: 50px"
+            >
               <button
                 class="expand-btn"
-                @click.stop="toggleRow(row, index)"
                 :data-testid="`expand-btn-${index}`"
                 :aria-label="expandedRows.has(getRowKey(row, index)) ? 'Collapse' : 'Expand'"
+                @click.stop="toggleRow(row, index)"
               >
                 <svg
                   :class="['expand-icon', { 'rotated': expandedRows.has(getRowKey(row, index)) }]"
@@ -86,7 +107,11 @@
               :class="['expanded-content', isMobile && 'md:relative']"
               :data-testid="`expanded-${index}`"
             >
-              <slot name="expanded-content" :row="row" :index="index">
+              <slot
+                name="expanded-content"
+                :row="row"
+                :index="index"
+              >
                 <div class="p-4 text-gray-600">
                   No expanded content defined
                 </div>
@@ -102,22 +127,32 @@
           <div
             v-if="expandedRows.size > 0 && isMobile"
             class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-            @click="collapseAll"
             data-testid="bottom-sheet-overlay"
-          ></div>
+            @click="collapseAll"
+          />
         </transition>
       </teleport>
 
       <!-- Empty State -->
-      <div v-if="paginatedData.length === 0" class="empty-state" data-testid="grid-empty-state">
+      <div
+        v-if="paginatedData.length === 0"
+        class="empty-state"
+        data-testid="grid-empty-state"
+      >
         <slot name="empty">
-          <p class="text-gray-500 text-center py-8">{{ emptyMessage }}</p>
+          <p class="text-gray-500 text-center py-8">
+            {{ emptyMessage }}
+          </p>
         </slot>
       </div>
     </div>
 
     <!-- Pagination -->
-    <div v-if="paginated && totalPages > 1" class="grid-footer" data-testid="grid-pagination">
+    <div
+      v-if="paginated && totalPages > 1"
+      class="grid-footer"
+      data-testid="grid-pagination"
+    >
       <div class="pagination-info">
         Showing {{ startIndex + 1 }} to {{ endIndex }} of {{ totalRows }} items
       </div>
@@ -125,16 +160,16 @@
         <button
           class="pagination-btn"
           :disabled="currentPage === 1"
-          @click="goToPage(1)"
           data-testid="pagination-first"
+          @click="goToPage(1)"
         >
           First
         </button>
         <button
           class="pagination-btn"
           :disabled="currentPage === 1"
-          @click="goToPage(currentPage - 1)"
           data-testid="pagination-prev"
+          @click="goToPage(currentPage - 1)"
         >
           Previous
         </button>
@@ -144,8 +179,8 @@
             v-for="page in visiblePages"
             :key="page"
             :class="['page-btn', { 'active': page === currentPage }]"
-            @click="goToPage(page)"
             :data-testid="`pagination-page-${page}`"
+            @click="goToPage(page)"
           >
             {{ page }}
           </button>
@@ -154,16 +189,16 @@
         <button
           class="pagination-btn"
           :disabled="currentPage === totalPages"
-          @click="goToPage(currentPage + 1)"
           data-testid="pagination-next"
+          @click="goToPage(currentPage + 1)"
         >
           Next
         </button>
         <button
           class="pagination-btn"
           :disabled="currentPage === totalPages"
-          @click="goToPage(totalPages)"
           data-testid="pagination-last"
+          @click="goToPage(totalPages)"
         >
           Last
         </button>
@@ -177,10 +212,18 @@
           class="per-page-select"
           data-testid="pagination-per-page"
         >
-          <option :value="10">10</option>
-          <option :value="25">25</option>
-          <option :value="50">50</option>
-          <option :value="100">100</option>
+          <option :value="10">
+            10
+          </option>
+          <option :value="25">
+            25
+          </option>
+          <option :value="50">
+            50
+          </option>
+          <option :value="100">
+            100
+          </option>
         </select>
       </div>
     </div>

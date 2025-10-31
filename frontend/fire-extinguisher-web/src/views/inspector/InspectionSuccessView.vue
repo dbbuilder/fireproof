@@ -1,39 +1,89 @@
 <template>
   <div class="inspection-success">
     <!-- Success Icon -->
-    <div class="success-icon" data-testid="success-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-        <polyline points="22 4 12 14.01 9 11.01"/>
+    <div
+      class="success-icon"
+      data-testid="success-icon"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+      >
+        <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
       </svg>
     </div>
 
     <!-- Success Message -->
-    <h1 class="success-heading" data-testid="success-heading">Inspection Submitted!</h1>
-    <p class="success-message" data-testid="success-message">
+    <h1
+      class="success-heading"
+      data-testid="success-heading"
+    >
+      Inspection Submitted!
+    </h1>
+    <p
+      class="success-message"
+      data-testid="success-message"
+    >
       {{ message || 'Your inspection has been saved and will sync when online.' }}
     </p>
 
     <!-- Info Card -->
-    <div class="info-card" data-testid="info-card">
+    <div
+      class="info-card"
+      data-testid="info-card"
+    >
       <div class="info-row">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M9 11l3 3L22 4"/>
-          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M9 11l3 3L22 4" />
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
         </svg>
         <span>Inspection data saved locally</span>
       </div>
-      <div v-if="!isOnline" class="info-row warning">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="12"/>
-          <line x1="12" y1="16" x2="12.01" y2="16"/>
+      <div
+        v-if="!isOnline"
+        class="info-row warning"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            x1="12"
+            y1="8"
+            x2="12"
+            y2="12"
+          />
+          <line
+            x1="12"
+            y1="16"
+            x2="12.01"
+            y2="16"
+          />
         </svg>
         <span>Will sync automatically when online</span>
       </div>
-      <div v-else class="info-row">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+      <div
+        v-else
+        class="info-row"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
         </svg>
         <span>Syncing to server...</span>
       </div>
@@ -42,36 +92,76 @@
     <!-- Actions -->
     <div class="actions">
       <button
-        @click="handleNewInspection"
         class="btn-primary"
         data-testid="btn-new-inspection"
+        @click="handleNewInspection"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M12 5v14M5 12h14"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M12 5v14M5 12h14" />
         </svg>
         <span>Start New Inspection</span>
       </button>
 
       <button
-        @click="handleDashboard"
         class="btn-secondary"
         data-testid="btn-dashboard"
+        @click="handleDashboard"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <rect x="3" y="3" width="7" height="7"/>
-          <rect x="14" y="3" width="7" height="7"/>
-          <rect x="14" y="14" width="7" height="7"/>
-          <rect x="3" y="14" width="7" height="7"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <rect
+            x="3"
+            y="3"
+            width="7"
+            height="7"
+          />
+          <rect
+            x="14"
+            y="3"
+            width="7"
+            height="7"
+          />
+          <rect
+            x="14"
+            y="14"
+            width="7"
+            height="7"
+          />
+          <rect
+            x="3"
+            y="14"
+            width="7"
+            height="7"
+          />
         </svg>
         <span>Back to Dashboard</span>
       </button>
     </div>
 
     <!-- Draft Queue Info -->
-    <div v-if="draftCount > 0" class="draft-info" data-testid="draft-info">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10"/>
-        <polyline points="12 6 12 12 16 14"/>
+    <div
+      v-if="draftCount > 0"
+      class="draft-info"
+      data-testid="draft-info"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <polyline points="12 6 12 12 16 14" />
       </svg>
       <span>{{ draftCount }} inspection{{ draftCount === 1 ? '' : 's' }} in offline queue</span>
     </div>

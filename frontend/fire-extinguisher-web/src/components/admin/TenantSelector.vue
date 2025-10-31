@@ -10,10 +10,16 @@
         <div class="flex items-center gap-3">
           <BuildingOfficeIcon class="h-6 w-6 flex-shrink-0" />
           <div>
-            <h3 class="text-sm font-semibold" data-testid="tenant-selector-title">
+            <h3
+              class="text-sm font-semibold"
+              data-testid="tenant-selector-title"
+            >
               Select Organization
             </h3>
-            <p class="text-xs text-primary-100" data-testid="tenant-selector-description">
+            <p
+              class="text-xs text-primary-100"
+              data-testid="tenant-selector-description"
+            >
               Choose an organization to view and manage data
             </p>
           </div>
@@ -21,7 +27,10 @@
 
         <!-- Tenant Dropdown -->
         <div class="flex items-center gap-3">
-          <div class="relative" data-testid="tenant-selector-dropdown">
+          <div
+            class="relative"
+            data-testid="tenant-selector-dropdown"
+          >
             <select
               v-model="selectedTenantId"
               class="appearance-none bg-white text-gray-900 rounded-lg px-4 py-2 pr-10 text-sm font-medium border-2 border-primary-700 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors min-w-[250px]"
@@ -29,7 +38,11 @@
               data-testid="tenant-selector-select"
               @change="handleTenantChange"
             >
-              <option value="" disabled data-testid="tenant-selector-placeholder">
+              <option
+                value=""
+                disabled
+                data-testid="tenant-selector-placeholder"
+              >
                 {{ loading ? 'Loading organizations...' : 'Choose an organization...' }}
               </option>
               <option

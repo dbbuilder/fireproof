@@ -2,28 +2,49 @@
   <div class="inspection-signature">
     <!-- Header -->
     <div class="signature-header">
-      <button @click="handleBack" class="btn-back" data-testid="back-button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
+      <button
+        class="btn-back"
+        data-testid="back-button"
+        @click="handleBack"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
       </button>
-      <h1 class="signature-heading" data-testid="page-heading">Sign & Submit</h1>
-      <div class="header-spacer"></div>
+      <h1
+        class="signature-heading"
+        data-testid="page-heading"
+      >
+        Sign & Submit
+      </h1>
+      <div class="header-spacer" />
     </div>
 
     <!-- Inspection Summary -->
     <div class="inspection-summary">
-      <h2 class="summary-heading">Inspection Summary</h2>
+      <h2 class="summary-heading">
+        Inspection Summary
+      </h2>
 
       <!-- Location & Extinguisher -->
       <div class="summary-card">
         <div class="summary-row">
           <span class="summary-label">Location:</span>
-          <span class="summary-value" data-testid="summary-location">{{ currentLocation?.name || 'N/A' }}</span>
+          <span
+            class="summary-value"
+            data-testid="summary-location"
+          >{{ currentLocation?.name || 'N/A' }}</span>
         </div>
         <div class="summary-row">
           <span class="summary-label">Extinguisher:</span>
-          <span class="summary-value" data-testid="summary-extinguisher">{{ currentExtinguisher?.serialNumber || 'N/A' }}</span>
+          <span
+            class="summary-value"
+            data-testid="summary-extinguisher"
+          >{{ currentExtinguisher?.serialNumber || 'N/A' }}</span>
         </div>
       </div>
 
@@ -36,31 +57,82 @@
         }"
         data-testid="result-badge"
       >
-        <svg class="result-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path v-if="currentInspection?.overallPass === true" d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-          <polyline v-if="currentInspection?.overallPass === true" points="22 4 12 14.01 9 11.01"/>
-          <circle v-if="currentInspection?.overallPass === false" cx="12" cy="12" r="10"/>
-          <line v-if="currentInspection?.overallPass === false" x1="15" y1="9" x2="9" y2="15"/>
-          <line v-if="currentInspection?.overallPass === false" x1="9" y1="9" x2="15" y2="15"/>
+        <svg
+          class="result-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path
+            v-if="currentInspection?.overallPass === true"
+            d="M22 11.08V12a10 10 0 11-5.93-9.14"
+          />
+          <polyline
+            v-if="currentInspection?.overallPass === true"
+            points="22 4 12 14.01 9 11.01"
+          />
+          <circle
+            v-if="currentInspection?.overallPass === false"
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            v-if="currentInspection?.overallPass === false"
+            x1="15"
+            y1="9"
+            x2="9"
+            y2="15"
+          />
+          <line
+            v-if="currentInspection?.overallPass === false"
+            x1="9"
+            y1="9"
+            x2="15"
+            y2="15"
+          />
         </svg>
         <span>{{ currentInspection?.overallPass ? 'Inspection Passed' : 'Inspection Failed' }}</span>
       </div>
 
       <!-- Checklist Summary -->
       <div class="summary-card">
-        <h3 class="card-heading">Checklist Results</h3>
+        <h3 class="card-heading">
+          Checklist Results
+        </h3>
         <div class="checklist-stats">
           <div class="stat-item">
-            <div class="stat-value pass" data-testid="pass-count">{{ passCount }}</div>
-            <div class="stat-label">Passed</div>
+            <div
+              class="stat-value pass"
+              data-testid="pass-count"
+            >
+              {{ passCount }}
+            </div>
+            <div class="stat-label">
+              Passed
+            </div>
           </div>
           <div class="stat-item">
-            <div class="stat-value fail" data-testid="fail-count">{{ failCount }}</div>
-            <div class="stat-label">Failed</div>
+            <div
+              class="stat-value fail"
+              data-testid="fail-count"
+            >
+              {{ failCount }}
+            </div>
+            <div class="stat-label">
+              Failed
+            </div>
           </div>
           <div class="stat-item">
-            <div class="stat-value na" data-testid="na-count">{{ naCount }}</div>
-            <div class="stat-label">N/A</div>
+            <div
+              class="stat-value na"
+              data-testid="na-count"
+            >
+              {{ naCount }}
+            </div>
+            <div class="stat-label">
+              N/A
+            </div>
           </div>
         </div>
       </div>
@@ -68,8 +140,12 @@
 
     <!-- Signature Section -->
     <div class="signature-section">
-      <h2 class="section-heading">Inspector Signature</h2>
-      <p class="section-description">Please sign below to certify this inspection</p>
+      <h2 class="section-heading">
+        Inspector Signature
+      </h2>
+      <p class="section-description">
+        Please sign below to certify this inspection
+      </p>
 
       <SignaturePadComponent
         ref="signaturePadRef"
@@ -77,44 +153,87 @@
       />
 
       <!-- Inspector Info -->
-      <div class="inspector-info" data-testid="inspector-info">
+      <div
+        class="inspector-info"
+        data-testid="inspector-info"
+      >
         <div class="info-row">
           <span class="info-label">Inspector:</span>
-          <span class="info-value" data-testid="inspector-name">{{ user?.firstName }} {{ user?.lastName }}</span>
+          <span
+            class="info-value"
+            data-testid="inspector-name"
+          >{{ user?.firstName }} {{ user?.lastName }}</span>
         </div>
         <div class="info-row">
           <span class="info-label">Date:</span>
-          <span class="info-value" data-testid="inspection-date">{{ currentDate }}</span>
+          <span
+            class="info-value"
+            data-testid="inspection-date"
+          >{{ currentDate }}</span>
         </div>
         <div class="info-row">
           <span class="info-label">Time:</span>
-          <span class="info-value" data-testid="inspection-time">{{ currentTime }}</span>
+          <span
+            class="info-value"
+            data-testid="inspection-time"
+          >{{ currentTime }}</span>
         </div>
       </div>
     </div>
 
     <!-- Validation Error -->
-    <div v-if="validationError" class="alert-error" data-testid="validation-error">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="15" y1="9" x2="9" y2="15"/>
-        <line x1="9" y1="9" x2="15" y2="15"/>
+    <div
+      v-if="validationError"
+      class="alert-error"
+      data-testid="validation-error"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="15"
+          y1="9"
+          x2="9"
+          y2="15"
+        />
+        <line
+          x1="9"
+          y1="9"
+          x2="15"
+          y2="15"
+        />
       </svg>
       <span>{{ validationError }}</span>
     </div>
 
     <!-- Submit Button -->
     <button
-      @click="handleSubmit"
       class="btn-submit"
       data-testid="btn-submit"
       :disabled="isSubmitting"
+      @click="handleSubmit"
     >
-      <svg v-if="!isSubmitting" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-        <polyline points="22 4 12 14.01 9 11.01"/>
+      <svg
+        v-if="!isSubmitting"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+      >
+        <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
       </svg>
-      <svg v-else class="loading-spinner" viewBox="0 0 24 24">
+      <svg
+        v-else
+        class="loading-spinner"
+        viewBox="0 0 24 24"
+      >
         <circle
           cx="12"
           cy="12"

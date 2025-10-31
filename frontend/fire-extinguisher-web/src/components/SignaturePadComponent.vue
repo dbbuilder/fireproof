@@ -1,5 +1,8 @@
 <template>
-  <div class="signature-pad" data-testid="signature-pad">
+  <div
+    class="signature-pad"
+    data-testid="signature-pad"
+  >
     <!-- Canvas Container -->
     <div class="canvas-container">
       <canvas
@@ -13,10 +16,14 @@
         @mousemove="handleMouseMove"
         @mouseup="handleMouseUp"
         @mouseleave="handleMouseLeave"
-      ></canvas>
+      />
 
       <!-- Placeholder Text -->
-      <div v-if="!hasSignature && !isDrawing" class="placeholder-text" data-testid="placeholder-text">
+      <div
+        v-if="!hasSignature && !isDrawing"
+        class="placeholder-text"
+        data-testid="placeholder-text"
+      >
         Sign here
       </div>
     </div>
@@ -24,14 +31,18 @@
     <!-- Controls -->
     <div class="controls">
       <button
-        @click="handleClear"
         class="btn-control btn-clear"
         data-testid="btn-clear"
         :disabled="!hasSignature"
+        @click="handleClear"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
         </svg>
         <span>Clear</span>
       </button>

@@ -2,63 +2,112 @@
   <div class="scan-extinguisher">
     <!-- Header -->
     <div class="scan-header">
-      <button @click="handleBack" class="btn-back" data-testid="back-button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
+      <button
+        class="btn-back"
+        data-testid="back-button"
+        @click="handleBack"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
       </button>
-      <h1 class="scan-heading" data-testid="page-heading">Scan Extinguisher</h1>
-      <div class="header-spacer"></div>
+      <h1
+        class="scan-heading"
+        data-testid="page-heading"
+      >
+        Scan Extinguisher
+      </h1>
+      <div class="header-spacer" />
     </div>
 
     <!-- Instructions -->
-    <div v-if="!scannedExtinguisher" class="instructions">
+    <div
+      v-if="!scannedExtinguisher"
+      class="instructions"
+    >
       <div class="instruction-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
         </svg>
       </div>
-      <p class="instruction-text">Scan the extinguisher barcode</p>
-      <p class="instruction-subtext">Position the barcode within the frame</p>
+      <p class="instruction-text">
+        Scan the extinguisher barcode
+      </p>
+      <p class="instruction-subtext">
+        Position the barcode within the frame
+      </p>
     </div>
 
     <!-- Scanner Component -->
-    <div v-if="!scannedExtinguisher" class="scanner-container">
+    <div
+      v-if="!scannedExtinguisher"
+      class="scanner-container"
+    >
       <BarcodeScannerComponent
+        data-testid="barcode-scanner"
         @scan-success="handleScanSuccess"
         @scan-error="handleScanError"
-        data-testid="barcode-scanner"
       />
     </div>
 
     <!-- Scanned Extinguisher Info -->
-    <div v-if="scannedExtinguisher" class="extinguisher-info" data-testid="extinguisher-info">
+    <div
+      v-if="scannedExtinguisher"
+      class="extinguisher-info"
+      data-testid="extinguisher-info"
+    >
       <!-- Success Icon -->
       <div class="success-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-          <polyline points="22 4 12 14.01 9 11.01"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
         </svg>
       </div>
 
       <!-- Extinguisher Details -->
       <div class="info-card">
-        <h2 class="info-heading">Extinguisher Details</h2>
+        <h2 class="info-heading">
+          Extinguisher Details
+        </h2>
         <div class="info-row">
           <span class="info-label">Type:</span>
-          <span class="info-value" data-testid="extinguisher-type">{{ scannedExtinguisher.type || 'N/A' }}</span>
+          <span
+            class="info-value"
+            data-testid="extinguisher-type"
+          >{{ scannedExtinguisher.type || 'N/A' }}</span>
         </div>
         <div class="info-row">
           <span class="info-label">Serial Number:</span>
-          <span class="info-value" data-testid="extinguisher-serial">{{ scannedExtinguisher.serialNumber || 'N/A' }}</span>
+          <span
+            class="info-value"
+            data-testid="extinguisher-serial"
+          >{{ scannedExtinguisher.serialNumber || 'N/A' }}</span>
         </div>
         <div class="info-row">
           <span class="info-label">Size:</span>
-          <span class="info-value" data-testid="extinguisher-size">{{ scannedExtinguisher.size || 'N/A' }}</span>
+          <span
+            class="info-value"
+            data-testid="extinguisher-size"
+          >{{ scannedExtinguisher.size || 'N/A' }}</span>
         </div>
         <div class="info-row">
           <span class="info-label">Last Service:</span>
-          <span class="info-value" data-testid="extinguisher-last-service">{{ formatDate(scannedExtinguisher.lastServiceDate) }}</span>
+          <span
+            class="info-value"
+            data-testid="extinguisher-last-service"
+          >{{ formatDate(scannedExtinguisher.lastServiceDate) }}</span>
         </div>
       </div>
 
@@ -72,50 +121,112 @@
         }"
         data-testid="extinguisher-status"
       >
-        <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle cx="12" cy="12" r="10"/>
-          <path v-if="scannedExtinguisher.status === 'InService'" d="M9 12l2 2 4-4"/>
-          <path v-else d="M12 8v4M12 16h.01"/>
+        <svg
+          class="status-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <path
+            v-if="scannedExtinguisher.status === 'InService'"
+            d="M9 12l2 2 4-4"
+          />
+          <path
+            v-else
+            d="M12 8v4M12 16h.01"
+          />
         </svg>
         <span>{{ getStatusLabel(scannedExtinguisher.status) }}</span>
       </div>
 
       <!-- Location Context -->
-      <div v-if="currentLocation" class="info-card" data-testid="location-context">
-        <h2 class="info-heading">Location Context</h2>
+      <div
+        v-if="currentLocation"
+        class="info-card"
+        data-testid="location-context"
+      >
+        <h2 class="info-heading">
+          Location Context
+        </h2>
         <div class="info-row">
           <span class="info-label">Location:</span>
-          <span class="info-value" data-testid="context-location">{{ currentLocation.name }}</span>
+          <span
+            class="info-value"
+            data-testid="context-location"
+          >{{ currentLocation.name }}</span>
         </div>
-        <div v-if="currentLocation.building" class="info-row">
+        <div
+          v-if="currentLocation.building"
+          class="info-row"
+        >
           <span class="info-label">Building:</span>
-          <span class="info-value" data-testid="context-building">{{ currentLocation.building }}</span>
+          <span
+            class="info-value"
+            data-testid="context-building"
+          >{{ currentLocation.building }}</span>
         </div>
-        <div v-if="currentLocation.floor" class="info-row">
+        <div
+          v-if="currentLocation.floor"
+          class="info-row"
+        >
           <span class="info-label">Floor:</span>
-          <span class="info-value" data-testid="context-floor">{{ currentLocation.floor }}</span>
+          <span
+            class="info-value"
+            data-testid="context-floor"
+          >{{ currentLocation.floor }}</span>
         </div>
       </div>
 
       <!-- Continue Button -->
       <button
-        @click="handleContinue"
         class="btn-continue"
         data-testid="continue-button"
+        @click="handleContinue"
       >
         <span>Continue to Inspection Checklist</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </button>
     </div>
 
     <!-- Scan Error -->
-    <div v-if="scanError" class="alert-error" data-testid="scan-error">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="15" y1="9" x2="9" y2="15"/>
-        <line x1="9" y1="9" x2="15" y2="15"/>
+    <div
+      v-if="scanError"
+      class="alert-error"
+      data-testid="scan-error"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="15"
+          y1="9"
+          x2="9"
+          y2="15"
+        />
+        <line
+          x1="9"
+          y1="9"
+          x2="15"
+          y2="15"
+        />
       </svg>
       <span>{{ scanError }}</span>
     </div>

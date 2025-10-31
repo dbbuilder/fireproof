@@ -2,83 +2,158 @@
   <div class="scan-location">
     <!-- Header -->
     <div class="scan-header">
-      <button @click="handleBack" class="btn-back" data-testid="back-button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
+      <button
+        class="btn-back"
+        data-testid="back-button"
+        @click="handleBack"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
       </button>
-      <h1 class="scan-heading" data-testid="page-heading">Scan Location</h1>
-      <div class="header-spacer"></div>
+      <h1
+        class="scan-heading"
+        data-testid="page-heading"
+      >
+        Scan Location
+      </h1>
+      <div class="header-spacer" />
     </div>
 
     <!-- Instructions -->
-    <div v-if="!scannedLocation" class="instructions">
+    <div
+      v-if="!scannedLocation"
+      class="instructions"
+    >
       <div class="instruction-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <rect
+            x="3"
+            y="11"
+            width="18"
+            height="11"
+            rx="2"
+            ry="2"
+          />
+          <path d="M7 11V7a5 5 0 0110 0v4" />
         </svg>
       </div>
-      <p class="instruction-text">Scan the location QR code</p>
-      <p class="instruction-subtext">Position the QR code within the frame</p>
+      <p class="instruction-text">
+        Scan the location QR code
+      </p>
+      <p class="instruction-subtext">
+        Position the QR code within the frame
+      </p>
     </div>
 
     <!-- Scanner Component -->
-    <div v-if="!scannedLocation" class="scanner-container">
+    <div
+      v-if="!scannedLocation"
+      class="scanner-container"
+    >
       <BarcodeScannerComponent
+        data-testid="barcode-scanner"
         @scan-success="handleScanSuccess"
         @scan-error="handleScanError"
-        data-testid="barcode-scanner"
       />
     </div>
 
     <!-- Scanned Location Info -->
-    <div v-if="scannedLocation" class="location-info" data-testid="location-info">
+    <div
+      v-if="scannedLocation"
+      class="location-info"
+      data-testid="location-info"
+    >
       <!-- Success Icon -->
       <div class="success-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-          <polyline points="22 4 12 14.01 9 11.01"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
         </svg>
       </div>
 
       <!-- Location Details -->
       <div class="info-card">
-        <h2 class="info-heading">Location Scanned</h2>
+        <h2 class="info-heading">
+          Location Scanned
+        </h2>
         <div class="info-row">
           <span class="info-label">Name:</span>
-          <span class="info-value" data-testid="location-name">{{ scannedLocation.name }}</span>
+          <span
+            class="info-value"
+            data-testid="location-name"
+          >{{ scannedLocation.name }}</span>
         </div>
         <div class="info-row">
           <span class="info-label">Building:</span>
-          <span class="info-value" data-testid="location-building">{{ scannedLocation.building || 'N/A' }}</span>
+          <span
+            class="info-value"
+            data-testid="location-building"
+          >{{ scannedLocation.building || 'N/A' }}</span>
         </div>
         <div class="info-row">
           <span class="info-label">Floor:</span>
-          <span class="info-value" data-testid="location-floor">{{ scannedLocation.floor || 'N/A' }}</span>
+          <span
+            class="info-value"
+            data-testid="location-floor"
+          >{{ scannedLocation.floor || 'N/A' }}</span>
         </div>
       </div>
 
       <!-- GPS Coordinates -->
-      <div v-if="gpsCoordinates" class="info-card" data-testid="gps-info">
-        <h2 class="info-heading">GPS Location</h2>
+      <div
+        v-if="gpsCoordinates"
+        class="info-card"
+        data-testid="gps-info"
+      >
+        <h2 class="info-heading">
+          GPS Location
+        </h2>
         <div class="info-row">
           <span class="info-label">Latitude:</span>
-          <span class="info-value" data-testid="gps-latitude">{{ gpsCoordinates.latitude.toFixed(6) }}</span>
+          <span
+            class="info-value"
+            data-testid="gps-latitude"
+          >{{ gpsCoordinates.latitude.toFixed(6) }}</span>
         </div>
         <div class="info-row">
           <span class="info-label">Longitude:</span>
-          <span class="info-value" data-testid="gps-longitude">{{ gpsCoordinates.longitude.toFixed(6) }}</span>
+          <span
+            class="info-value"
+            data-testid="gps-longitude"
+          >{{ gpsCoordinates.longitude.toFixed(6) }}</span>
         </div>
         <div class="info-row">
           <span class="info-label">Accuracy:</span>
-          <span class="info-value" data-testid="gps-accuracy">± {{ gpsCoordinates.accuracy.toFixed(0) }}m</span>
+          <span
+            class="info-value"
+            data-testid="gps-accuracy"
+          >± {{ gpsCoordinates.accuracy.toFixed(0) }}m</span>
         </div>
       </div>
 
       <!-- GPS Loading -->
-      <div v-if="isCapturingGPS" class="gps-loading" data-testid="gps-loading">
-        <svg class="loading-spinner" viewBox="0 0 24 24">
+      <div
+        v-if="isCapturingGPS"
+        class="gps-loading"
+        data-testid="gps-loading"
+      >
+        <svg
+          class="loading-spinner"
+          viewBox="0 0 24 24"
+        >
           <circle
             cx="12"
             cy="12"
@@ -94,35 +169,83 @@
       </div>
 
       <!-- GPS Error -->
-      <div v-if="gpsError" class="alert-error" data-testid="gps-error">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="15" y1="9" x2="9" y2="15"/>
-          <line x1="9" y1="9" x2="15" y2="15"/>
+      <div
+        v-if="gpsError"
+        class="alert-error"
+        data-testid="gps-error"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+          />
+          <line
+            x1="15"
+            y1="9"
+            x2="9"
+            y2="15"
+          />
+          <line
+            x1="9"
+            y1="9"
+            x2="15"
+            y2="15"
+          />
         </svg>
         <span>{{ gpsError }}</span>
       </div>
 
       <!-- Continue Button -->
       <button
-        @click="handleContinue"
         class="btn-continue"
         data-testid="continue-button"
         :disabled="isCapturingGPS"
+        @click="handleContinue"
       >
         <span>Continue to Extinguisher Scan</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
+          <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </button>
     </div>
 
     <!-- Scan Error -->
-    <div v-if="scanError" class="alert-error" data-testid="scan-error">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="15" y1="9" x2="9" y2="15"/>
-        <line x1="9" y1="9" x2="15" y2="15"/>
+    <div
+      v-if="scanError"
+      class="alert-error"
+      data-testid="scan-error"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="15"
+          y1="9"
+          x2="9"
+          y2="15"
+        />
+        <line
+          x1="9"
+          y1="9"
+          x2="15"
+          y2="15"
+        />
       </svg>
       <span>{{ scanError }}</span>
     </div>

@@ -2,56 +2,91 @@
   <AppLayout>
     <div class="templates-view">
       <!-- Header -->
-      <div class="page-header" data-testid="templates-heading">
+      <div
+        class="page-header"
+        data-testid="templates-heading"
+      >
         <div>
-          <h1 class="page-title">Checklist Templates</h1>
-          <p class="page-description">Manage inspection checklist templates (NFPA, Title19, ULC, Custom)</p>
+          <h1 class="page-title">
+            Checklist Templates
+          </h1>
+          <p class="page-description">
+            Manage inspection checklist templates (NFPA, Title19, ULC, Custom)
+          </p>
         </div>
-        <button @click="showCreateModal = true" class="btn-create" data-testid="create-template-button">
+        <button
+          class="btn-create"
+          data-testid="create-template-button"
+          @click="showCreateModal = true"
+        >
           + Create Template
         </button>
       </div>
 
       <!-- Filter Tabs -->
-      <div class="tabs" data-testid="template-tabs">
+      <div
+        class="tabs"
+        data-testid="template-tabs"
+      >
         <button
-          @click="currentTab = 'all'"
           :class="['tab', { 'tab-active': currentTab === 'all' }]"
           data-testid="tab-all"
+          @click="currentTab = 'all'"
         >
           All Templates
         </button>
         <button
-          @click="currentTab = 'system'"
           :class="['tab', { 'tab-active': currentTab === 'system' }]"
           data-testid="tab-system"
+          @click="currentTab = 'system'"
         >
           System Templates
         </button>
         <button
-          @click="currentTab = 'custom'"
           :class="['tab', { 'tab-active': currentTab === 'custom' }]"
           data-testid="tab-custom"
+          @click="currentTab = 'custom'"
         >
           Custom Templates
         </button>
       </div>
 
       <!-- Loading State -->
-      <div v-if="templatesStore.loading" class="loading-state" data-testid="loading-state">
-        <div class="spinner"></div>
+      <div
+        v-if="templatesStore.loading"
+        class="loading-state"
+        data-testid="loading-state"
+      >
+        <div class="spinner" />
         <p>Loading templates...</p>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="templatesStore.error" class="error-state" data-testid="error-state">
-        <div class="error-icon">⚠️</div>
-        <p class="error-message">{{ templatesStore.error }}</p>
-        <button @click="loadTemplates" class="btn-retry">Retry</button>
+      <div
+        v-else-if="templatesStore.error"
+        class="error-state"
+        data-testid="error-state"
+      >
+        <div class="error-icon">
+          ⚠️
+        </div>
+        <p class="error-message">
+          {{ templatesStore.error }}
+        </p>
+        <button
+          class="btn-retry"
+          @click="loadTemplates"
+        >
+          Retry
+        </button>
       </div>
 
       <!-- Templates Grid -->
-      <div v-else-if="filteredTemplates.length > 0" class="templates-grid" data-testid="templates-grid">
+      <div
+        v-else-if="filteredTemplates.length > 0"
+        class="templates-grid"
+        data-testid="templates-grid"
+      >
         <div
           v-for="template in filteredTemplates"
           :key="template.templateId"
@@ -60,13 +95,17 @@
           data-testid="template-card"
         >
           <div class="card-header">
-            <h3 class="card-title">{{ template.templateName }}</h3>
+            <h3 class="card-title">
+              {{ template.templateName }}
+            </h3>
             <span :class="['badge', getBadgeClass(template.templateType)]">
               {{ template.templateType }}
             </span>
           </div>
 
-          <p class="card-description">{{ template.description || 'No description' }}</p>
+          <p class="card-description">
+            {{ template.description || 'No description' }}
+          </p>
 
           <div class="card-meta">
             <span class="meta-item">
@@ -79,32 +118,32 @@
 
           <div class="card-actions">
             <button
-              @click="viewTemplate(template)"
               class="btn-card btn-primary"
               data-testid="view-template-button"
+              @click="viewTemplate(template)"
             >
               View
             </button>
             <button
               v-if="!template.isSystemTemplate"
-              @click="editTemplate(template)"
               class="btn-card btn-secondary"
               data-testid="edit-template-button"
+              @click="editTemplate(template)"
             >
               Edit
             </button>
             <button
-              @click="duplicateTemplate(template)"
               class="btn-card btn-secondary"
               data-testid="duplicate-template-button"
+              @click="duplicateTemplate(template)"
             >
               Duplicate
             </button>
             <button
               v-if="!template.isSystemTemplate"
-              @click="confirmDelete(template)"
               class="btn-card btn-danger"
               data-testid="delete-template-button"
+              @click="confirmDelete(template)"
             >
               Delete
             </button>
@@ -113,11 +152,21 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="empty-state" data-testid="empty-state">
-        <div class="empty-icon">📋</div>
+      <div
+        v-else
+        class="empty-state"
+        data-testid="empty-state"
+      >
+        <div class="empty-icon">
+          📋
+        </div>
         <h3>No templates found</h3>
         <p>{{ currentTab === 'custom' ? 'Create your first custom template' : 'No templates available' }}</p>
-        <button v-if="currentTab === 'custom'" @click="showCreateModal = true" class="btn-create-empty">
+        <button
+          v-if="currentTab === 'custom'"
+          class="btn-create-empty"
+          @click="showCreateModal = true"
+        >
           + Create Template
         </button>
       </div>
@@ -127,24 +176,38 @@
         <div
           v-if="showViewModal"
           class="modal-overlay"
-          @click="closeViewModal"
           data-testid="view-template-modal"
+          @click="closeViewModal"
         >
-          <div class="modal-content modal-large" @click.stop>
+          <div
+            class="modal-content modal-large"
+            @click.stop
+          >
             <div class="modal-header">
               <div>
-                <h2 class="modal-title">{{ currentTemplate?.templateName }}</h2>
+                <h2 class="modal-title">
+                  {{ currentTemplate?.templateName }}
+                </h2>
                 <span :class="['badge', getBadgeClass(currentTemplate?.templateType)]">
                   {{ currentTemplate?.templateType }}
                 </span>
               </div>
-              <button @click="closeViewModal" class="btn-close">✕</button>
+              <button
+                class="btn-close"
+                @click="closeViewModal"
+              >
+                ✕
+              </button>
             </div>
 
-            <div v-if="currentTemplate" class="modal-body">
+            <div
+              v-if="currentTemplate"
+              class="modal-body"
+            >
               <div class="template-info">
                 <p><strong>Description:</strong> {{ currentTemplate.description || 'No description' }}</p>
-                <p><strong>Status:</strong>
+                <p>
+                  <strong>Status:</strong>
                   <span :class="['badge', currentTemplate.isActive ? 'badge-success' : 'badge-inactive']">
                     {{ currentTemplate.isActive ? 'Active' : 'Inactive' }}
                   </span>
@@ -152,23 +215,37 @@
                 <p><strong>Type:</strong> {{ currentTemplate.isSystemTemplate ? 'System Template (Read-Only)' : 'Custom Template' }}</p>
               </div>
 
-              <h3 class="section-title">Checklist Items ({{ currentTemplate.checklistItems?.length || 0 }})</h3>
-              <div v-if="currentTemplate.checklistItems?.length" class="checklist-items">
+              <h3 class="section-title">
+                Checklist Items ({{ currentTemplate.checklistItems?.length || 0 }})
+              </h3>
+              <div
+                v-if="currentTemplate.checklistItems?.length"
+                class="checklist-items"
+              >
                 <div
                   v-for="(item, index) in currentTemplate.checklistItems"
                   :key="item.checklistItemId"
                   class="checklist-item"
                 >
-                  <div class="item-number">{{ index + 1 }}</div>
+                  <div class="item-number">
+                    {{ index + 1 }}
+                  </div>
                   <div class="item-content">
-                    <p class="item-text">{{ item.itemText }}</p>
+                    <p class="item-text">
+                      {{ item.itemText }}
+                    </p>
                     <span :class="['badge', item.isRequired ? 'badge-error' : 'badge-info']">
                       {{ item.isRequired ? 'Required' : 'Optional' }}
                     </span>
                   </div>
                 </div>
               </div>
-              <p v-else class="text-gray-500">No checklist items</p>
+              <p
+                v-else
+                class="text-gray-500"
+              >
+                No checklist items
+              </p>
             </div>
           </div>
         </div>
@@ -179,18 +256,34 @@
         <div
           v-if="showCreateModal || showEditModal"
           class="modal-overlay"
-          @click="closeEditModal"
           data-testid="edit-template-modal"
+          @click="closeEditModal"
         >
-          <div class="modal-content" @click.stop>
+          <div
+            class="modal-content"
+            @click.stop
+          >
             <div class="modal-header">
-              <h2 class="modal-title">{{ showEditModal ? 'Edit Template' : 'Create Template' }}</h2>
-              <button @click="closeEditModal" class="btn-close">✕</button>
+              <h2 class="modal-title">
+                {{ showEditModal ? 'Edit Template' : 'Create Template' }}
+              </h2>
+              <button
+                class="btn-close"
+                @click="closeEditModal"
+              >
+                ✕
+              </button>
             </div>
 
-            <form @submit.prevent="saveTemplate" class="modal-body">
+            <form
+              class="modal-body"
+              @submit.prevent="saveTemplate"
+            >
               <div class="form-group">
-                <label for="template-name" class="form-label">Template Name *</label>
+                <label
+                  for="template-name"
+                  class="form-label"
+                >Template Name *</label>
                 <input
                   id="template-name"
                   v-model="templateForm.templateName"
@@ -198,22 +291,28 @@
                   required
                   class="form-input"
                   data-testid="template-name-input"
-                />
+                >
               </div>
 
               <div class="form-group">
-                <label for="template-description" class="form-label">Description</label>
+                <label
+                  for="template-description"
+                  class="form-label"
+                >Description</label>
                 <textarea
                   id="template-description"
                   v-model="templateForm.description"
                   rows="3"
                   class="form-input"
                   data-testid="template-description-input"
-                ></textarea>
+                />
               </div>
 
               <div class="form-group">
-                <label for="template-type" class="form-label">Template Type *</label>
+                <label
+                  for="template-type"
+                  class="form-label"
+                >Template Type *</label>
                 <select
                   id="template-type"
                   v-model="templateForm.templateType"
@@ -221,10 +320,18 @@
                   class="form-input"
                   data-testid="template-type-select"
                 >
-                  <option value="CUSTOM">Custom</option>
-                  <option value="NFPA_10">NFPA 10</option>
-                  <option value="TITLE_19">Title 19</option>
-                  <option value="ULC">ULC</option>
+                  <option value="CUSTOM">
+                    Custom
+                  </option>
+                  <option value="NFPA_10">
+                    NFPA 10
+                  </option>
+                  <option value="TITLE_19">
+                    Title 19
+                  </option>
+                  <option value="ULC">
+                    ULC
+                  </option>
                 </select>
               </div>
 
@@ -235,16 +342,24 @@
                     type="checkbox"
                     class="checkbox-input"
                     data-testid="template-active-checkbox"
-                  />
+                  >
                   <span>Active</span>
                 </label>
               </div>
 
               <div class="modal-footer">
-                <button type="button" @click="closeEditModal" class="btn-secondary">
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  @click="closeEditModal"
+                >
                   Cancel
                 </button>
-                <button type="submit" class="btn-primary" :disabled="templatesStore.loading">
+                <button
+                  type="submit"
+                  class="btn-primary"
+                  :disabled="templatesStore.loading"
+                >
                   {{ templatesStore.loading ? 'Saving...' : 'Save Template' }}
                 </button>
               </div>
@@ -258,31 +373,46 @@
         <div
           v-if="showDeleteModal"
           class="modal-overlay"
-          @click="closeDeleteModal"
           data-testid="delete-confirm-modal"
+          @click="closeDeleteModal"
         >
-          <div class="modal-content modal-small" @click.stop>
+          <div
+            class="modal-content modal-small"
+            @click.stop
+          >
             <div class="modal-header">
-              <h2 class="modal-title">Confirm Delete</h2>
-              <button @click="closeDeleteModal" class="btn-close">✕</button>
+              <h2 class="modal-title">
+                Confirm Delete
+              </h2>
+              <button
+                class="btn-close"
+                @click="closeDeleteModal"
+              >
+                ✕
+              </button>
             </div>
 
             <div class="modal-body">
               <p>Are you sure you want to delete this template?</p>
-              <p class="font-semibold mt-2">{{ templateToDelete?.templateName }}</p>
+              <p class="font-semibold mt-2">
+                {{ templateToDelete?.templateName }}
+              </p>
               <p class="text-sm text-gray-600 mt-2">
                 This action cannot be undone.
               </p>
             </div>
 
             <div class="modal-footer">
-              <button @click="closeDeleteModal" class="btn-secondary">
+              <button
+                class="btn-secondary"
+                @click="closeDeleteModal"
+              >
                 Cancel
               </button>
               <button
-                @click="deleteTemplate"
                 class="btn-danger"
                 :disabled="templatesStore.loading"
+                @click="deleteTemplate"
               >
                 {{ templatesStore.loading ? 'Deleting...' : 'Delete Template' }}
               </button>
@@ -298,17 +428,35 @@
           class="modal-overlay"
           @click="showDuplicateModal = false"
         >
-          <div class="modal-content modal-small" @click.stop>
+          <div
+            class="modal-content modal-small"
+            @click.stop
+          >
             <div class="modal-header">
-              <h2 class="modal-title">Duplicate Template</h2>
-              <button @click="showDuplicateModal = false" class="btn-close">✕</button>
+              <h2 class="modal-title">
+                Duplicate Template
+              </h2>
+              <button
+                class="btn-close"
+                @click="showDuplicateModal = false"
+              >
+                ✕
+              </button>
             </div>
 
-            <form @submit.prevent="saveDuplicate" class="modal-body">
-              <p class="mb-4">Create a copy of <strong>{{ templateToDuplicate?.templateName }}</strong></p>
+            <form
+              class="modal-body"
+              @submit.prevent="saveDuplicate"
+            >
+              <p class="mb-4">
+                Create a copy of <strong>{{ templateToDuplicate?.templateName }}</strong>
+              </p>
 
               <div class="form-group">
-                <label for="new-template-name" class="form-label">New Template Name *</label>
+                <label
+                  for="new-template-name"
+                  class="form-label"
+                >New Template Name *</label>
                 <input
                   id="new-template-name"
                   v-model="newTemplateName"
@@ -316,14 +464,22 @@
                   required
                   class="form-input"
                   placeholder="Enter new template name"
-                />
+                >
               </div>
 
               <div class="modal-footer">
-                <button type="button" @click="showDuplicateModal = false" class="btn-secondary">
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  @click="showDuplicateModal = false"
+                >
                   Cancel
                 </button>
-                <button type="submit" class="btn-primary" :disabled="!newTemplateName || templatesStore.loading">
+                <button
+                  type="submit"
+                  class="btn-primary"
+                  :disabled="!newTemplateName || templatesStore.loading"
+                >
                   Create Copy
                 </button>
               </div>

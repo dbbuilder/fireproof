@@ -21,8 +21,19 @@
             fill="none"
             viewBox="0 0 24 24"
           >
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            />
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
           </svg>
           <span v-else>↓ Pull to refresh</span>
           <span v-if="isRefreshing">Refreshing...</span>
@@ -32,7 +43,10 @@
       <!-- Header -->
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2" data-testid="page-heading">
+          <h1
+            class="text-3xl font-display font-semibold text-gray-900 mb-2"
+            data-testid="page-heading"
+          >
             Fire Extinguishers
           </h1>
           <p class="text-gray-600">
@@ -41,8 +55,8 @@
         </div>
         <button
           class="btn-primary inline-flex items-center"
-          @click="openCreateModal"
           data-testid="new-extinguisher-button"
+          @click="openCreateModal"
         >
           <PlusIcon class="h-5 w-5 mr-2" />
           Add Extinguisher
@@ -50,13 +64,24 @@
       </div>
 
       <!-- Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8" data-testid="stats-cards">
-        <div class="card" data-testid="stat-card-total">
+      <div
+        class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
+        data-testid="stats-cards"
+      >
+        <div
+          class="card"
+          data-testid="stat-card-total"
+        >
           <div class="p-4">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-600">Total</p>
-                <p class="text-2xl font-bold text-gray-900" data-testid="total-count">
+                <p class="text-sm text-gray-600">
+                  Total
+                </p>
+                <p
+                  class="text-2xl font-bold text-gray-900"
+                  data-testid="total-count"
+                >
                   {{ filteredCount }}
                 </p>
               </div>
@@ -65,12 +90,20 @@
           </div>
         </div>
 
-        <div class="card" data-testid="stat-card-active">
+        <div
+          class="card"
+          data-testid="stat-card-active"
+        >
           <div class="p-4">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-600">Active</p>
-                <p class="text-2xl font-bold text-secondary-600" data-testid="active-count">
+                <p class="text-sm text-gray-600">
+                  Active
+                </p>
+                <p
+                  class="text-2xl font-bold text-secondary-600"
+                  data-testid="active-count"
+                >
                   {{ stats.active }}
                 </p>
               </div>
@@ -79,12 +112,20 @@
           </div>
         </div>
 
-        <div class="card" data-testid="stat-card-out-of-service">
+        <div
+          class="card"
+          data-testid="stat-card-out-of-service"
+        >
           <div class="p-4">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-600">Out of Service</p>
-                <p class="text-2xl font-bold text-red-600" data-testid="out-of-service-count">
+                <p class="text-sm text-gray-600">
+                  Out of Service
+                </p>
+                <p
+                  class="text-2xl font-bold text-red-600"
+                  data-testid="out-of-service-count"
+                >
                   {{ stats.outOfService }}
                 </p>
               </div>
@@ -93,12 +134,20 @@
           </div>
         </div>
 
-        <div class="card" data-testid="stat-card-need-attention">
+        <div
+          class="card"
+          data-testid="stat-card-need-attention"
+        >
           <div class="p-4">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm text-gray-600">Need Attention</p>
-                <p class="text-2xl font-bold text-accent-600" data-testid="need-attention-count">
+                <p class="text-sm text-gray-600">
+                  Need Attention
+                </p>
+                <p
+                  class="text-2xl font-bold text-accent-600"
+                  data-testid="need-attention-count"
+                >
                   {{ stats.needingAttention }}
                 </p>
               </div>
@@ -109,15 +158,20 @@
       </div>
 
       <!-- Filters (Collapsible on Mobile) -->
-      <div class="card mb-6" data-testid="filters-card">
+      <div
+        class="card mb-6"
+        data-testid="filters-card"
+      >
         <div class="p-4">
           <!-- Filter Header with Toggle Button (Mobile Only) -->
           <div class="flex justify-between items-center mb-4 md:hidden">
-            <h3 class="text-sm font-semibold text-gray-700">Filters</h3>
+            <h3 class="text-sm font-semibold text-gray-700">
+              Filters
+            </h3>
             <button
-              @click="toggleFilters"
               class="text-primary-600 hover:text-primary-800 transition-colors"
               data-testid="toggle-filters-button"
+              @click="toggleFilters"
             >
               {{ filtersExpanded ? 'Hide' : 'Show' }}
             </button>
@@ -125,88 +179,117 @@
 
           <!-- Filters Content -->
           <transition name="expand">
-            <div v-show="filtersExpanded || isDesktop" class="flex flex-wrap gap-4">
-            <!-- Search -->
-            <div class="flex-1 min-w-[200px] w-full md:w-auto">
-              <label for="search" class="form-label">Search</label>
-              <input
-                id="search"
-                v-model="filters.search"
-                type="text"
-                class="form-input"
-                placeholder="Search code, serial number, or manufacturer..."
-                data-testid="filter-search"
-              >
-            </div>
-
-            <!-- Location Filter -->
-            <div class="w-full md:w-64">
-              <label for="locationFilter" class="form-label">Location</label>
-              <select
-                id="locationFilter"
-                v-model="filters.locationId"
-                class="form-input"
-                data-testid="filter-location"
-              >
-                <option value="">All Locations</option>
-                <option
-                  v-for="location in locationStore.locations"
-                  :key="location.locationId"
-                  :value="location.locationId"
+            <div
+              v-show="filtersExpanded || isDesktop"
+              class="flex flex-wrap gap-4"
+            >
+              <!-- Search -->
+              <div class="flex-1 min-w-[200px] w-full md:w-auto">
+                <label
+                  for="search"
+                  class="form-label"
+                >Search</label>
+                <input
+                  id="search"
+                  v-model="filters.search"
+                  type="text"
+                  class="form-input"
+                  placeholder="Search code, serial number, or manufacturer..."
+                  data-testid="filter-search"
                 >
-                  {{ location.locationName }}
-                </option>
-              </select>
-            </div>
+              </div>
 
-            <!-- Type Filter -->
-            <div class="w-full md:w-64">
-              <label for="typeFilter" class="form-label">Type</label>
-              <select
-                id="typeFilter"
-                v-model="filters.extinguisherTypeId"
-                class="form-input"
-                data-testid="filter-type"
-              >
-                <option value="">All Types</option>
-                <option
-                  v-for="type in typeStore.types"
-                  :key="type.extinguisherTypeId"
-                  :value="type.extinguisherTypeId"
+              <!-- Location Filter -->
+              <div class="w-full md:w-64">
+                <label
+                  for="locationFilter"
+                  class="form-label"
+                >Location</label>
+                <select
+                  id="locationFilter"
+                  v-model="filters.locationId"
+                  class="form-input"
+                  data-testid="filter-location"
                 >
-                  {{ type.typeName }}
-                </option>
-              </select>
-            </div>
+                  <option value="">
+                    All Locations
+                  </option>
+                  <option
+                    v-for="location in locationStore.locations"
+                    :key="location.locationId"
+                    :value="location.locationId"
+                  >
+                    {{ location.locationName }}
+                  </option>
+                </select>
+              </div>
 
-            <!-- Status Filter -->
-            <div class="w-full md:w-48">
-              <label for="statusFilter" class="form-label">Status</label>
-              <select
-                id="statusFilter"
-                v-model="filters.status"
-                class="form-input"
-                data-testid="filter-status"
-              >
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="out-of-service">Out of Service</option>
-                <option value="needs-attention">Needs Attention</option>
-              </select>
-            </div>
+              <!-- Type Filter -->
+              <div class="w-full md:w-64">
+                <label
+                  for="typeFilter"
+                  class="form-label"
+                >Type</label>
+                <select
+                  id="typeFilter"
+                  v-model="filters.extinguisherTypeId"
+                  class="form-input"
+                  data-testid="filter-type"
+                >
+                  <option value="">
+                    All Types
+                  </option>
+                  <option
+                    v-for="type in typeStore.types"
+                    :key="type.extinguisherTypeId"
+                    :value="type.extinguisherTypeId"
+                  >
+                    {{ type.typeName }}
+                  </option>
+                </select>
+              </div>
 
-            <!-- Reset Button -->
-            <div class="flex items-end">
-              <button
-                class="btn-outline"
-                @click="resetFilters"
-                data-testid="filter-reset"
-              >
-                Reset
-              </button>
+              <!-- Status Filter -->
+              <div class="w-full md:w-48">
+                <label
+                  for="statusFilter"
+                  class="form-label"
+                >Status</label>
+                <select
+                  id="statusFilter"
+                  v-model="filters.status"
+                  class="form-input"
+                  data-testid="filter-status"
+                >
+                  <option value="">
+                    All Status
+                  </option>
+                  <option value="active">
+                    Active
+                  </option>
+                  <option value="inactive">
+                    Inactive
+                  </option>
+                  <option value="out-of-service">
+                    Out of Service
+                  </option>
+                  <option value="needs-attention">
+                    Needs Attention
+                  </option>
+                </select>
+              </div>
+
+              <!-- Reset Button -->
+              <div class="flex items-end">
+                <button
+                  class="btn-outline"
+                  data-testid="filter-reset"
+                  @click="resetFilters"
+                >
+                  Reset
+                </button>
+              </div>
             </div>
-          </div>
           </transition>
         </div>
       </div>
@@ -238,7 +321,9 @@
       >
         <div class="p-12 text-center">
           <div class="spinner-lg mx-auto mb-4" />
-          <p class="text-gray-600">Loading extinguishers...</p>
+          <p class="text-gray-600">
+            Loading extinguishers...
+          </p>
         </div>
       </div>
 
@@ -310,42 +395,45 @@
           >
             {{ formatDate(row.nextServiceDueDate) }}
           </span>
-          <span v-else class="text-gray-400 text-sm">Not set</span>
+          <span
+            v-else
+            class="text-gray-400 text-sm"
+          >Not set</span>
         </template>
 
         <template #cell-actions="{ row }">
           <div class="flex space-x-2">
             <button
               class="text-primary-600 hover:text-primary-800 transition-colors"
-              @click.stop="openEditModal(row)"
               title="Edit"
               data-testid="edit-button"
+              @click.stop="openEditModal(row)"
             >
               <PencilIcon class="h-4 w-4" />
             </button>
             <button
               v-if="row.qrCodeData"
               class="text-secondary-600 hover:text-secondary-800 transition-colors"
-              @click.stop="showQRCode(row)"
               title="View QR Code"
               data-testid="qr-button"
+              @click.stop="showQRCode(row)"
             >
               <QrCodeIcon class="h-4 w-4" />
             </button>
             <button
               v-else
               class="text-secondary-600 hover:text-secondary-800 transition-colors"
-              @click.stop="generateQRCode(row)"
               title="Generate QR Code"
               data-testid="generate-qr-button"
+              @click.stop="generateQRCode(row)"
             >
               <SparklesIcon class="h-4 w-4" />
             </button>
             <button
               class="text-red-600 hover:text-red-800 transition-colors"
-              @click.stop="confirmDelete(row)"
               title="Delete"
               data-testid="delete-button"
+              @click.stop="confirmDelete(row)"
             >
               <TrashIcon class="h-4 w-4" />
             </button>
@@ -358,45 +446,79 @@
             <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
               <!-- Details Section -->
               <div>
-                <h4 class="text-sm font-semibold text-gray-900 mb-3">Details</h4>
+                <h4 class="text-sm font-semibold text-gray-900 mb-3">
+                  Details
+                </h4>
                 <dl class="space-y-2 text-sm">
                   <div v-if="row.manufacturer">
-                    <dt class="text-gray-500">Manufacturer</dt>
-                    <dd class="text-gray-900 font-medium">{{ row.manufacturer }}</dd>
+                    <dt class="text-gray-500">
+                      Manufacturer
+                    </dt>
+                    <dd class="text-gray-900 font-medium">
+                      {{ row.manufacturer }}
+                    </dd>
                   </div>
                   <div v-if="row.assetTag">
-                    <dt class="text-gray-500">Asset Tag</dt>
-                    <dd class="text-gray-900 font-medium">{{ row.assetTag }}</dd>
+                    <dt class="text-gray-500">
+                      Asset Tag
+                    </dt>
+                    <dd class="text-gray-900 font-medium">
+                      {{ row.assetTag }}
+                    </dd>
                   </div>
                   <div v-if="row.floorLevel">
-                    <dt class="text-gray-500">Floor Level</dt>
-                    <dd class="text-gray-900">{{ row.floorLevel }}</dd>
+                    <dt class="text-gray-500">
+                      Floor Level
+                    </dt>
+                    <dd class="text-gray-900">
+                      {{ row.floorLevel }}
+                    </dd>
                   </div>
                   <div v-if="row.locationDescription">
-                    <dt class="text-gray-500">Location Description</dt>
-                    <dd class="text-gray-900">{{ row.locationDescription }}</dd>
+                    <dt class="text-gray-500">
+                      Location Description
+                    </dt>
+                    <dd class="text-gray-900">
+                      {{ row.locationDescription }}
+                    </dd>
                   </div>
                 </dl>
               </div>
 
               <!-- Dates Section -->
               <div>
-                <h4 class="text-sm font-semibold text-gray-900 mb-3">Service History</h4>
+                <h4 class="text-sm font-semibold text-gray-900 mb-3">
+                  Service History
+                </h4>
                 <dl class="space-y-2 text-sm">
                   <div v-if="row.manufactureDate">
-                    <dt class="text-gray-500">Manufacture Date</dt>
-                    <dd class="text-gray-900">{{ formatDate(row.manufactureDate) }}</dd>
+                    <dt class="text-gray-500">
+                      Manufacture Date
+                    </dt>
+                    <dd class="text-gray-900">
+                      {{ formatDate(row.manufactureDate) }}
+                    </dd>
                   </div>
                   <div v-if="row.installDate">
-                    <dt class="text-gray-500">Install Date</dt>
-                    <dd class="text-gray-900">{{ formatDate(row.installDate) }}</dd>
+                    <dt class="text-gray-500">
+                      Install Date
+                    </dt>
+                    <dd class="text-gray-900">
+                      {{ formatDate(row.installDate) }}
+                    </dd>
                   </div>
                   <div v-if="row.lastServiceDate">
-                    <dt class="text-gray-500">Last Service</dt>
-                    <dd class="text-gray-900">{{ formatDate(row.lastServiceDate) }}</dd>
+                    <dt class="text-gray-500">
+                      Last Service
+                    </dt>
+                    <dd class="text-gray-900">
+                      {{ formatDate(row.lastServiceDate) }}
+                    </dd>
                   </div>
                   <div v-if="row.nextHydroTestDueDate">
-                    <dt class="text-gray-500">Next Hydro Test</dt>
+                    <dt class="text-gray-500">
+                      Next Hydro Test
+                    </dt>
                     <dd
                       :class="{
                         'text-red-600 font-semibold': isOverdue(row.nextHydroTestDueDate),
@@ -412,14 +534,28 @@
 
               <!-- Notes Section -->
               <div v-if="row.notes || row.outOfServiceReason">
-                <h4 class="text-sm font-semibold text-gray-900 mb-3">Notes</h4>
+                <h4 class="text-sm font-semibold text-gray-900 mb-3">
+                  Notes
+                </h4>
                 <div class="space-y-2 text-sm">
-                  <div v-if="row.outOfServiceReason" class="p-3 bg-red-50 border border-red-200 rounded">
-                    <p class="text-xs font-semibold text-red-700 mb-1">Out of Service Reason:</p>
-                    <p class="text-red-900">{{ row.outOfServiceReason }}</p>
+                  <div
+                    v-if="row.outOfServiceReason"
+                    class="p-3 bg-red-50 border border-red-200 rounded"
+                  >
+                    <p class="text-xs font-semibold text-red-700 mb-1">
+                      Out of Service Reason:
+                    </p>
+                    <p class="text-red-900">
+                      {{ row.outOfServiceReason }}
+                    </p>
                   </div>
-                  <div v-if="row.notes" class="text-gray-700">
-                    <p class="text-gray-500 mb-1">General Notes:</p>
+                  <div
+                    v-if="row.notes"
+                    class="text-gray-700"
+                  >
+                    <p class="text-gray-500 mb-1">
+                      General Notes:
+                    </p>
                     <p>{{ row.notes }}</p>
                   </div>
                 </div>

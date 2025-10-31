@@ -2,7 +2,10 @@
   <AppLayout>
     <!-- Page Header -->
     <div class="mb-8">
-      <h1 data-testid="import-heading" class="text-3xl font-bold text-gray-900">
+      <h1
+        data-testid="import-heading"
+        class="text-3xl font-bold text-gray-900"
+      >
         Import Historical Data
       </h1>
       <p class="mt-2 text-gray-600">
@@ -19,7 +22,9 @@
       <div class="flex items-start">
         <ExclamationTriangleIcon class="h-6 w-6 text-yellow-600 mt-0.5" />
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-yellow-800">Historical Imports Disabled</h3>
+          <h3 class="text-sm font-medium text-yellow-800">
+            Historical Imports Disabled
+          </h3>
           <p class="mt-1 text-sm text-yellow-700">
             Historical data imports have been permanently disabled for this tenant. This cannot be
             undone.
@@ -30,8 +35,14 @@
 
     <!-- Step Progress -->
     <div class="mb-8">
-      <nav aria-label="Progress" data-testid="import-progress">
-        <ol role="list" class="flex items-center">
+      <nav
+        aria-label="Progress"
+        data-testid="import-progress"
+      >
+        <ol
+          role="list"
+          class="flex items-center"
+        >
           <li
             v-for="(step, index) in steps"
             :key="step.name"
@@ -96,19 +107,24 @@
     </div>
 
     <!-- Step 1: Upload File -->
-    <div v-if="currentStep === 1" data-testid="step-upload">
+    <div
+      v-if="currentStep === 1"
+      data-testid="step-upload"
+    >
       <div class="bg-white shadow sm:rounded-lg p-6">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">Upload CSV File</h2>
+        <h2 class="text-lg font-medium text-gray-900 mb-4">
+          Upload CSV File
+        </h2>
 
         <!-- File upload area -->
         <div
           class="mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-gray-400 transition-colors cursor-pointer"
           :class="{ 'border-blue-500 bg-blue-50': isDragging }"
+          data-testid="file-upload-area"
           @dragover.prevent="isDragging = true"
           @dragleave.prevent="isDragging = false"
           @drop.prevent="handleFileDrop"
           @click="$refs.fileInput.click()"
-          data-testid="file-upload-area"
         >
           <div class="space-y-1 text-center">
             <ArrowUpTrayIcon class="mx-auto h-12 w-12 text-gray-400" />
@@ -116,16 +132,18 @@
               <span class="font-medium text-blue-600 hover:text-blue-500">Upload a file</span>
               <span class="pl-1">or drag and drop</span>
             </div>
-            <p class="text-xs text-gray-500">CSV files up to 10MB</p>
+            <p class="text-xs text-gray-500">
+              CSV files up to 10MB
+            </p>
           </div>
           <input
             ref="fileInput"
             type="file"
             class="sr-only"
             accept=".csv"
-            @change="handleFileSelect"
             data-testid="file-input"
-          />
+            @change="handleFileSelect"
+          >
         </div>
 
         <!-- Upload progress -->
@@ -152,7 +170,9 @@
           class="mt-4 p-4 bg-red-50 rounded-lg"
           data-testid="upload-error"
         >
-          <p class="text-sm text-red-800">{{ importStore.error }}</p>
+          <p class="text-sm text-red-800">
+            {{ importStore.error }}
+          </p>
         </div>
 
         <!-- File info after upload -->
@@ -161,23 +181,40 @@
           class="mt-6"
           data-testid="file-info"
         >
-          <h3 class="text-sm font-medium text-gray-900 mb-2">File Information</h3>
+          <h3 class="text-sm font-medium text-gray-900 mb-2">
+            File Information
+          </h3>
           <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
             <div>
-              <dt class="text-sm font-medium text-gray-500">File Name</dt>
-              <dd class="mt-1 text-sm text-gray-900" data-testid="file-name">
+              <dt class="text-sm font-medium text-gray-500">
+                File Name
+              </dt>
+              <dd
+                class="mt-1 text-sm text-gray-900"
+                data-testid="file-name"
+              >
                 {{ importStore.uploadedFileInfo.fileName }}
               </dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-500">File Size</dt>
-              <dd class="mt-1 text-sm text-gray-900" data-testid="file-size">
+              <dt class="text-sm font-medium text-gray-500">
+                File Size
+              </dt>
+              <dd
+                class="mt-1 text-sm text-gray-900"
+                data-testid="file-size"
+              >
                 {{ formatFileSize(importStore.uploadedFileInfo.fileSize) }}
               </dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-500">Total Rows</dt>
-              <dd class="mt-1 text-sm text-gray-900" data-testid="total-rows">
+              <dt class="text-sm font-medium text-gray-500">
+                Total Rows
+              </dt>
+              <dd
+                class="mt-1 text-sm text-gray-900"
+                data-testid="total-rows"
+              >
                 {{ importStore.uploadedFileInfo.totalRows }}
               </dd>
             </div>
@@ -185,9 +222,9 @@
 
           <div class="mt-4 flex justify-end">
             <button
-              @click="nextStep"
               class="btn btn-primary"
               data-testid="next-to-mapping-button"
+              @click="nextStep"
             >
               Next: Map Fields
             </button>
@@ -197,20 +234,27 @@
     </div>
 
     <!-- Step 2: Field Mapping -->
-    <div v-if="currentStep === 2" data-testid="step-mapping">
+    <div
+      v-if="currentStep === 2"
+      data-testid="step-mapping"
+    >
       <div class="bg-white shadow sm:rounded-lg p-6">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-lg font-medium text-gray-900">Map CSV Fields</h2>
+          <h2 class="text-lg font-medium text-gray-900">
+            Map CSV Fields
+          </h2>
 
           <!-- Mapping templates -->
           <div class="flex items-center space-x-2">
             <select
               v-model="selectedTemplateId"
-              @change="applyTemplate"
               class="input"
               data-testid="template-select"
+              @change="applyTemplate"
             >
-              <option :value="null">Select template...</option>
+              <option :value="null">
+                Select template...
+              </option>
               <option
                 v-for="template in importStore.mappingTemplates"
                 :key="template.mappingTemplateId"
@@ -220,9 +264,9 @@
               </option>
             </select>
             <button
-              @click="showSaveTemplateModal = true"
               class="btn btn-secondary text-sm"
               data-testid="save-template-button"
+              @click="showSaveTemplateModal = true"
             >
               Save as Template
             </button>
@@ -235,7 +279,10 @@
         </p>
 
         <!-- Field mapping table -->
-        <div class="overflow-x-auto" data-testid="field-mapping-table">
+        <div
+          class="overflow-x-auto"
+          data-testid="field-mapping-table"
+        >
           <table class="min-w-full divide-y divide-gray-300">
             <thead>
               <tr>
@@ -265,20 +312,48 @@
                     class="input w-full"
                     :data-testid="`destination-select-${index}`"
                   >
-                    <option value="">-- Skip this field --</option>
-                    <option value="ExtinguisherBarcode">Extinguisher Barcode *</option>
-                    <option value="InspectionDate">Inspection Date *</option>
-                    <option value="InspectorName">Inspector Name *</option>
-                    <option value="InspectionType">Inspection Type *</option>
-                    <option value="PassFail">Pass/Fail *</option>
-                    <option value="Notes">Notes</option>
-                    <option value="LocationName">Location Name</option>
-                    <option value="SerialNumber">Serial Number</option>
-                    <option value="Manufacturer">Manufacturer</option>
-                    <option value="ExtinguisherType">Extinguisher Type</option>
-                    <option value="Weight">Weight</option>
-                    <option value="LastHydroTestDate">Last Hydro Test Date</option>
-                    <option value="ManufactureDate">Manufacture Date</option>
+                    <option value="">
+                      -- Skip this field --
+                    </option>
+                    <option value="ExtinguisherBarcode">
+                      Extinguisher Barcode *
+                    </option>
+                    <option value="InspectionDate">
+                      Inspection Date *
+                    </option>
+                    <option value="InspectorName">
+                      Inspector Name *
+                    </option>
+                    <option value="InspectionType">
+                      Inspection Type *
+                    </option>
+                    <option value="PassFail">
+                      Pass/Fail *
+                    </option>
+                    <option value="Notes">
+                      Notes
+                    </option>
+                    <option value="LocationName">
+                      Location Name
+                    </option>
+                    <option value="SerialNumber">
+                      Serial Number
+                    </option>
+                    <option value="Manufacturer">
+                      Manufacturer
+                    </option>
+                    <option value="ExtinguisherType">
+                      Extinguisher Type
+                    </option>
+                    <option value="Weight">
+                      Weight
+                    </option>
+                    <option value="LastHydroTestDate">
+                      Last Hydro Test Date
+                    </option>
+                    <option value="ManufactureDate">
+                      Manufacture Date
+                    </option>
                   </select>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -292,17 +367,17 @@
         <!-- Navigation buttons -->
         <div class="mt-6 flex justify-between">
           <button
-            @click="previousStep"
             class="btn btn-secondary"
             data-testid="back-to-upload-button"
+            @click="previousStep"
           >
             Back
           </button>
           <button
-            @click="validateAndPreview"
             class="btn btn-primary"
             :disabled="!hasRequiredMappings"
             data-testid="validate-button"
+            @click="validateAndPreview"
           >
             Validate & Preview
           </button>
@@ -311,9 +386,14 @@
     </div>
 
     <!-- Step 3: Validation & Preview -->
-    <div v-if="currentStep === 3" data-testid="step-validation">
+    <div
+      v-if="currentStep === 3"
+      data-testid="step-validation"
+    >
       <div class="bg-white shadow sm:rounded-lg p-6">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">Validation Results</h2>
+        <h2 class="text-lg font-medium text-gray-900 mb-4">
+          Validation Results
+        </h2>
 
         <!-- Validation in progress -->
         <div
@@ -322,7 +402,9 @@
           data-testid="validation-progress"
         >
           <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-          <p class="mt-2 text-sm text-gray-600">Validating data...</p>
+          <p class="mt-2 text-sm text-gray-600">
+            Validating data...
+          </p>
         </div>
 
         <!-- Validation summary -->
@@ -340,8 +422,13 @@
                   </div>
                   <div class="ml-5 w-0 flex-1">
                     <dl>
-                      <dt class="text-sm font-medium text-gray-500 truncate">Total Rows</dt>
-                      <dd class="text-lg font-semibold text-gray-900" data-testid="summary-total">
+                      <dt class="text-sm font-medium text-gray-500 truncate">
+                        Total Rows
+                      </dt>
+                      <dd
+                        class="text-lg font-semibold text-gray-900"
+                        data-testid="summary-total"
+                      >
                         {{ importStore.validationSummary.totalRows }}
                       </dd>
                     </dl>
@@ -358,8 +445,13 @@
                   </div>
                   <div class="ml-5 w-0 flex-1">
                     <dl>
-                      <dt class="text-sm font-medium text-gray-500 truncate">Valid Rows</dt>
-                      <dd class="text-lg font-semibold text-green-600" data-testid="summary-valid">
+                      <dt class="text-sm font-medium text-gray-500 truncate">
+                        Valid Rows
+                      </dt>
+                      <dd
+                        class="text-lg font-semibold text-green-600"
+                        data-testid="summary-valid"
+                      >
                         {{ importStore.validationSummary.validRows }}
                       </dd>
                     </dl>
@@ -376,8 +468,13 @@
                   </div>
                   <div class="ml-5 w-0 flex-1">
                     <dl>
-                      <dt class="text-sm font-medium text-gray-500 truncate">Invalid Rows</dt>
-                      <dd class="text-lg font-semibold text-red-600" data-testid="summary-invalid">
+                      <dt class="text-sm font-medium text-gray-500 truncate">
+                        Invalid Rows
+                      </dt>
+                      <dd
+                        class="text-lg font-semibold text-red-600"
+                        data-testid="summary-invalid"
+                      >
                         {{ importStore.validationSummary.invalidRows }}
                       </dd>
                     </dl>
@@ -394,8 +491,13 @@
                   </div>
                   <div class="ml-5 w-0 flex-1">
                     <dl>
-                      <dt class="text-sm font-medium text-gray-500 truncate">Warnings</dt>
-                      <dd class="text-lg font-semibold text-yellow-600" data-testid="summary-warnings">
+                      <dt class="text-sm font-medium text-gray-500 truncate">
+                        Warnings
+                      </dt>
+                      <dd
+                        class="text-lg font-semibold text-yellow-600"
+                        data-testid="summary-warnings"
+                      >
                         {{ importStore.validationSummary.rowsWithWarnings }}
                       </dd>
                     </dl>
@@ -414,7 +516,9 @@
             <div class="flex">
               <XCircleIcon class="h-5 w-5 text-red-400" />
               <div class="ml-3">
-                <h3 class="text-sm font-medium text-red-800">Cannot proceed with import</h3>
+                <h3 class="text-sm font-medium text-red-800">
+                  Cannot proceed with import
+                </h3>
                 <p class="mt-1 text-sm text-red-700">
                   Please fix the errors below before importing.
                 </p>
@@ -430,7 +534,9 @@
             <div class="flex">
               <ExclamationTriangleIcon class="h-5 w-5 text-yellow-400" />
               <div class="ml-3">
-                <h3 class="text-sm font-medium text-yellow-800">Warnings detected</h3>
+                <h3 class="text-sm font-medium text-yellow-800">
+                  Warnings detected
+                </h3>
                 <p class="mt-1 text-sm text-yellow-700">
                   Some rows have warnings. Review them before proceeding.
                 </p>
@@ -439,19 +545,36 @@
           </div>
 
           <!-- Validation details (first 10 rows with errors/warnings) -->
-          <div v-if="rowsWithIssues.length > 0" class="mb-6">
-            <h3 class="text-sm font-medium text-gray-900 mb-2">Rows with Issues</h3>
+          <div
+            v-if="rowsWithIssues.length > 0"
+            class="mb-6"
+          >
+            <h3 class="text-sm font-medium text-gray-900 mb-2">
+              Rows with Issues
+            </h3>
             <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-300" data-testid="issues-table">
+              <table
+                class="min-w-full divide-y divide-gray-300"
+                data-testid="issues-table"
+              >
                 <thead>
                   <tr>
-                    <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Row</th>
-                    <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Issues</th>
+                    <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Row
+                    </th>
+                    <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Status
+                    </th>
+                    <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Issues
+                    </th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                  <tr v-for="row in rowsWithIssues.slice(0, 10)" :key="row.rowNumber">
+                  <tr
+                    v-for="row in rowsWithIssues.slice(0, 10)"
+                    :key="row.rowNumber"
+                  >
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
                       {{ row.rowNumber }}
                     </td>
@@ -471,10 +594,18 @@
                     </td>
                     <td class="px-3 py-4 text-sm text-gray-500">
                       <ul class="list-disc list-inside">
-                        <li v-for="(error, idx) in row.errors" :key="`error-${idx}`" class="text-red-700">
+                        <li
+                          v-for="(error, idx) in row.errors"
+                          :key="`error-${idx}`"
+                          class="text-red-700"
+                        >
                           {{ error }}
                         </li>
-                        <li v-for="(warning, idx) in row.warnings" :key="`warning-${idx}`" class="text-yellow-700">
+                        <li
+                          v-for="(warning, idx) in row.warnings"
+                          :key="`warning-${idx}`"
+                          class="text-yellow-700"
+                        >
                           {{ warning }}
                         </li>
                       </ul>
@@ -483,7 +614,10 @@
                 </tbody>
               </table>
             </div>
-            <p v-if="rowsWithIssues.length > 10" class="mt-2 text-sm text-gray-500">
+            <p
+              v-if="rowsWithIssues.length > 10"
+              class="mt-2 text-sm text-gray-500"
+            >
               Showing first 10 of {{ rowsWithIssues.length }} rows with issues
             </p>
           </div>
@@ -491,17 +625,17 @@
           <!-- Navigation buttons -->
           <div class="flex justify-between">
             <button
-              @click="previousStep"
               class="btn btn-secondary"
               data-testid="back-to-mapping-button"
+              @click="previousStep"
             >
               Back to Mapping
             </button>
             <button
-              @click="startImport"
               class="btn btn-primary"
               :disabled="!importStore.validationSummary.canProceed || importStore.isImporting"
               data-testid="start-import-button"
+              @click="startImport"
             >
               {{ importStore.isImporting ? 'Importing...' : 'Start Import' }}
             </button>
@@ -511,25 +645,30 @@
     </div>
 
     <!-- Step 4: Import Complete -->
-    <div v-if="currentStep === 4" data-testid="step-complete">
+    <div
+      v-if="currentStep === 4"
+      data-testid="step-complete"
+    >
       <div class="bg-white shadow sm:rounded-lg p-6 text-center">
         <CheckCircleIcon class="mx-auto h-12 w-12 text-green-500" />
-        <h2 class="mt-4 text-lg font-medium text-gray-900">Import Started</h2>
+        <h2 class="mt-4 text-lg font-medium text-gray-900">
+          Import Started
+        </h2>
         <p class="mt-2 text-sm text-gray-600">
           Your import job has been created and is being processed in the background.
         </p>
         <div class="mt-6 flex justify-center space-x-4">
           <button
-            @click="resetImport"
             class="btn btn-secondary"
             data-testid="new-import-button"
+            @click="resetImport"
           >
             Start New Import
           </button>
           <button
-            @click="viewImportHistory"
             class="btn btn-primary"
             data-testid="view-history-button"
+            @click="viewImportHistory"
           >
             View Import History
           </button>
@@ -545,11 +684,16 @@
         data-testid="save-template-modal"
       >
         <div class="flex min-h-screen items-center justify-center p-4">
-          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="showSaveTemplateModal = false" />
+          <div
+            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            @click="showSaveTemplateModal = false"
+          />
 
           <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
             <div>
-              <h3 class="text-lg font-medium leading-6 text-gray-900">Save Mapping Template</h3>
+              <h3 class="text-lg font-medium leading-6 text-gray-900">
+                Save Mapping Template
+              </h3>
               <div class="mt-4">
                 <label class="block text-sm font-medium text-gray-700">Template Name</label>
                 <input
@@ -558,7 +702,7 @@
                   class="mt-1 input w-full"
                   placeholder="e.g., Monthly Inspections Template"
                   data-testid="template-name-input"
-                />
+                >
               </div>
               <div class="mt-4">
                 <label class="flex items-center">
@@ -567,24 +711,24 @@
                     type="checkbox"
                     class="checkbox"
                     data-testid="default-template-checkbox"
-                  />
+                  >
                   <span class="ml-2 text-sm text-gray-700">Set as default template</span>
                 </label>
               </div>
             </div>
             <div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
               <button
-                @click="saveTemplate"
                 class="btn btn-primary"
                 :disabled="!newTemplateName"
                 data-testid="save-template-confirm-button"
+                @click="saveTemplate"
               >
                 Save Template
               </button>
               <button
-                @click="showSaveTemplateModal = false"
                 class="btn btn-secondary"
                 data-testid="save-template-cancel-button"
+                @click="showSaveTemplateModal = false"
               >
                 Cancel
               </button>

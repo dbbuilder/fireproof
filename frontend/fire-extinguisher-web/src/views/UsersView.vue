@@ -2,10 +2,17 @@
   <AppLayout>
     <div class="users-view">
       <!-- Header -->
-      <div class="page-header" data-testid="users-heading">
+      <div
+        class="page-header"
+        data-testid="users-heading"
+      >
         <div>
-          <h1 class="page-title">User Management</h1>
-          <p class="page-description">Manage user accounts, roles, and permissions</p>
+          <h1 class="page-title">
+            User Management
+          </h1>
+          <p class="page-description">
+            Manage user accounts, roles, and permissions
+          </p>
         </div>
       </div>
 
@@ -13,7 +20,10 @@
       <div class="filters-card">
         <div class="filters-grid">
           <div class="filter-item">
-            <label for="search" class="filter-label">Search</label>
+            <label
+              for="search"
+              class="filter-label"
+            >Search</label>
             <input
               id="search"
               v-model="searchTerm"
@@ -22,11 +32,14 @@
               class="filter-input"
               data-testid="search-input"
               @input="debouncedSearch"
-            />
+            >
           </div>
 
           <div class="filter-item">
-            <label for="status-filter" class="filter-label">Status</label>
+            <label
+              for="status-filter"
+              class="filter-label"
+            >Status</label>
             <select
               id="status-filter"
               v-model="statusFilter"
@@ -34,14 +47,23 @@
               data-testid="status-filter"
               @change="loadUsers"
             >
-              <option :value="null">All Users</option>
-              <option :value="true">Active Only</option>
-              <option :value="false">Inactive Only</option>
+              <option :value="null">
+                All Users
+              </option>
+              <option :value="true">
+                Active Only
+              </option>
+              <option :value="false">
+                Inactive Only
+              </option>
             </select>
           </div>
 
           <div class="filter-item">
-            <label for="page-size" class="filter-label">Per Page</label>
+            <label
+              for="page-size"
+              class="filter-label"
+            >Per Page</label>
             <select
               id="page-size"
               v-model="pageSize"
@@ -49,30 +71,60 @@
               data-testid="page-size-select"
               @change="loadUsers"
             >
-              <option :value="25">25</option>
-              <option :value="50">50</option>
-              <option :value="100">100</option>
+              <option :value="25">
+                25
+              </option>
+              <option :value="50">
+                50
+              </option>
+              <option :value="100">
+                100
+              </option>
             </select>
           </div>
         </div>
       </div>
 
       <!-- Loading State -->
-      <div v-if="usersStore.loading" class="loading-state" data-testid="loading-state">
-        <div class="spinner"></div>
+      <div
+        v-if="usersStore.loading"
+        class="loading-state"
+        data-testid="loading-state"
+      >
+        <div class="spinner" />
         <p>Loading users...</p>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="usersStore.error" class="error-state" data-testid="error-state">
-        <div class="error-icon">⚠️</div>
-        <p class="error-message">{{ usersStore.error }}</p>
-        <button @click="loadUsers" class="btn-retry">Retry</button>
+      <div
+        v-else-if="usersStore.error"
+        class="error-state"
+        data-testid="error-state"
+      >
+        <div class="error-icon">
+          ⚠️
+        </div>
+        <p class="error-message">
+          {{ usersStore.error }}
+        </p>
+        <button
+          class="btn-retry"
+          @click="loadUsers"
+        >
+          Retry
+        </button>
       </div>
 
       <!-- Users Table -->
-      <div v-else-if="usersStore.users.length > 0" class="table-container" data-testid="users-table-container">
-        <table class="data-table" data-testid="users-table">
+      <div
+        v-else-if="usersStore.users.length > 0"
+        class="table-container"
+        data-testid="users-table-container"
+      >
+        <table
+          class="data-table"
+          data-testid="users-table"
+        >
           <thead>
             <tr>
               <th>Name</th>
@@ -94,8 +146,14 @@
               <td>
                 <div class="user-name">
                   <span class="font-semibold">{{ user.firstName }} {{ user.lastName }}</span>
-                  <span v-if="user.emailConfirmed" class="badge badge-success ml-2">✓ Verified</span>
-                  <span v-if="user.mfaEnabled" class="badge badge-info ml-2">🔐 MFA</span>
+                  <span
+                    v-if="user.emailConfirmed"
+                    class="badge badge-success ml-2"
+                  >✓ Verified</span>
+                  <span
+                    v-if="user.mfaEnabled"
+                    class="badge badge-info ml-2"
+                  >🔐 MFA</span>
                 </div>
               </td>
               <td>{{ user.email }}</td>
@@ -106,10 +164,16 @@
                 <span class="role-count">{{ user.tenantRoleCount }} role(s)</span>
               </td>
               <td>
-                <span v-if="user.lastLoginDate" class="text-sm">
+                <span
+                  v-if="user.lastLoginDate"
+                  class="text-sm"
+                >
                   {{ formatDate(user.lastLoginDate) }}
                 </span>
-                <span v-else class="text-gray-400">Never</span>
+                <span
+                  v-else
+                  class="text-gray-400"
+                >Never</span>
               </td>
               <td>
                 <span
@@ -125,26 +189,26 @@
               <td>
                 <div class="action-buttons">
                   <button
-                    @click="viewUser(user)"
                     class="btn-action btn-primary"
                     data-testid="view-user-button"
                     title="View Details"
+                    @click="viewUser(user)"
                   >
                     👁️
                   </button>
                   <button
-                    @click="editUser(user)"
                     class="btn-action btn-secondary"
                     data-testid="edit-user-button"
                     title="Edit User"
+                    @click="editUser(user)"
                   >
                     ✏️
                   </button>
                   <button
-                    @click="confirmDelete(user)"
                     class="btn-action btn-danger"
                     data-testid="delete-user-button"
                     title="Delete User"
+                    @click="confirmDelete(user)"
                   >
                     🗑️
                   </button>
@@ -155,12 +219,15 @@
         </table>
 
         <!-- Pagination -->
-        <div class="pagination" data-testid="pagination">
+        <div
+          class="pagination"
+          data-testid="pagination"
+        >
           <button
-            @click="goToPage(usersStore.pageNumber - 1)"
             :disabled="!usersStore.hasPrevPage"
             class="btn-pagination"
             data-testid="prev-page-button"
+            @click="goToPage(usersStore.pageNumber - 1)"
           >
             ← Previous
           </button>
@@ -171,10 +238,10 @@
           </span>
 
           <button
-            @click="goToPage(usersStore.pageNumber + 1)"
             :disabled="!usersStore.hasNextPage"
             class="btn-pagination"
             data-testid="next-page-button"
+            @click="goToPage(usersStore.pageNumber + 1)"
           >
             Next →
           </button>
@@ -182,8 +249,14 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="empty-state" data-testid="empty-state">
-        <div class="empty-icon">👥</div>
+      <div
+        v-else
+        class="empty-state"
+        data-testid="empty-state"
+      >
+        <div class="empty-icon">
+          👥
+        </div>
         <h3>No users found</h3>
         <p>{{ searchTerm ? 'Try adjusting your search' : 'No users match the current filters' }}</p>
       </div>
@@ -193,19 +266,34 @@
         <div
           v-if="showDetailModal"
           class="modal-overlay"
-          @click="closeDetailModal"
           data-testid="user-detail-modal"
+          @click="closeDetailModal"
         >
-          <div class="modal-content" @click.stop>
+          <div
+            class="modal-content"
+            @click.stop
+          >
             <div class="modal-header">
-              <h2 class="modal-title">User Details</h2>
-              <button @click="closeDetailModal" class="btn-close">✕</button>
+              <h2 class="modal-title">
+                User Details
+              </h2>
+              <button
+                class="btn-close"
+                @click="closeDetailModal"
+              >
+                ✕
+              </button>
             </div>
 
-            <div v-if="selectedUser" class="modal-body">
+            <div
+              v-if="selectedUser"
+              class="modal-body"
+            >
               <!-- Basic Info -->
               <section class="detail-section">
-                <h3 class="section-title">Basic Information</h3>
+                <h3 class="section-title">
+                  Basic Information
+                </h3>
                 <div class="detail-grid">
                   <div class="detail-item">
                     <span class="detail-label">Name:</span>
@@ -239,12 +327,20 @@
               <!-- System Roles -->
               <section class="detail-section">
                 <div class="section-header">
-                  <h3 class="section-title">System Roles ({{ selectedUser.systemRoles?.length || 0 }})</h3>
-                  <button @click="showAddSystemRoleModal = true" class="btn-add-role">
+                  <h3 class="section-title">
+                    System Roles ({{ selectedUser.systemRoles?.length || 0 }})
+                  </h3>
+                  <button
+                    class="btn-add-role"
+                    @click="showAddSystemRoleModal = true"
+                  >
                     + Add System Role
                   </button>
                 </div>
-                <div v-if="selectedUser.systemRoles?.length" class="roles-list">
+                <div
+                  v-if="selectedUser.systemRoles?.length"
+                  class="roles-list"
+                >
                   <div
                     v-for="role in selectedUser.systemRoles"
                     :key="role.systemRoleId"
@@ -255,26 +351,39 @@
                       <span class="role-description">{{ role.description }}</span>
                     </div>
                     <button
-                      @click="removeSystemRole(selectedUser.userId, role.systemRoleId)"
                       class="btn-remove-role"
                       title="Remove Role"
+                      @click="removeSystemRole(selectedUser.userId, role.systemRoleId)"
                     >
                       ✕
                     </button>
                   </div>
                 </div>
-                <p v-else class="text-gray-500">No system roles assigned</p>
+                <p
+                  v-else
+                  class="text-gray-500"
+                >
+                  No system roles assigned
+                </p>
               </section>
 
               <!-- Tenant Roles -->
               <section class="detail-section">
                 <div class="section-header">
-                  <h3 class="section-title">Tenant Roles ({{ selectedUser.tenantRoles?.length || 0 }})</h3>
-                  <button @click="showAddTenantRoleModal = true" class="btn-add-role">
+                  <h3 class="section-title">
+                    Tenant Roles ({{ selectedUser.tenantRoles?.length || 0 }})
+                  </h3>
+                  <button
+                    class="btn-add-role"
+                    @click="showAddTenantRoleModal = true"
+                  >
                     + Add Tenant Role
                   </button>
                 </div>
-                <div v-if="selectedUser.tenantRoles?.length" class="roles-list">
+                <div
+                  v-if="selectedUser.tenantRoles?.length"
+                  class="roles-list"
+                >
                   <div
                     v-for="role in selectedUser.tenantRoles"
                     :key="role.userTenantRoleId"
@@ -285,15 +394,20 @@
                       <span class="role-description">{{ role.tenantName }} ({{ role.tenantCode }})</span>
                     </div>
                     <button
-                      @click="removeTenantRole(selectedUser.userId, role.userTenantRoleId)"
                       class="btn-remove-role"
                       title="Remove Role"
+                      @click="removeTenantRole(selectedUser.userId, role.userTenantRoleId)"
                     >
                       ✕
                     </button>
                   </div>
                 </div>
-                <p v-else class="text-gray-500">No tenant roles assigned</p>
+                <p
+                  v-else
+                  class="text-gray-500"
+                >
+                  No tenant roles assigned
+                </p>
               </section>
             </div>
           </div>
@@ -305,19 +419,35 @@
         <div
           v-if="showEditModal"
           class="modal-overlay"
-          @click="closeEditModal"
           data-testid="edit-user-modal"
+          @click="closeEditModal"
         >
-          <div class="modal-content" @click.stop>
+          <div
+            class="modal-content"
+            @click.stop
+          >
             <div class="modal-header">
-              <h2 class="modal-title">Edit User</h2>
-              <button @click="closeEditModal" class="btn-close">✕</button>
+              <h2 class="modal-title">
+                Edit User
+              </h2>
+              <button
+                class="btn-close"
+                @click="closeEditModal"
+              >
+                ✕
+              </button>
             </div>
 
-            <form @submit.prevent="saveUser" class="modal-body">
+            <form
+              class="modal-body"
+              @submit.prevent="saveUser"
+            >
               <div class="form-grid">
                 <div class="form-group">
-                  <label for="edit-first-name" class="form-label">First Name *</label>
+                  <label
+                    for="edit-first-name"
+                    class="form-label"
+                  >First Name *</label>
                   <input
                     id="edit-first-name"
                     v-model="editForm.firstName"
@@ -325,11 +455,14 @@
                     required
                     class="form-input"
                     data-testid="edit-first-name"
-                  />
+                  >
                 </div>
 
                 <div class="form-group">
-                  <label for="edit-last-name" class="form-label">Last Name *</label>
+                  <label
+                    for="edit-last-name"
+                    class="form-label"
+                  >Last Name *</label>
                   <input
                     id="edit-last-name"
                     v-model="editForm.lastName"
@@ -337,18 +470,21 @@
                     required
                     class="form-input"
                     data-testid="edit-last-name"
-                  />
+                  >
                 </div>
 
                 <div class="form-group">
-                  <label for="edit-phone" class="form-label">Phone Number</label>
+                  <label
+                    for="edit-phone"
+                    class="form-label"
+                  >Phone Number</label>
                   <input
                     id="edit-phone"
                     v-model="editForm.phoneNumber"
                     type="tel"
                     class="form-input"
                     data-testid="edit-phone"
-                  />
+                  >
                 </div>
 
                 <div class="form-group">
@@ -358,7 +494,7 @@
                       type="checkbox"
                       class="checkbox-input"
                       data-testid="edit-email-confirmed"
-                    />
+                    >
                     <span>Email Confirmed</span>
                   </label>
                 </div>
@@ -370,7 +506,7 @@
                       type="checkbox"
                       class="checkbox-input"
                       data-testid="edit-mfa-enabled"
-                    />
+                    >
                     <span>MFA Enabled</span>
                   </label>
                 </div>
@@ -382,17 +518,25 @@
                       type="checkbox"
                       class="checkbox-input"
                       data-testid="edit-is-active"
-                    />
+                    >
                     <span>Active</span>
                   </label>
                 </div>
               </div>
 
               <div class="modal-footer">
-                <button type="button" @click="closeEditModal" class="btn-secondary">
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  @click="closeEditModal"
+                >
                   Cancel
                 </button>
-                <button type="submit" class="btn-primary" :disabled="usersStore.loading">
+                <button
+                  type="submit"
+                  class="btn-primary"
+                  :disabled="usersStore.loading"
+                >
                   {{ usersStore.loading ? 'Saving...' : 'Save Changes' }}
                 </button>
               </div>
@@ -406,13 +550,23 @@
         <div
           v-if="showDeleteModal"
           class="modal-overlay"
-          @click="closeDeleteModal"
           data-testid="delete-confirm-modal"
+          @click="closeDeleteModal"
         >
-          <div class="modal-content modal-small" @click.stop>
+          <div
+            class="modal-content modal-small"
+            @click.stop
+          >
             <div class="modal-header">
-              <h2 class="modal-title">Confirm Delete</h2>
-              <button @click="closeDeleteModal" class="btn-close">✕</button>
+              <h2 class="modal-title">
+                Confirm Delete
+              </h2>
+              <button
+                class="btn-close"
+                @click="closeDeleteModal"
+              >
+                ✕
+              </button>
             </div>
 
             <div class="modal-body">
@@ -427,13 +581,16 @@
             </div>
 
             <div class="modal-footer">
-              <button @click="closeDeleteModal" class="btn-secondary">
+              <button
+                class="btn-secondary"
+                @click="closeDeleteModal"
+              >
                 Cancel
               </button>
               <button
-                @click="deleteUser"
                 class="btn-danger"
                 :disabled="usersStore.loading"
+                @click="deleteUser"
               >
                 {{ usersStore.loading ? 'Deleting...' : 'Delete User' }}
               </button>
@@ -449,22 +606,40 @@
           class="modal-overlay"
           @click="showAddSystemRoleModal = false"
         >
-          <div class="modal-content modal-small" @click.stop>
+          <div
+            class="modal-content modal-small"
+            @click.stop
+          >
             <div class="modal-header">
-              <h2 class="modal-title">Assign System Role</h2>
-              <button @click="showAddSystemRoleModal = false" class="btn-close">✕</button>
+              <h2 class="modal-title">
+                Assign System Role
+              </h2>
+              <button
+                class="btn-close"
+                @click="showAddSystemRoleModal = false"
+              >
+                ✕
+              </button>
             </div>
 
-            <form @submit.prevent="addSystemRole" class="modal-body">
+            <form
+              class="modal-body"
+              @submit.prevent="addSystemRole"
+            >
               <div class="form-group">
-                <label for="system-role-select" class="form-label">Select System Role</label>
+                <label
+                  for="system-role-select"
+                  class="form-label"
+                >Select System Role</label>
                 <select
                   id="system-role-select"
                   v-model="selectedSystemRoleId"
                   required
                   class="form-input"
                 >
-                  <option value="">-- Select Role --</option>
+                  <option value="">
+                    -- Select Role --
+                  </option>
                   <option
                     v-for="role in availableSystemRoles"
                     :key="role.systemRoleId"
@@ -476,10 +651,18 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" @click="showAddSystemRoleModal = false" class="btn-secondary">
+                <button
+                  type="button"
+                  class="btn-secondary"
+                  @click="showAddSystemRoleModal = false"
+                >
                   Cancel
                 </button>
-                <button type="submit" class="btn-primary" :disabled="!selectedSystemRoleId">
+                <button
+                  type="submit"
+                  class="btn-primary"
+                  :disabled="!selectedSystemRoleId"
+                >
                   Assign Role
                 </button>
               </div>
