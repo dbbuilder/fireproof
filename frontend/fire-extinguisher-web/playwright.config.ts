@@ -91,10 +91,12 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npx vite',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-  },
+  // Note: Commented out for Windows compatibility - start dev server manually with 'npm run dev'
+  // Uncomment for CI/CD or if running on Linux/Mac
+  // webServer: {
+  //   command: 'npx vite',
+  //   url: 'http://localhost:5173',
+  //   reuseExistingServer: !process.env.CI,
+  //   timeout: 120 * 1000,
+  // },
 })
