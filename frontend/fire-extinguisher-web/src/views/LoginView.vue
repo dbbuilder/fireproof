@@ -18,10 +18,16 @@
             />
           </svg>
         </div>
-        <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2">
+        <h1
+          class="text-3xl font-display font-semibold text-gray-900 mb-2"
+          data-testid="login-heading"
+        >
           Welcome Back
         </h1>
-        <p class="text-gray-600">
+        <p
+          class="text-gray-600"
+          data-testid="login-description"
+        >
           Sign in to your FireProof account
         </p>
       </div>
@@ -252,6 +258,7 @@
         <router-link
           to="/"
           class="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          data-testid="back-to-home-link"
         >
           <ArrowLeftIcon class="h-4 w-4 mr-2" />
           Back to Home

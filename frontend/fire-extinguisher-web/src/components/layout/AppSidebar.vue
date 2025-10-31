@@ -12,6 +12,7 @@
           :to="item.to"
           class="nav-link group"
           :class="isActive(item.to) ? 'nav-link-active' : 'nav-link-inactive'"
+          :data-testid="`sidebar-nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`"
         >
           <component
             :is="item.icon"
@@ -35,6 +36,7 @@
           to="/settings"
           class="nav-link group"
           :class="isActive('/settings') ? 'nav-link-active' : 'nav-link-inactive'"
+          data-testid="sidebar-nav-settings"
         >
           <Cog6ToothIcon
             class="h-5 w-5 flex-shrink-0 transition-colors"
@@ -105,6 +107,7 @@
             type="button"
             class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
             aria-label="Close sidebar"
+            data-testid="sidebar-close-button"
             @click="$emit('close')"
           >
             <XMarkIcon class="h-6 w-6" />
@@ -119,6 +122,7 @@
             :to="item.to"
             class="nav-link group"
             :class="isActive(item.to) ? 'nav-link-active' : 'nav-link-inactive'"
+            :data-testid="`sidebar-nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`"
             @click="$emit('close')"
           >
             <component
@@ -143,6 +147,7 @@
             to="/settings"
             class="nav-link group"
             :class="isActive('/settings') ? 'nav-link-active' : 'nav-link-inactive'"
+            data-testid="sidebar-nav-settings"
             @click="$emit('close')"
           >
             <Cog6ToothIcon

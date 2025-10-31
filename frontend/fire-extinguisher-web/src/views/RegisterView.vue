@@ -18,10 +18,16 @@
             />
           </svg>
         </div>
-        <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2">
+        <h1
+          class="text-3xl font-display font-semibold text-gray-900 mb-2"
+          data-testid="register-heading"
+        >
           Create Account
         </h1>
-        <p class="text-gray-600">
+        <p
+          class="text-gray-600"
+          data-testid="register-description"
+        >
           Join FireProof to manage fire safety inspections
         </p>
       </div>

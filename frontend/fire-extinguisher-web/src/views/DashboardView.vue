@@ -8,18 +8,30 @@
     <div v-else>
       <!-- Welcome Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-display font-semibold text-gray-900 mb-2">
+        <h1
+          class="text-3xl font-display font-semibold text-gray-900 mb-2"
+          data-testid="dashboard-heading"
+        >
           Welcome back, {{ userFirstName }}!
         </h1>
-        <p class="text-gray-600">
+        <p
+          class="text-gray-600"
+          data-testid="dashboard-description"
+        >
           Here's an overview of your fire safety compliance
         </p>
       </div>
 
       <!-- KPI Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+        data-testid="dashboard-stats-cards"
+      >
         <!-- Total Locations -->
-        <div class="card hover:shadow-lg transition-all duration-200">
+        <div
+          class="card hover:shadow-lg transition-all duration-200"
+          data-testid="dashboard-stat-card-locations"
+        >
           <div class="p-6">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary-100">
@@ -27,7 +39,10 @@
               </div>
               <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Locations</span>
             </div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">
+            <div
+              class="text-3xl font-bold text-gray-900 mb-1"
+              data-testid="dashboard-locations-count"
+            >
               {{ locationStore.locations.length }}
             </div>
             <router-link
@@ -40,7 +55,10 @@
         </div>
 
         <!-- Total Extinguishers -->
-        <div class="card hover:shadow-lg transition-all duration-200">
+        <div
+          class="card hover:shadow-lg transition-all duration-200"
+          data-testid="dashboard-stat-card-extinguishers"
+        >
           <div class="p-6">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-secondary-100">
@@ -48,7 +66,10 @@
               </div>
               <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Extinguishers</span>
             </div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">
+            <div
+              class="text-3xl font-bold text-gray-900 mb-1"
+              data-testid="dashboard-extinguishers-count"
+            >
               {{ extinguisherStore.extinguisherCount }}
             </div>
             <router-link
@@ -61,7 +82,10 @@
         </div>
 
         <!-- Inspections This Month -->
-        <div class="card hover:shadow-lg transition-all duration-200">
+        <div
+          class="card hover:shadow-lg transition-all duration-200"
+          data-testid="dashboard-stat-card-inspections"
+        >
           <div class="p-6">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-blue-100">
@@ -69,7 +93,10 @@
               </div>
               <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">This Month</span>
             </div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">
+            <div
+              class="text-3xl font-bold text-gray-900 mb-1"
+              data-testid="dashboard-inspections-count"
+            >
               0
             </div>
             <router-link
@@ -82,7 +109,10 @@
         </div>
 
         <!-- Compliance Rate -->
-        <div class="card hover:shadow-lg transition-all duration-200">
+        <div
+          class="card hover:shadow-lg transition-all duration-200"
+          data-testid="dashboard-stat-card-compliance"
+        >
           <div class="p-6">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-accent-100">
@@ -90,7 +120,10 @@
               </div>
               <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Compliance</span>
             </div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">
+            <div
+              class="text-3xl font-bold text-gray-900 mb-1"
+              data-testid="dashboard-compliance-rate"
+            >
               --%
             </div>
             <router-link
@@ -107,7 +140,10 @@
         <!-- Quick Actions -->
         <div class="card">
           <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">
+            <h2
+              class="text-lg font-semibold text-gray-900"
+              data-testid="dashboard-quick-actions-heading"
+            >
               Quick Actions
             </h2>
           </div>
@@ -116,6 +152,7 @@
               <router-link
                 to="/locations"
                 class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-gray-200 hover:border-primary-500 hover:bg-primary-50 transition-all duration-200 group"
+                data-testid="dashboard-action-add-location"
               >
                 <MapPinIcon class="h-8 w-8 text-gray-400 group-hover:text-primary-600 mb-2" />
                 <span class="text-sm font-medium text-gray-700 group-hover:text-primary-700">Add Location</span>
@@ -124,6 +161,7 @@
               <router-link
                 to="/extinguishers"
                 class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-gray-200 hover:border-primary-500 hover:bg-primary-50 transition-all duration-200 group"
+                data-testid="dashboard-action-add-extinguisher"
               >
                 <ShieldCheckIcon class="h-8 w-8 text-gray-400 group-hover:text-primary-600 mb-2" />
                 <span class="text-sm font-medium text-gray-700 group-hover:text-primary-700">Add Extinguisher</span>
@@ -132,6 +170,7 @@
               <router-link
                 to="/inspections"
                 class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-gray-200 hover:border-primary-500 hover:bg-primary-50 transition-all duration-200 group"
+                data-testid="dashboard-action-start-inspection"
               >
                 <ClipboardDocumentCheckIcon class="h-8 w-8 text-gray-400 group-hover:text-primary-600 mb-2" />
                 <span class="text-sm font-medium text-gray-700 group-hover:text-primary-700">Start Inspection</span>
@@ -140,6 +179,7 @@
               <router-link
                 to="/reports"
                 class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-gray-200 hover:border-primary-500 hover:bg-primary-50 transition-all duration-200 group"
+                data-testid="dashboard-action-generate-report"
               >
                 <DocumentTextIcon class="h-8 w-8 text-gray-400 group-hover:text-primary-600 mb-2" />
                 <span class="text-sm font-medium text-gray-700 group-hover:text-primary-700">Generate Report</span>

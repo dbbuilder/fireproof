@@ -9,6 +9,7 @@
             type="button"
             class="lg:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 transition-colors"
             aria-label="Toggle sidebar"
+            data-testid="header-menu-toggle"
             @click="$emit('toggle-sidebar')"
           >
             <Bars3Icon class="h-6 w-6" />
@@ -18,6 +19,7 @@
           <router-link
             to="/dashboard"
             class="flex items-center space-x-3 group"
+            data-testid="header-logo"
           >
             <!-- Logo Icon -->
             <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 shadow-sm group-hover:shadow-md transition-shadow">
@@ -50,7 +52,10 @@
 
         <!-- Center Section: Tenant Display -->
         <div class="hidden md:flex flex-1 items-center justify-center mx-8">
-          <div class="flex items-center space-x-3 px-6 py-2 bg-gradient-to-r from-primary-50 to-primary-100 border border-primary-200 rounded-lg">
+          <div
+            class="flex items-center space-x-3 px-6 py-2 bg-gradient-to-r from-primary-50 to-primary-100 border border-primary-200 rounded-lg"
+            data-testid="header-tenant-display"
+          >
             <BuildingOfficeIcon class="h-6 w-6 text-primary-600 flex-shrink-0" />
             <div class="text-center">
               <p class="text-xs font-medium text-primary-600 uppercase tracking-wide">
@@ -70,6 +75,7 @@
             type="button"
             class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
             aria-label="View notifications"
+            data-testid="header-notifications-button"
           >
             <BellIcon class="h-6 w-6" />
             <!-- Notification Badge -->
@@ -91,6 +97,7 @@
               class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
               aria-haspopup="true"
               :aria-expanded="userMenuOpen"
+              data-testid="header-user-menu-button"
               @click="toggleUserMenu"
             >
               <!-- User Avatar -->
@@ -129,6 +136,7 @@
                 class="absolute right-0 mt-2 w-56 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                 role="menu"
                 aria-orientation="vertical"
+                data-testid="header-user-menu-dropdown"
               >
                 <div class="p-4 border-b border-gray-100">
                   <p class="text-sm font-medium text-gray-900">
@@ -144,6 +152,7 @@
                     to="/profile"
                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                     role="menuitem"
+                    data-testid="header-user-menu-profile"
                     @click="userMenuOpen = false"
                   >
                     <UserCircleIcon class="h-5 w-5 mr-3 text-gray-400" />
@@ -154,6 +163,7 @@
                     to="/settings"
                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                     role="menuitem"
+                    data-testid="header-user-menu-settings"
                     @click="userMenuOpen = false"
                   >
                     <Cog6ToothIcon class="h-5 w-5 mr-3 text-gray-400" />
@@ -164,6 +174,7 @@
                     href="#"
                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                     role="menuitem"
+                    data-testid="header-user-menu-help"
                     @click.prevent="handleHelp"
                   >
                     <QuestionMarkCircleIcon class="h-5 w-5 mr-3 text-gray-400" />
@@ -179,6 +190,7 @@
                     type="button"
                     class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                     role="menuitem"
+                    data-testid="header-user-menu-switch-tenant"
                     @click="handleSwitchTenant"
                   >
                     <BuildingOfficeIcon class="h-5 w-5 mr-3 text-gray-400" />
@@ -191,6 +203,7 @@
                     type="button"
                     class="flex items-center w-full px-4 py-2 text-sm text-red-700 hover:bg-red-50 transition-colors"
                     role="menuitem"
+                    data-testid="header-user-menu-logout"
                     @click="handleSignOut"
                   >
                     <ArrowRightOnRectangleIcon class="h-5 w-5 mr-3 text-red-400" />
