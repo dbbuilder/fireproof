@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../fixtures/authenticated'
 
 /**
  * E2E Tests for Checklist Template Management Feature

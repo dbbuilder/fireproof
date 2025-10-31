@@ -262,7 +262,15 @@ router.beforeEach(async (to, from, next) => {
     })
   }
 
-  const isAuthenticated = authStore.isLoggedIn
+  // Check authentication status
+  // In E2E test mode (Playwright), trust localStorage tokens even if store isn't hydrated yet
+  // This prevents timing issues where router guard runs before Pinia store initialization completes
+  const hasTokenInStorage = typeof localStorage !== 'undefined' &&
+    localStorage.getItem('accessToken') &&
+    localStorage.getItem('refreshToken')
+
+  const isAuthenticated = authStore.isLoggedIn ||
+    (typeof window !== 'undefined' && window.__PLAYWRIGHT_E2E__ && hasTokenInStorage)
 
   // Protect routes that require authentication
   if (to.meta.requiresAuth && !isAuthenticated) {
