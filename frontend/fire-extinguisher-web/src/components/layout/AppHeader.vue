@@ -24,20 +24,20 @@
             <!-- Logo Icon - Flame with Checkmark -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 200 240"
-              class="w-10 h-10"
+              viewBox="0 0 200 280"
+              class="w-8 h-10"
             >
               <path
                 fill="#e95f5f"
-                d="M100 10 L85 35 L75 20 L65 50 L50 30 L35 70 L25 240 L175 240 L165 70 L150 30 L135 50 L125 20 L115 35 Z"
+                d="M 100,20 L 80,50 L 70,35 L 55,70 L 45,50 L 30,90 L 20,110 Q 15,240 50,260 Q 100,280 150,260 Q 185,240 180,110 L 170,90 L 155,50 L 145,70 L 130,35 L 120,50 Z"
               />
               <path
                 fill="white"
                 stroke="white"
-                stroke-width="8"
+                stroke-width="10"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="M130 120 L90 160 L70 140 M90 160 L85 155"
+                d="M 140,130 L 95,180 L 70,155"
               />
             </svg>
 
