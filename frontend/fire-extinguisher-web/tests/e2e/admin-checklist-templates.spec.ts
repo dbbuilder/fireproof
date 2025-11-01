@@ -29,6 +29,13 @@ test.describe('Checklist Template Management', () => {
   })
 
   test('should display templates page with tabs', async ({ page }) => {
+    // Debug: Check if localStorage has tokens
+    const accessToken = await page.evaluate(() => localStorage.getItem('accessToken'))
+    const refreshToken = await page.evaluate(() => localStorage.getItem('refreshToken'))
+    console.log('DEBUG: accessToken exists?', !!accessToken)
+    console.log('DEBUG: refreshToken exists?', !!refreshToken)
+    console.log('DEBUG: current URL:', page.url())
+
     // Check page heading
     await expect(page.locator('[data-testid="templates-heading"]')).toBeVisible()
 

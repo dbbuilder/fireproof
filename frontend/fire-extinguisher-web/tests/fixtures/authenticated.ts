@@ -44,6 +44,36 @@ export const test = base.extend({
       }
     }
 
+    // Mock auth API endpoints at context level (Option C)
+    // This ensures all pages in this context have auth API mocked
+    await context.route('**/api/users/me', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          userId: 'e2e-test-user-id',
+          email: 'chris@servicevision.net',
+          firstName: 'Chris',
+          lastName: 'Test'
+        })
+      })
+    })
+
+    await context.route('**/api/users/me/roles', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            roleId: 'test-role-1',
+            roleName: 'TenantAdmin',
+            roleType: 'Tenant',
+            tenantId: 'test-tenant-id'
+          }
+        ])
+      })
+    })
+
     await use(context)
     await context.close()
   }

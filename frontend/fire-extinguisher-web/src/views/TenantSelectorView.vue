@@ -93,21 +93,21 @@
                 <p class="text-sm text-gray-600">
                   Code: {{ tenant.tenantCode }}
                   <span
-                    v-if="tenant.roleName"
+                    v-if="tenant.userRole"
                     class="ml-2 text-primary-600"
                   >
-                    • {{ tenant.roleName }}
+                    • {{ tenant.userRole }}
                   </span>
                 </p>
                 <div class="flex items-center gap-2 mt-1">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                    {{ tenant.subscriptionTier }}
-                  </span>
                   <span
-                    v-if="isSystemAdmin"
-                    class="text-xs text-gray-500"
+                    v-if="tenant.lastAccessedDate"
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
                   >
-                    {{ tenant.maxUsers }} users • {{ tenant.maxLocations }} locations
+                    Last accessed {{ formatDate(tenant.lastAccessedDate) }}
+                  </span>
+                  <span class="text-xs text-gray-500">
+                    {{ tenant.locationCount }} locations • {{ tenant.extinguisherCount }} extinguishers
                   </span>
                 </div>
               </div>
@@ -189,13 +189,23 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToastStore } from '@/stores/toast'
-import tenantService from '@/services/tenantService'
-import type { TenantDto } from '@/types/api'
+import userService from '@/services/userService'
 import {
   BuildingOfficeIcon,
   XCircleIcon,
   CheckIcon
 } from '@heroicons/vue/24/outline'
+
+interface TenantSummary {
+  tenantId: string
+  tenantName: string
+  tenantCode: string
+  userRole: string
+  isActive: boolean
+  lastAccessedDate: string | null
+  locationCount: number
+  extinguisherCount: number
+}
 
 const router = useRouter()
 const route = useRoute()
@@ -203,7 +213,7 @@ const authStore = useAuthStore()
 const toast = useToastStore()
 
 // State
-const tenants = ref<TenantDto[]>([])
+const tenants = ref<TenantSummary[]>([])
 const selectedTenantId = ref<string | null>(null)
 const loading = ref(false)
 const continuing = ref(false)
@@ -218,7 +228,7 @@ const loadTenants = async () => {
   error.value = null
 
   try {
-    tenants.value = await tenantService.getAvailable()
+    tenants.value = await userService.getAccessibleTenants()
 
     // Auto-select if only one tenant
     if (tenants.value.length === 1) {
@@ -232,8 +242,21 @@ const loadTenants = async () => {
   }
 }
 
-const selectTenant = (tenant: TenantDto) => {
+const selectTenant = (tenant: TenantSummary) => {
   selectedTenantId.value = tenant.tenantId
+}
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffDays === 0) return 'today'
+  if (diffDays === 1) return 'yesterday'
+  if (diffDays < 7) return `${diffDays} days ago`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
+  return date.toLocaleDateString()
 }
 
 const handleContinue = async () => {
@@ -242,8 +265,8 @@ const handleContinue = async () => {
   continuing.value = true
 
   try {
-    // Set the selected tenant in the auth store
-    authStore.setCurrentTenant(selectedTenantId.value)
+    // Switch to the selected tenant (gets new JWT token)
+    await authStore.switchTenant(selectedTenantId.value)
 
     toast.success('Organization selected successfully')
 

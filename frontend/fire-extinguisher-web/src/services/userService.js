@@ -135,6 +135,25 @@ const userService = {
   async getAllSystemRoles() {
     const response = await api.get('/users/system-roles')
     return response.data
+  },
+
+  /**
+   * Get all tenants accessible to the current user
+   * @returns {Promise<Array>} List of accessible tenants with role information
+   */
+  async getAccessibleTenants() {
+    const response = await api.get('/users/me/tenants')
+    return response.data
+  },
+
+  /**
+   * Switch the current user's active tenant
+   * @param {string} tenantId - Target tenant ID
+   * @returns {Promise<Object>} Response with new JWT token
+   */
+  async switchTenant(tenantId) {
+    const response = await api.post('/users/me/switch-tenant', { tenantId })
+    return response.data
   }
 }
 

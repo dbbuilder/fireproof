@@ -1,4 +1,5 @@
 using FireExtinguisherInspection.API.Authorization;
+using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using FireExtinguisherInspection.API.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -323,5 +324,65 @@ public class UsersController : ControllerBase
 
         var roles = await _userService.GetAllSystemRolesAsync();
         return Ok(roles);
+    }
+
+    /// <summary>
+    /// Gets all tenants accessible to the current user
+    /// </summary>
+    /// <returns>List of accessible tenants with role information</returns>
+    [HttpGet("me/tenants")]
+    [ProducesResponseType(typeof(IEnumerable<TenantSummaryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<IEnumerable<TenantSummaryDto>>> GetMyAccessibleTenants()
+    {
+        var userIdClaim = User.FindFirst("UserId")?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized(new { message = "Invalid user ID in token" });
+        }
+
+        _logger.LogDebug("GetMyAccessibleTenants called for user {UserId}", userId);
+
+        var tenants = await _userService.GetAccessibleTenantsAsync(userId);
+        return Ok(tenants);
+    }
+
+    /// <summary>
+    /// Switches the current user's active tenant
+    /// </summary>
+    /// <param name="request">Tenant switch request containing target tenant ID</param>
+    /// <returns>New JWT token with updated tenant context</returns>
+    [HttpPost("me/switch-tenant")]
+    [ProducesResponseType(typeof(SwitchTenantResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<SwitchTenantResponse>> SwitchTenant([FromBody] SwitchTenantRequest request)
+    {
+        var userIdClaim = User.FindFirst("UserId")?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized(new { message = "Invalid user ID in token" });
+        }
+
+        _logger.LogInformation("User {UserId} attempting to switch to tenant {TenantId}", userId, request.TenantId);
+
+        try
+        {
+            var response = await _userService.SwitchTenantAsync(userId, request.TenantId);
+            return Ok(response);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            _logger.LogWarning("User {UserId} unauthorized to access tenant {TenantId}: {Message}",
+                userId, request.TenantId, ex.Message);
+            return Forbid();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogWarning("Tenant {TenantId} not found: {Message}", request.TenantId, ex.Message);
+            return NotFound(new { message = ex.Message });
+        }
     }
 }

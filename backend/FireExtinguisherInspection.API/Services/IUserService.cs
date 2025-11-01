@@ -1,3 +1,4 @@
+using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 
 namespace FireExtinguisherInspection.API.Services;
@@ -61,4 +62,14 @@ public interface IUserService
     /// Gets all available system roles
     /// </summary>
     Task<IEnumerable<SystemRoleDto>> GetAllSystemRolesAsync();
+
+    /// <summary>
+    /// Gets all tenants accessible to the user
+    /// </summary>
+    Task<IEnumerable<TenantSummaryDto>> GetAccessibleTenantsAsync(Guid userId);
+
+    /// <summary>
+    /// Switches the user's active tenant and returns a new JWT token
+    /// </summary>
+    Task<SwitchTenantResponse> SwitchTenantAsync(Guid userId, Guid tenantId);
 }

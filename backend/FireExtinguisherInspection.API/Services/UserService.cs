@@ -1,5 +1,6 @@
 using System.Data;
 using FireExtinguisherInspection.API.Data;
+using FireExtinguisherInspection.API.Models;
 using FireExtinguisherInspection.API.Models.DTOs;
 using Microsoft.Data.SqlClient;
 
@@ -12,13 +13,16 @@ public class UserService : IUserService
 {
     private readonly IDbConnectionFactory _connectionFactory;
     private readonly ILogger<UserService> _logger;
+    private readonly IJwtTokenService _jwtTokenService;
 
     public UserService(
         IDbConnectionFactory connectionFactory,
-        ILogger<UserService> logger)
+        ILogger<UserService> logger,
+        IJwtTokenService jwtTokenService)
     {
         _connectionFactory = connectionFactory;
         _logger = logger;
+        _jwtTokenService = jwtTokenService;
     }
 
     public async Task<UserListResponse> GetAllUsersAsync(GetUsersRequest request)
@@ -370,6 +374,130 @@ public class UserService : IUserService
             RoleName = reader.GetString(reader.GetOrdinal("RoleName")),
             IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
             CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate"))
+        };
+    }
+
+    public async Task<IEnumerable<TenantSummaryDto>> GetAccessibleTenantsAsync(Guid userId)
+    {
+        _logger.LogDebug("Fetching accessible tenants for user: {UserId}", userId);
+
+        using var connection = await _connectionFactory.CreateConnectionAsync();
+        using var command = (SqlCommand)connection.CreateCommand();
+
+        command.CommandText = "dbo.usp_User_GetAccessibleTenants";
+        command.CommandType = CommandType.StoredProcedure;
+
+        command.Parameters.AddWithValue("@UserId", userId);
+
+        var tenants = new List<TenantSummaryDto>();
+
+        using var reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            tenants.Add(new TenantSummaryDto
+            {
+                TenantId = reader.GetGuid(reader.GetOrdinal("TenantId")),
+                TenantName = reader.GetString(reader.GetOrdinal("TenantName")),
+                TenantCode = reader.GetString(reader.GetOrdinal("TenantCode")),
+                UserRole = reader.GetString(reader.GetOrdinal("UserRole")),
+                IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
+                LastAccessedDate = reader.IsDBNull(reader.GetOrdinal("LastAccessedDate"))
+                    ? null
+                    : reader.GetDateTime(reader.GetOrdinal("LastAccessedDate")),
+                LocationCount = reader.GetInt32(reader.GetOrdinal("LocationCount")),
+                ExtinguisherCount = reader.GetInt32(reader.GetOrdinal("ExtinguisherCount"))
+            });
+        }
+
+        _logger.LogInformation("Found {Count} accessible tenants for user {UserId}", tenants.Count, userId);
+
+        return tenants;
+    }
+
+    public async Task<SwitchTenantResponse> SwitchTenantAsync(Guid userId, Guid tenantId)
+    {
+        _logger.LogDebug("Switching tenant for user {UserId} to tenant {TenantId}", userId, tenantId);
+
+        using var connection = await _connectionFactory.CreateConnectionAsync();
+        using var command = (SqlCommand)connection.CreateCommand();
+
+        command.CommandText = "dbo.usp_User_UpdateLastAccessedTenant";
+        command.CommandType = CommandType.StoredProcedure;
+
+        command.Parameters.AddWithValue("@UserId", userId);
+        command.Parameters.AddWithValue("@TenantId", tenantId);
+
+        using var reader = await command.ExecuteReaderAsync();
+
+        if (!await reader.ReadAsync())
+        {
+            _logger.LogWarning("User {UserId} does not have access to tenant {TenantId}", userId, tenantId);
+            throw new UnauthorizedAccessException("User does not have access to this tenant");
+        }
+
+        var tenantInfo = new
+        {
+            TenantId = reader.GetGuid(reader.GetOrdinal("TenantId")),
+            TenantName = reader.GetString(reader.GetOrdinal("TenantName")),
+            TenantCode = reader.GetString(reader.GetOrdinal("TenantCode")),
+            UserRole = reader.GetString(reader.GetOrdinal("UserRole"))
+        };
+
+        // Get user info for token generation
+        var user = await GetUserByIdAsync(userId);
+        if (user == null)
+        {
+            _logger.LogError("User {UserId} not found", userId);
+            throw new KeyNotFoundException($"User {userId} not found");
+        }
+
+        // Create user DTO for token generation
+        var userDto = new UserDto
+        {
+            UserId = user.UserId,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            IsActive = user.IsActive
+        };
+
+        // Create role DTOs for token with updated tenant context
+        var roles = new List<RoleDto>
+        {
+            new RoleDto
+            {
+                RoleName = tenantInfo.UserRole,
+                RoleType = "Tenant",
+                TenantId = tenantInfo.TenantId,
+                IsActive = true
+            }
+        };
+
+        // Add system roles
+        var systemRoles = await GetUserSystemRolesAsync(userId);
+        foreach (var systemRole in systemRoles)
+        {
+            roles.Add(new RoleDto
+            {
+                RoleName = systemRole.RoleName,
+                RoleType = "System",
+                IsActive = true
+            });
+        }
+
+        // Generate new JWT token with updated TenantId claim
+        var token = _jwtTokenService.GenerateAccessToken(userDto, roles);
+        var tokenExpiry = _jwtTokenService.GetTokenExpiry();
+
+        _logger.LogInformation("User {UserId} switched to tenant {TenantName} ({TenantId})",
+            userId, tenantInfo.TenantName, tenantInfo.TenantId);
+
+        return new SwitchTenantResponse
+        {
+            TenantId = tenantInfo.TenantId,
+            TenantName = tenantInfo.TenantName,
+            Token = token,
+            TokenExpiration = tokenExpiry
         };
     }
 }

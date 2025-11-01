@@ -88,13 +88,23 @@
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { BuildingOfficeIcon, ChevronDownIcon } from '@heroicons/vue/24/outline'
-import api from '@/services/api'
-import type { TenantDto } from '@/types/api'
+import userService from '@/services/userService'
+
+interface TenantSummary {
+  tenantId: string
+  tenantName: string
+  tenantCode: string
+  userRole: string
+  isActive: boolean
+  lastAccessedDate: string | null
+  locationCount: number
+  extinguisherCount: number
+}
 
 const authStore = useAuthStore()
 
 // State
-const availableTenants = ref<TenantDto[]>([])
+const availableTenants = ref<TenantSummary[]>([])
 const selectedTenantId = ref<string>('')
 const loading = ref(false)
 const applying = ref(false)
@@ -109,8 +119,8 @@ const fetchAvailableTenants = async (): Promise<void> => {
   error.value = null
 
   try {
-    const response = await api.get<TenantDto[]>('/api/tenants/available')
-    availableTenants.value = response.data
+    const response = await userService.getAccessibleTenants()
+    availableTenants.value = response
 
     // Pre-select if user already has a selection in localStorage
     const storedTenantId = localStorage.getItem('currentTenantId')
@@ -139,15 +149,15 @@ const applyTenantSelection = async (): Promise<void> => {
   error.value = null
 
   try {
-    // Update auth store with selected tenant
-    authStore.setCurrentTenant(selectedTenantId.value)
+    // Call auth store to switch tenant (gets new JWT token)
+    await authStore.switchTenant(selectedTenantId.value)
 
     // Reload the page to refresh all data with new tenant context
     // This ensures all views and stores re-fetch data with the correct tenantId
     window.location.reload()
   } catch (err: any) {
     console.error('Failed to apply tenant selection:', err)
-    error.value = 'Failed to apply organization selection'
+    error.value = err.response?.data?.message || 'Failed to apply organization selection'
     applying.value = false
   }
 }

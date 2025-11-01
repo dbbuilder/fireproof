@@ -65,7 +65,7 @@ export default defineConfig({
       testMatch: ['**/tenant/**/*.spec.ts', '**/dashboard/**/*.spec.ts'],
     },
 
-    // Authenticated tests - use saved auth state from setup (for other tests)
+    // Authenticated tests - use saved auth state from setup
     {
       name: 'chromium-authenticated',
       use: {
