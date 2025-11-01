@@ -40,7 +40,7 @@ BEGIN
     -- Get all tenants the user has access to via UserTenantRoles
     SELECT
         t.TenantId,
-        t.TenantName,
+        t.CompanyName AS TenantName,
         t.TenantCode,
         utr.RoleName AS UserRole,
         t.IsActive,
@@ -58,7 +58,7 @@ BEGIN
         -- Most recently accessed first
         CASE WHEN t.TenantId = u.LastAccessedTenantId THEN 0 ELSE 1 END,
         u.LastAccessedDate DESC,
-        t.TenantName ASC;
+        t.CompanyName ASC;
 END
 GO
 
@@ -101,7 +101,7 @@ BEGIN
     -- Return updated tenant info
     SELECT
         t.TenantId,
-        t.TenantName,
+        t.CompanyName AS TenantName,
         t.TenantCode,
         utr.RoleName AS UserRole,
         t.IsActive
